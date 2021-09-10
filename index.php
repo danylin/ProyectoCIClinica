@@ -25,18 +25,12 @@
               <p>
                     <?php
                     include("bd_usuario.php"); 
-                    $sql="SELECT*FROM eventos_db;";
+                    $sql="SELECT*FROM eventos;";
                     $resultado=mysqli_query($conexion,$sql);
-                    <p>hola
-                    
-                    
-                    </p>
-                    while ($row=mysqli_fetch_array($resultado)){
-                     
+                    while($row=mysqli_fetch_array($resultado)){
                       echo $row['nombre'];
                     }
                   ?> 
-                  
               </p>
               <input class='form' id="boton" type="submit" value="Ingresar">
               <input class='form' id="boton" type="button" value="Registrar">
