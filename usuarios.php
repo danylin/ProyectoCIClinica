@@ -14,7 +14,7 @@
           <img src="img/logotipo_auna.png" alt="logotipo auna">
         </div>
         <div class= "sesion">
-            <h1>Bienvenido a la Sesion</h1>
+            <h1>Bienvenido(a) a la Sesion</h1>
         </div>
       </nav>
     </header>
