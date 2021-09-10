@@ -24,7 +24,7 @@
               <p class="form" id='contraseña'> Contraseña <br> <input type="password" name="clave"></p>
               <p>
                     <?php
-                    include("bd_usuario.php"); 
+                    include("include/bd_usuario.php"); 
                     $sql="SELECT*FROM eventos;";
                     $resultado=mysqli_query($conexion,$sql);
                     echo "<select>";

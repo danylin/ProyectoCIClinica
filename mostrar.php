@@ -1,5 +1,5 @@
 <?php
-    include("bd_usuario.php");
+    include("include/bd_usuario.php");
     $usuario=$_POST['usuario'];
     $pass=$_POST['clave'];
     $sql="SELECT*FROM usuario where usuario='$usuario' and clave='$pass';";
