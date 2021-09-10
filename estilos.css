@@ -8,7 +8,7 @@
     text-align: center;
     background-color: cyan;
     margin: 0px 350px;
-    border: 100px;
+    border: red 20px;
 }
 
 .formulario h4{
@@ -21,6 +21,8 @@
     font-style: italic;
 }
 
-.form #boton {
+#boton {
     margin: 20px;
+    width: 150px;
+    border-radius: 20px;
 }
