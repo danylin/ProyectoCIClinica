@@ -22,9 +22,6 @@
             <form action="mostrar.php"method="post">
               <p class='form' id='usuario'>Usuario <br><input type="text" name="usuario"></p>
               <p class="form" id='contraseña'> Contraseña <br> <input type="password" name="clave"></p>
-              <p>
-                   
-              </p>
               <input class='form' id="boton" type="submit" value="Ingresar">
               <input class='form' id="boton" type="button" value="Registrar"  onclick="location.href='registro.php'">
             </form>
