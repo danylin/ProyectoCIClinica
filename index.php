@@ -23,16 +23,7 @@
               <p class='form' id='usuario'>Usuario <br><input type="text" name="usuario"></p>
               <p class="form" id='contraseña'> Contraseña <br> <input type="password" name="clave"></p>
               <p>
-                    <?php
-                    include("include/bd_usuario.php"); 
-                    $sql="SELECT*FROM eventos;";
-                    $resultado=mysqli_query($conexion,$sql);
-                    echo "<select>";
-                    while($row=mysqli_fetch_array($resultado)){
-                      echo "<option>". $row['nombre'] ."</option>";
-                    }
-                    echo "</select>";
-                  ?> 
+                   
               </p>
               <input class='form' id="boton" type="submit" value="Ingresar">
               <input class='form' id="boton" type="button" value="Registrar"  onclick="location.href='registro.php'">
