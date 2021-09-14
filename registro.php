@@ -1,12 +1,8 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilos.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-    <title>Control de Inventarios</title>
-</head>
+<?php
+include("include/titulo.php");
+?>
 <body>
     <header>
       <nav>
@@ -44,13 +40,6 @@
                       echo "<option value=".$row['id']." >". $row['sede'] ."</option>";
                     }
                     echo "</select> </p>";
-                    $sql="SELECT*FROM eventos_db;";
-                    $resultado=mysqli_query($conexion,$sql);
-                    echo "<br> Evento: <select name='evento'>Sede";
-                    while($row=mysqli_fetch_array($resultado)){
-                      echo "<option value=".$row['id_evento'].">". $row['nombre'] ."</option>";
-                    }
-                    echo "</select> </p>";
             ?> 
           <input type="submit" id='boton' value="Registrar">
           <input type="button" id='boton' value="Volver" onclick="location.href='index.php'">
@@ -63,9 +52,8 @@
             $nombre=$_POST['nombre'];
             $apellido=$_POST['apellido'];
             $sede=$_POST['sede'];
-            $evento=$_POST['evento'];
             $cargo=$_POST['cargo'];
-            $sql="INSERT INTO usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$evento,$cargo);";
+            $sql="INSERT INTO usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo);";
             $resultado=mysqli_query($conexion,$sql);          
           ?>
       </div>
