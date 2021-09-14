@@ -10,9 +10,10 @@
 <body>
     <header>
       <nav>
-        <div class="logotipo">
-          <img src="img/logotipo_auna.png" alt="logotipo auna">
-        </div>
+        <ul>
+          <li><img src="img/logotipo_auna.png" alt="logotipo auna"></li>
+          <li><a href="index.php">Control de Inventarios</a></li>
+        </ul>
       </nav>
       <div class="formulario">
         <form action="registro.php" method="post">
@@ -32,14 +33,10 @@
                     while($row=mysqli_fetch_array($resultado)){
                       echo "<option value=".$row['id']." >". $row['sede'] ."</option>";
                     }
-                    echo "</select> <br>";
-            ?> 
-               <?php
-                    error_reporting(0);
-                    include("include/bd_usuario.php"); 
-                    $sql="SELECT*FROM eventos;";
+                    echo "</select>";
+                    $sql="SELECT*FROM eventos_db;";
                     $resultado=mysqli_query($conexion,$sql);
-                    echo "Evento: <select name='evento'>Sede";
+                    echo "<br> Evento: <select name='evento'>Sede";
                     while($row=mysqli_fetch_array($resultado)){
                       echo "<option value=".$row['idevento'].">". $row['nombre'] ."</option>";
                     }
@@ -58,7 +55,7 @@
             $sede=$_POST['sede'];
             $evento=$_POST['evento'];
             $cargo=$_POST['cargo'];
-            $sql="INSERT INTO usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo,$evento);";
+            $sql="INSERT INTO usuario values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo,$evento);";
             $resultado=mysqli_query($conexion,$sql);          
           ?>
       </div>

@@ -11,9 +11,10 @@
 <body>
     <header>
       <nav>
-        <div class="logotipo">
-          <img src="img/logotipo_auna.png" alt="logotipo auna">
-        </div>
+      <ul>
+          <li><img src="img/logotipo_auna.png" alt="logotipo auna"></li>
+          <li><a href="index.php">Control de Inventarios</a></li>
+        </ul>
       </nav>
     </header>
     <section>
