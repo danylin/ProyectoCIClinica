@@ -12,7 +12,10 @@
       <nav>
         <ul>
           <li><img src="img/logotipo_auna.png" alt="logotipo auna"></li>
-          <li><a href="index.php">Control de Inventarios</a></li>
+          <li><a href="#">CREACION DE EVENTOS</a></li>
+          <li><a href="registro.php">CREACION DE USUARIO</a></li>
+          <li><a href="#">DESPACHO</a></li>
+          <li><a href="#">REPORTES</a></li>
         </ul>
       </nav>
       <div class="formulario">
@@ -20,29 +23,36 @@
             <h1>Registro</h1>
             <p class='form' id='dni'>DNI: <input type="text" name='dni'></p>
             <p class='form' id='usuario'>Usuario: <input type="text" name='usuario'></p>
-            <p class='form' id='contraseña'>Contraseña: <input type="text" name='contraseña'></p>
+            <p class='form' id='contraseña'>Contraseña: <input type="password" name='contraseña'></p>
             <p class='form' id='nombre'>Nombre: <input type="text" name='nombre'></p>
             <p class='form' id='apellido'>Apellido <input type="text" name='apellido'></p>
-            <p class='form' id='cargo'>Cargo <input type="number" name='cargo'></p>
             <?php
-                    error_reporting(0);
                     include("include/bd_usuario.php"); 
+                    error_reporting(0);
+                    $sql="SELECT*FROM tipo_db;";
+                    $resultado=mysqli_query($conexion,$sql);
+                    echo "<p> Tipo: <select name='cargo'>";
+                    while($row=mysqli_fetch_array($resultado)){
+                      echo "<option value=".$row['id_tipo'].">". $row['id_tipo'] ."</option>";
+                    }
+                    echo "</select> </p>";
+                    
                     $sql="SELECT*FROM sede__db_area;";
                     $resultado=mysqli_query($conexion,$sql);
-                    echo "Sede: <select name='sede'>";
+                    echo "<p> Sede: <select name='sede'>";
                     while($row=mysqli_fetch_array($resultado)){
                       echo "<option value=".$row['id']." >". $row['sede'] ."</option>";
                     }
-                    echo "</select>";
+                    echo "</select> </p>";
                     $sql="SELECT*FROM eventos_db;";
                     $resultado=mysqli_query($conexion,$sql);
                     echo "<br> Evento: <select name='evento'>Sede";
                     while($row=mysqli_fetch_array($resultado)){
-                      echo "<option value=".$row['idevento'].">". $row['nombre'] ."</option>";
+                      echo "<option value=".$row['id_evento'].">". $row['nombre'] ."</option>";
                     }
-                    echo "</select> <br>";
+                    echo "</select> </p>";
             ?> 
-          <input type="submit" id='boton' value="Registrar" onclick="location.href='index.php'">
+          <input type="submit" id='boton' value="Registrar">
           <input type="button" id='boton' value="Volver" onclick="location.href='index.php'">
         </form>
         <?php
@@ -55,7 +65,7 @@
             $sede=$_POST['sede'];
             $evento=$_POST['evento'];
             $cargo=$_POST['cargo'];
-            $sql="INSERT INTO usuario values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo,$evento);";
+            $sql="INSERT INTO usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$evento,$cargo);";
             $resultado=mysqli_query($conexion,$sql);          
           ?>
       </div>
