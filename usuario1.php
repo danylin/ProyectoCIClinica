@@ -19,12 +19,11 @@ session_start();
       </nav>
     </header>
     <section>
-    <div class= "sesion">
+    <div class= "sesion" id="encabezado">
             <h2>Bienvenido(a) a la Sesion <?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido']?></h2>
-     </div>
-    
+    </div>
       <?php
         include("include/creacion_evento.php")
       ?>
     </section>
-  </body>
+</body>

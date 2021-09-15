@@ -4,9 +4,9 @@
         <table class="table table-light">
             <thead>
                 <th scope="col">id</th>
-                <th scope="col">fecha</th>
-                <th scope="col">usuario</th>
-                <th scope="col">nombre del paciente</th>
+                <th scope="col">Fecha de Ingreso</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Nombre del Paciente</th>
             </thead>
         <tbody>
             <?php
@@ -44,6 +44,7 @@
             <p>Fecha Programada: <input type="date" name="fecha" id="form-fecha"></p>
             <p>Nombre del Paciente: <input type="text" name="nombre" id="nombre"></p>
             <p>Descripcion del Evento: <textarea name="descripcion" id="descr-evento" cols="30" rows="3"></textarea> </p>
+            <p><input type="submit" value="Ingresar"></p>
         </form>
         <?php
             include("include/bd_usuario.php"); 
