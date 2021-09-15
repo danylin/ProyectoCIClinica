@@ -14,9 +14,9 @@ include("include/titulo.php");
         <div class="formulario">
             <h4>Iniciar Sesion</h2>
             <form action="mostrar.php"method="post">
-              <p class='form' id='usuario'>Usuario <br><input type="text" name="usuario"></p>
-              <p class="form" id='contraseña'> Contraseña <br> <input type="password" name="clave"></p>
+              <p class='form' id='dni'>ID <br><input type="text" name="usuario" ></p>
               <input class='form' id="boton" type="submit" value="Ingresar">
+              <input class='form' id="boton" type="button" value="Ingreso Manual" onclick="location='ingreso_manual.php'">
             </form>
         </div>
     </section>

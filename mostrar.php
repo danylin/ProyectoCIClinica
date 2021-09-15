@@ -1,10 +1,18 @@
 <?php
     include("include/bd_usuario.php");
+    if (isset($_POST['clave'])){
+        $usuario=$_POST['usuario'];
+        $pass=$_POST['clave'];
+        $sql="SELECT*FROM usuarios_db where usuario='$usuario' and clave='$pass';";
+        $resultado=mysqli_query($conexion,$sql);
+        $row=mysqli_fetch_array($resultado);
+    }
+   else{
     $usuario=$_POST['usuario'];
-    $pass=$_POST['clave'];
-    $sql="SELECT*FROM usuarios_db where usuario='$usuario' and contraseña='$pass';";
+    $sql="SELECT*FROM usuarios_db where dni=$usuario;";
     $resultado=mysqli_query($conexion,$sql);
     $row=mysqli_fetch_array($resultado);
+   }
     if ($row['id_tipo']==1) {
         header("location:usuario1.php");
      }
