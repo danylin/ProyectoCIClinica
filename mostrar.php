@@ -1,4 +1,6 @@
 <?php
+    error_reporting(0);
+    session_start();
     include("include/bd_usuario.php");
     if (isset($_POST['clave'])){
         $usuario=$_POST['usuario'];
@@ -13,6 +15,10 @@
     $resultado=mysqli_query($conexion,$sql);
     $row=mysqli_fetch_array($resultado);
    }
+   $_SESSION['id']=$row['dni'];
+   $_SESSION['usuario']=$row['usuario'];
+   $_SESSION['nombre']=$row['nombre'];
+   $_SESSION['apellido']=$row['apellido'];
     if ($row['id_tipo']==1) {
         header("location:usuario1.php");
      }

@@ -8,14 +8,19 @@ include("include/titulo.php");
       <nav>
         <ul>
           <li><img src="img/logotipo_auna.png" alt="logotipo auna"></li>
-          <li><a href="#">CREACION DE EVENTOS</a></li>
+          <div class="navegacion">
+          <li><a href="usuario2.php">CREACION DE EVENTOS</a></li>
           <li><a href="registro.php">CREACION DE USUARIO</a></li>
           <li><a href="#">DESPACHO</a></li>
           <li><a href="#">REPORTES</a></li>
+          </div>
         </ul>
       </nav>
+      </header>
+      <section>
+      <div class="registro">
       <div class="formulario">
-        <form action="registro.php" method="post">
+        <form class="formu-registro"action="registro.php" method="post">
             <h1>Registro</h1>
             <p class='form' id='dni'>DNI: <input type="text" name='dni'></p>
             <p class='form' id='usuario'>Usuario: <input type="text" name='usuario'></p>
@@ -57,4 +62,37 @@ include("include/titulo.php");
             $resultado=mysqli_query($conexion,$sql);          
           ?>
       </div>
-    </header>
+      <div class="usuarios-actuales">
+        <table class="table table-light">
+          <thead>
+            <th scope="col">DNI</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Sede</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Accion</th>
+          </thead>
+          <tbody>
+          <?php
+          include("bd_usuario.php");
+          $sql="SELECT*FROM usuarios_db;";
+          $resultado=mysqli_query($conexion,$sql);
+          while($row=mysqli_fetch_array($resultado)){
+              echo "<tr>";
+              echo "<th scope='row'>". $row['dni']."</th>";
+              echo "<td>". $row['usuario']."</td>";
+              echo "<td>". $row['nombre']."</td>";
+              echo "<td>". $row['apellido']."</td>";
+              echo "<td>". $row['id_sede']."</td>";
+              echo "<td>". $row['id_tipo']."</td>";
+              echo "<td><i class='fas fa-edit' onclick='editar()'></i></td>";
+              echo "</tr>";
+          }
+          ?>
+          </tbody>
+          </table>
+      </div>
+      </div>  
+      </section>
+  </html>

@@ -2,26 +2,30 @@
 <html>
 <?php
 include("include/titulo.php");
+session_start();
 ?>
 <body>
     <header>
       <nav>
         <ul>
           <li><img src="img/logotipo_auna.png" alt="logotipo auna"></li>
-          <li><a href="#">CREACION DE EVENTOS</a></li>
+          <div class="navegacion">
+          <li><a href="usuario2.php">CREACION DE EVENTOS</a></li>
           <li><a href="registro.php">CREACION DE USUARIO</a></li>
           <li><a href="#">DESPACHO</a></li>
           <li><a href="#">REPORTES</a></li>
+          <li><a href="include/logout.php">SALIR</a></li>
+          </div>
         </ul>
-        <div class= "sesion">
-            <h2>Bienvenido(a) a la Sesion Tipo 2</h2>
-        </div>
       </nav>
     </header>
+    <div class= "sesion">
+            <h2>Bienvenido(a) a la Sesion <?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido'] ?> </h2>
+        </div>
     <section>
-      
+      <?php
+       include("include/creacion_evento.php")
+      ?>
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
 </body>
 </html>
