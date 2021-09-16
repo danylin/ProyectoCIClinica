@@ -30,7 +30,7 @@ section{
     font-size: 30px;
 }
 
-.form #error {
+.formulario #error {
     text-align: center ;
     font-size: 20px;
     font-style: italic;
@@ -64,10 +64,8 @@ li {
 }
 
 .cre-evento{
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
-    padding-top: 25px;
-    display: flex;
 }
 
 .usuarios-actuales{
@@ -79,6 +77,7 @@ li {
 
 .sesion h2{
     text-align: center;
+    padding-top: 3rem;
 }
 
 .reg-evento{
@@ -90,4 +89,8 @@ li {
 
 .reg-evento form{
     margin: 20px;
+}
+.reg-evento h3{
+    border-bottom: 2px solid black;
+    font-style: oblique;
 }
