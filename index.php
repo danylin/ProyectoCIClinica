@@ -14,7 +14,7 @@ include("include/titulo.php");
         <div class="formulario">
             <h4>Iniciar Sesion</h2>
             <form action="mostrar.php" method="post">
-              <p class='form' id='dni'>ID <br><input type="text" name="usuario" autocomplete="off" ></p>
+              <p class='form' id='dni'>ID <br><input type="text" name="usuario" autocomplete="off" autofocus="autofocus" ></p>
               <input class='form' id="boton" type="submit" value="Ingresar">
               <input class='form' id="boton" type="button" value="Ingreso Manual" onclick="location='ingreso_manual.php'">
             </form>

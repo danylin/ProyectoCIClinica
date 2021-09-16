@@ -15,10 +15,13 @@
     $resultado=mysqli_query($conexion,$sql);
     $row=mysqli_fetch_array($resultado);
    }
+   
    $_SESSION['id']=$row['dni'];
    $_SESSION['usuario']=$row['usuario'];
    $_SESSION['nombre']=$row['nombre'];
    $_SESSION['apellido']=$row['apellido'];
+   $_SESSION['id_sede']=$row['id_sede'];
+
     if ($row['id_tipo']==1) {
         header("location:usuario1.php");
      }

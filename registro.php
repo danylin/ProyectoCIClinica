@@ -4,24 +4,24 @@
 include("include/titulo.php");
 ?>
 <body>
-<header>
-      <nav>
-        <ul class="container">
-          <div class="row">
-          <li class="col-sm-2"><img src="img/logotipo_auna.png" alt="logotipo auna"></li>
-          <li class="col-md-2"><a href="usuario2.php">CREACION DE EVENTOS</a></li>
-          <li class="col-md-2"><a href="registro.php">CREACION DE USUARIO</a></li>
-          <li class="col-md-2"><a href="#">DESPACHO</a></li>
-          <li class="col-md-2"><a href="#">REPORTES</a></li>
-          <li class="col-md-2"><a href="include/logout.php">SALIR</a></li>
-          </div>
-        </ul>
+  <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <img class="navbar-brand" src="img/logotipo_auna.png" alt="logotipo auna">
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item active"><a class="nav-link" href="usuario2.php">CREACION DE EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="registro.php">CREACION DE USUARIO <i class="fa fa-user" aria-hidden="true"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="#">DESPACHO <i class="fa fa-archive" aria-hidden="true"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="#">REPORTES <i class="fa fa-file" aria-hidden="true"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="include/logout.php">SALIR <i class="fas fa-sign-out-alt"></i></a></li>
+          </ul>
+        </div>
       </nav>
-    </header>
+  </header>
       <section>
       <div class="registro">
         <div class="formulario">
-          <form class="formu-registro"action="registro.php" method="post">
+          <form class="formu-registro" action="registro.php" method="post">
               <h1>Registro</h1>
               <p class='form' id='dni'>DNI: <input type="text" name='dni'></p>
               <p class='form' id='usuario'>Usuario: <input type="text" name='usuario'></p>
@@ -77,7 +77,7 @@ include("include/titulo.php");
               <tbody>
                 <?php
                 include("bd_usuario.php");
-                $sql="SELECT dni,usuario,nombre,apellido,a.sede 'sede',id_tipo FROM usuarios_db INNER JOIN sede__db_area a WHERE usuarios_db.id_sede=a.id;";
+                $sql="SELECT dni,usuario,nombre,apellido,a.sede 'sede',id_tipo FROM usuarios_db INNER JOIN sede__db_area a on usuarios_db.id_sede=a.id;";
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                     echo "<tr>";
