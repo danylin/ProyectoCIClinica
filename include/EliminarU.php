@@ -3,7 +3,7 @@
     $dni=$_GET['dni'];
     $valor=$_POST['tipo'];
     if($valor==1){
-     header("location:Editar.php");
+     header("location:Editar.php?dni=".$_GET['dni']."");
     }
     else{
         if(isset($dni)){

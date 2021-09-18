@@ -45,6 +45,7 @@ include("titulo.php");
                       $sql="SELECT*FROM sede__db_area;";
                       $resultado=mysqli_query($conexion,$sql);
                       echo "<p  class='col-sm-12'> Sede <br> <select name='sede'>";
+                      echo "<option value='none' selected disabled> Elija una sede </option>";
                       while($row=mysqli_fetch_array($resultado)){
                         echo "<option value=".$row['id']." >". $row['sede'] ."</option>";
                       }
@@ -65,9 +66,7 @@ include("titulo.php");
               $cargo=$_POST['cargo'];
               $sql="INSERT INTO usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo);";
               $resultado=mysqli_query($conexion,$sql);
-              if (isset($dni)){
-                header("location:../Usuarios.php"); 
-              }
+              header("location:../Usuarios.php"); 
             ?>
         </div>
 </body>

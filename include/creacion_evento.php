@@ -4,7 +4,7 @@
         <form action="include/registro_evento.php" method="post" >
             <div class="container">
                 <div class="row">
-                <div class="col-sm-4"><p>Nombre del Paciente <br> <input type="text" name="nombre" id="nombre"></p></div>  
+                <div class="col-sm-4"><p>Nombre del Paciente <br> <input type="text" name="nombre" id="nombre" autocomplete="off"></p></div>  
                 <?php
                     include("include/bd_usuario.php"); 
                     $sql="SELECT*FROM eventos_db;";
@@ -41,10 +41,10 @@
             <?php
             $id=$_SESSION['id_sede'];
             include("bd_usuario.php");
-            $sql="SELECT a.id_accion, a.fecha,a.nombre_paciente,a.fecha_programacion,b.estado,a.usuario 
+            $sql="SELECT a.id_accion, a.fecha,a.nombre_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
             FROM estados_db b
             INNER JOIN evento_acc_db a on b.id_estado=a.id_estado
-            INNER JOIN usuarios_db on a.usuario =usuarios_db.usuario 
+            INNER JOIN usuarios_db on a.dni_usuario =usuarios_db.dni 
             INNER JOIN sede__db_area on sede__db_area.id=usuarios_db.id_sede 
             WHERE sede__db_area.id=$id and (a.id_estado=1 or a.id_estado=3);";
             $resultado=mysqli_query($conexion,$sql);
