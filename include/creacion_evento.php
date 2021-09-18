@@ -1,5 +1,5 @@
 <div class="cre-evento">
-    <div class="reg-evento">
+    <div class="formu-registro">
         <h3>Registrar Evento</h3>
         <form action="include/registro_evento.php" method="post" >
             <div class="container">

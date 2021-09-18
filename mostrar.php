@@ -1,6 +1,9 @@
 <?php
     error_reporting(0);
     session_start();
+    if (!isset($_POST['usuario'])){
+        die('No ingreso ID');
+    }
     include("include/bd_usuario.php");
     if (isset($_POST['clave'])){
         $usuario=$_POST['usuario'];

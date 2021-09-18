@@ -4,10 +4,6 @@
     font-family: 'Roboto Slab', serif;
 }
 
-body{
-    background-color: red;
-}
-
 section{
     padding-top: 5px;
 }
@@ -51,15 +47,20 @@ table{
 .usuarios-actuales{
     padding-top: 1rem;
 }
+
+.usuarios-actuales h3{
+    text-align: center;
+}
 .sesion h2{
     text-align: center;
 }
 
-.reg-evento{
+.formu-registro{
     text-align: center;
     background-color: #34c4d0;
     border: 2px solid black;
-    margin: auto;
+    padding-left:50px ;
+    padding-right:50px ;
 }
 
 .reg-evento form{
@@ -82,4 +83,10 @@ table{
 
   .usuarios{
       padding-top: 1rem;
+  }
+
+  .registro{
+      padding-top: 2rem;
+      padding-right: 20rem;
+      padding-left: 20rem;
   }
