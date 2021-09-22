@@ -20,7 +20,7 @@ include("../include/titulo.php");
     </header>
     <section>
         <?php
-        include("");
+        include("../include/bd_usuario.php");
         ?>
     </section>
 </body>
