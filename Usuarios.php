@@ -49,7 +49,7 @@ include("include/titulo.php");
                     "<td>
                     <form action='include/EliminarU.php?dni=".$row['dni']."' method='post'>
                     <button class='btn btn-primary' type='submit' value=1 name='tipo'>Editar</button>
-                    <button class='btn btn-danger' type='submit' value=2 name='tipo'>Eliminar</button>
+                    <button class='btn btn-danger' type='submit' value=2 name='tipo' >Eliminar</button>
                     </form>
                     </td>";
                     echo "</tr>";

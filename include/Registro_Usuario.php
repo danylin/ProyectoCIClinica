@@ -1,5 +1,8 @@
 <?php
 include("titulo.php");
+if(isset($_POST['dni'])){
+  header("Location:../Usuarios.php");
+} 
 ?>
 <link rel="stylesheet" href="../estilos.css">
 <body>
@@ -18,7 +21,7 @@ include("titulo.php");
       </nav>
   </header>
         <div class="registro">
-          <form class="formu-registro" action="Registro_Usuario.php" method="post">
+          <form class="formu-registro" action="" method="post">
               <div class="container" id='form-registro'>
                 <h3>Registro de Usuario</h3>
                 <div class='row'>
@@ -52,11 +55,9 @@ include("titulo.php");
                       echo "</select> </p> </div>";
               ?> 
                 </div>      
-            <input type="submit" id='boton' value="Registrar" onclick="location.href='../Usuarios.php'">
+            <input type="submit" id='boton' value="Registrar">
             <input type="button" id='boton' value="Volver" onclick="location.href='../Usuarios.php'">
-          </form>
-          <?php
-              include("bd_usuario.php"); 
+            <?php
               $dni=$_POST['dni'];
               $usuario=$_POST['usuario'];
               $contraseña=$_POST['contraseña'];
@@ -66,7 +67,7 @@ include("titulo.php");
               $cargo=$_POST['cargo'];
               $sql="INSERT INTO usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo);";
               $resultado=mysqli_query($conexion,$sql);
-              header("location:../Usuarios.php"); 
             ?>
+          </form>
         </div>
 </body>

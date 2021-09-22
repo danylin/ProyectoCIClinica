@@ -1,5 +1,8 @@
 <?php
 include("titulo.php");
+if(isset($_POST['dni'])){
+  header("Location:../Usuarios.php");
+} 
 ?>
 <link rel="stylesheet" href="../estilos.css">
 <body>
@@ -19,7 +22,7 @@ include("titulo.php");
     </header>
     <div class="registro">
                 
-          <form class="formu-registro" action="Editar.php?dni= <?php echo $dniComparacion ?>" method="post">
+          <form class="formu-registro" action="" method="post">
               <div class="container" id='form-registro'>
                 <h3>Edicion de Usuario</h3>
                 <?php
@@ -40,7 +43,6 @@ include("titulo.php");
                 <div class="row">
                   <p class='col-sm-6' id='apellido'>Apellido <br> <input type="text" name='apellido' value=<?php echo $resultado['apellido']; ?>></p>
                 <?php
-                      
                       $sql="SELECT*FROM tipo_db;";
                       $tipoResultado=mysqli_query($conexion,$sql);
                       echo "<p class='col-sm-6'> Tipo de Usuario <br> <select name='cargo'";
@@ -66,12 +68,13 @@ include("titulo.php");
                         }
                       }
                       echo "</select> </p> </div>";
-              ?> 
+                ?> 
                 </div>      
-            <input type="submit" id='boton' value="Editar" onclick="location.href='../Usuarios.php'">
+            <input type="submit" id='boton' value="Editar">
             <input type="button" id='boton' value="Volver" onclick="location.href='../Usuarios.php'">
           </form>
           <?php
+          $dniComparacion=$_GET['dni'];
           $dni=$_POST['dni'];
           $nombre=$_POST['nombre'];
           $apellido=$_POST['apellido'];
