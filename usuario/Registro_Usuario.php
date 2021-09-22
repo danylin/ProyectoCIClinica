@@ -1,7 +1,7 @@
 <?php
-include("titulo.php");
+include("../include/titulo.php");
 if(isset($_POST['dni'])){
-  header("Location:../Usuarios.php");
+  header("Location:Usuarios.php");
 } 
 ?>
 <link rel="stylesheet" href="../estilos.css">
@@ -13,9 +13,9 @@ if(isset($_POST['dni'])){
           <ul class="navbar-nav ms-auto">
             <li class="nav-item active"><a class="nav-link" href="../usuario2.php">CREACION DE EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
             <li class="nav-item"><a class="nav-link" href="#">CREACION DE USUARIO <i class="fa fa-user" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="#">DESPACHO <i class="fa fa-archive" aria-hidden="true"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="../despacho/despacho.php">DESPACHO <i class="fa fa-archive" aria-hidden="true"></i></a></li>
             <li class="nav-item"><a class="nav-link" href="#">REPORTES <i class="fa fa-file" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="include/logout.php">SALIR <i class="fas fa-sign-out-alt"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="../include/logout.php">SALIR <i class="fas fa-sign-out-alt"></i></a></li>
           </ul>
         </div>
       </nav>
@@ -35,7 +35,7 @@ if(isset($_POST['dni'])){
                 <div class="row">
                   <p class='col-sm-6' id='apellido'>Apellido <br> <input type="text" name='apellido'></p>
                 <?php
-                      include("bd_usuario.php"); 
+                      include("../include/bd_usuario.php"); 
                       error_reporting(0);
                       $sql="SELECT*FROM tipo_db;";
                       $resultado=mysqli_query($conexion,$sql);
@@ -56,7 +56,7 @@ if(isset($_POST['dni'])){
               ?> 
                 </div>      
             <input type="submit" id='boton' value="Registrar">
-            <input type="button" id='boton' value="Volver" onclick="location.href='../Usuarios.php'">
+            <input type="button" id='boton' value="Volver" onclick="location.href='Usuarios.php'">
             <?php
               $dni=$_POST['dni'];
               $usuario=$_POST['usuario'];
