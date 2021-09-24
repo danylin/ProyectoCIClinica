@@ -6,8 +6,8 @@ include("include/titulo.php");
 ?>
 <body>
     <header>
-      <nav>
-          <li><img src="img/logotipo_auna.png" alt="logotipo auna"></li>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <img class="navbar-brand" src="img/logotipo_auna.png" alt="logotipo auna">
       </nav>
     </header>
     <section>
