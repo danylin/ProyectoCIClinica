@@ -3,6 +3,7 @@ include("../include/titulo.php");
 if(isset($_POST['dni'])){
   header("Location:Usuarios.php");
 } 
+error_reporting(0);
 ?>
 <link rel="stylesheet" href="../estilos.css">
 <body>
@@ -71,7 +72,7 @@ if(isset($_POST['dni'])){
                 ?> 
                 </div>      
             <input type="submit" id='boton' value="Editar">
-            <input type="button" id='boton' value="Volver" onclick="location.href='../Usuarios.php'">
+            <input type="button" id='boton' value="Volver" onclick="location.href='Usuarios.php'">
           </form>
           <?php
           $dniComparacion=$_GET['dni'];
