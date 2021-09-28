@@ -47,15 +47,21 @@ if(isset($_POST['dni'])){
                       echo "<div class='row'>";
                       $sql="SELECT*FROM sede__db_area;";
                       $resultado=mysqli_query($conexion,$sql);
-                      echo "<p  class='col-sm-12'> Sede <br> <select name='sede'>";
+                      echo "<p  class='col-sm-6'> Sede <br> <select name='sede'>";
                       echo "<option value='none' selected disabled> Elija una sede </option>";
                       while($row=mysqli_fetch_array($resultado)){
                         echo "<option value=".$row['id']." >". $row['sede'] ."</option>";
                       }
-                      echo "</select> </p> </div>";
+                      echo "</select> </p>";
+                      echo "<p class='col-sm-6'> Eventos <br>";
+                      echo "<input type='checkbox' name='chk1' value='1'><label for='chk1'>Quimioterapia</label>";
+                      echo "<input type='checkbox' name='chk1' value='2'><label for='chk2'>Cirugía</label><br>";
+                      echo "<input type='checkbox' name='chk1' value='3'><label for='chk3'>P. Médico</label>";
+                      echo "<input type='checkbox' name='chk1' value='4'><label for='chk4'>C. Logístico</label><br>";
+                      echo "</p> </div>";
               ?> 
                 </div>      
-            <input type="submit" id='boton' value="Registrar">
+            <input type="submit" id='boton' value="Registrar" onclick='mostrar()'>
             <input type="button" id='boton' value="Volver" onclick="location.href='Usuarios.php'">
             <?php
               $dni=$_POST['dni'];

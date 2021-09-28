@@ -29,6 +29,17 @@ section{
     border-radius: 20px;
 }
 
+th {
+    cursor: pointer;
+}
+
+#boton-ingreso{
+    display:none;
+    margin: 20px;
+    width: 150px;
+    border-radius: 20px;
+}
+
 table{
     text-align: center;
 }

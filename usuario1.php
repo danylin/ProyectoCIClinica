@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
-<?php
-include("include/titulo.php");
-session_start();
-?>
+  <head>
+    <?php
+    include("include/titulo.php");
+    session_start();
+    ?>
+  </head>
 <body>
 <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">

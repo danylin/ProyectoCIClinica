@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+<head>
 <?php
 include("include/titulo.php");
 ?>
+</head>
 <body>
 <header>
       <nav>
