@@ -53,11 +53,11 @@ if(isset($_POST['dni'])){
                         echo "<option value=".$row['id']." >". $row['sede'] ."</option>";
                       }
                       echo "</select> </p>";
-                      echo "<p class='col-sm-6'> Eventos <br>";
-                      echo "<input type='checkbox' name='chk1' value='1'><label for='chk1'>Quimioterapia</label>";
-                      echo "<input type='checkbox' name='chk1' value='2'><label for='chk2'>Cirugía</label><br>";
-                      echo "<input type='checkbox' name='chk1' value='3'><label for='chk3'>P. Médico</label>";
-                      echo "<input type='checkbox' name='chk1' value='4'><label for='chk4'>C. Logístico</label><br>";
+                      echo "<p class='col-sm-12' id='checkbox_list'> Eventos <br>";
+                      echo "<input type='checkbox' name='chk1' value=1 ><label for='chk1'>Quimioterapia</label><br>";
+                      echo "<input type='checkbox' name='chk2' value=1 ><label for='chk2'>Cirugía</label><br>";
+                      echo "<input type='checkbox' name='chk3' value=1 ><label for='chk3'>P. Médico</label><br>";
+                      echo "<input type='checkbox' name='chk4' value=1 ><label for='chk4'>C. Logístico</label><br>";
                       echo "</p> </div>";
               ?> 
                 </div>      
@@ -71,7 +71,32 @@ if(isset($_POST['dni'])){
               $apellido=$_POST['apellido'];
               $sede=$_POST['sede'];
               $cargo=$_POST['cargo'];
-              $sql="INSERT INTO usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo);";
+              if (isset($_POST['chk1'])){
+                $quimio=$_POST['chk1'];
+              }
+              else{
+                $quimio=0;
+              }
+              if (isset($_POST['chk2'])){
+                $cirugia=$_POST['chk2'];
+              }
+              else{
+                $cirugia=0;
+              }
+              if (isset($_POST['chk3'])){
+                $medico=$_POST['chk3'];
+              }
+              else{
+                $medico=0;
+              }
+              if (isset($_POST['chk4'])){
+                $logistico=$_POST['chk4'];
+              }
+              else{
+                $logistico=0;
+              }
+              
+              $sql="INSERT INTO usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo,$quimio,$cirugia,$medico,$logistico);";
               $resultado=mysqli_query($conexion,$sql);
             ?>
           </form>

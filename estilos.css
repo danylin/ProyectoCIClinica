@@ -17,6 +17,11 @@ section{
     font-size: 30px;
 }
 
+#descr-evento{
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
 .formulario #error {
     text-align: center ;
     font-size: 20px;

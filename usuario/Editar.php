@@ -68,7 +68,29 @@ error_reporting(0);
                           echo "<option value=".$row['id'].">". $row['sede'] ."</option>";
                         }
                       }
-                      echo "</select> </p> </div>";
+                      echo "</select> </p>";
+                      echo "<p class='col-sm-12' id='checkbox_list'> Eventos <br>";
+                      if($resultado['Evento1']==1){
+                        echo "<input type='checkbox' name='chk1' value=1 checked><label for='chk1'>Quimioterapia</label><br>";
+                      } else{
+                        echo "<input type='checkbox' name='chk1' value=1><label for='chk1'>Quimioterapia</label><br>";
+                      }
+                      if($resultado['Evento2']==1){
+                        echo "<input type='checkbox' name='chk2' value=1 checked ><label for='chk2'>Cirugía</label><br>";
+                      }else{
+                        echo "<input type='checkbox' name='chk2' value=1 ><label for='chk2'>Cirugía</label><br>";
+                      }
+                      if($resultado['Evento3']==1){
+                        echo "<input type='checkbox' name='chk3' value=1 checked ><label for='chk3'>P. Médico</label><br>";
+                      }else{
+                        echo "<input type='checkbox' name='chk3' value=1 ><label for='chk3'>P. Médico</label><br>";
+                      }
+                      if($resultado['Evento4']==1){
+                        echo "<input type='checkbox' name='chk4' value=1 checked><label for='chk4'>C. Logístico</label><br>";
+                      }else{
+                        echo "<input type='checkbox' name='chk4' value=1 ><label for='chk4'>C. Logístico</label><br>";
+                      }
+                      echo "</p> </div>";
                 ?> 
                 </div>      
             <input type="submit" id='boton' value="Editar">
@@ -83,8 +105,32 @@ error_reporting(0);
           $contraseña=$_POST['contraseña'];
           $tipo=$_POST['cargo'];	
           $sede=$_POST['sede'];
-          $sqlEditar="UPDATE usuarios_db SET dni=$dni,nombre='$nombre',apellido='$apellido',usuario='$usuario',clave='$contraseña',id_sede=$sede,id_tipo=$tipo
-          WHERE dni=$dniComparacion;";
+          if (isset($_POST['chk1'])){
+            $quimio=$_POST['chk1'];
+          }
+          else{
+            $quimio=0;
+          }
+          if (isset($_POST['chk2'])){
+            $cirugia=$_POST['chk2'];
+          }
+          else{
+            $cirugia=0;
+          }
+          if (isset($_POST['chk3'])){
+            $medico=$_POST['chk3'];
+          }
+          else{
+            $medico=0;
+          }
+          if (isset($_POST['chk4'])){
+            $logistico=$_POST['chk4'];
+          }
+          else{
+            $logistico=0;
+          }
+          $sqlEditar="UPDATE usuarios_db SET dni=$dni,nombre='$nombre',apellido='$apellido',usuario='$usuario',clave='$contraseña',id_sede=$sede,id_tipo=$tipo,
+          Evento1=$quimio,Evento2=$cirugia,Evento3=$medico,Evento4=$logistico WHERE dni=$dniComparacion;";
           $consultaUsuario=mysqli_query($conexion,$sqlEditar);
           ?>
         </div>
