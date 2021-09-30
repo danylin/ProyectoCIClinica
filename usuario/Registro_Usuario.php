@@ -25,15 +25,15 @@ if(isset($_POST['dni'])){
               <div class="container" id='form-registro'>
                 <h3>Registro de Usuario</h3>
                 <div class='row'>
-                  <p class='col-sm-6' id='dni'>DNI <br> <input type="text" name='dni' maxlength=8></p>
-                  <p class='col-sm-6' id='usuario'>Usuario <br> <input type="text" name='usuario'></p>
+                  <p class='col-sm-6' id='dni'>DNI <br> <input type="text" name='dni' maxlength=8 autocomplete=off></p>
+                  <p class='col-sm-6' id='usuario'>Usuario <br> <input type="text" name='usuario' autocomplete=off></p>
                 </div>
                 <div class='row'>
                   <p class='col-sm-6' id='contraseña'>Contraseña <br> <input type="password" name='contraseña'></p>
-                  <p class='col-sm-6' id='nombre'>Nombre <br> <input type="text" name='nombre'></p>                
+                  <p class='col-sm-6' id='nombre'>Nombre <br> <input type="text" name='nombre' autocomplete=off></p>                
                 </div>
                 <div class="row">
-                  <p class='col-sm-6' id='apellido'>Apellido <br> <input type="text" name='apellido'></p>
+                  <p class='col-sm-6' id='apellido'>Apellido <br> <input type="text" name='apellido' autocomplete=off></p>
                 <?php
                       include("../include/bd_usuario.php"); 
                       error_reporting(0);
@@ -47,7 +47,7 @@ if(isset($_POST['dni'])){
                       echo "<div class='row'>";
                       $sql="SELECT*FROM sede__db_area;";
                       $resultado=mysqli_query($conexion,$sql);
-                      echo "<p  class='col-sm-6'> Sede <br> <select name='sede'>";
+                      echo "<p  class='col-sm-12'> Sede <br> <select name='sede'>";
                       echo "<option value='none' selected disabled> Elija una sede </option>";
                       while($row=mysqli_fetch_array($resultado)){
                         echo "<option value=".$row['id']." >". $row['sede'] ."</option>";

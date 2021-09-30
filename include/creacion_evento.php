@@ -42,17 +42,25 @@
 <div class="usuarios">
     <div class="container-table">
         <div class="table-title">
+            <select id="selector">
+                <option value=0>Id</option>
+                <option value=1>Fecha de Ingreso</option>
+                <option value=2>Nombre del Paciente</option>
+                <option value=3>Fecha de Programacion</option>
+                <option value=6>Responsable</option>
+            </select>
+            <button onclick="sortTable(document.getElementById('selector').value)">Ordenar</button>
             <h3>Eventos Actuales</h3>
         </div>
         <table class="table table-light" id='tabla-eventos'>
             <thead>
-                <th scope="col" onclick="sortTable(0)">Id</th>
-                <th scope="col" onclick="sortTable(1)">Fecha de Ingreso</th>
-                <th scope="col" onclick="sortTable(2)">Nombre del Paciente</th>
-                <th scope="col" onclick="sortTable(3)">Fecha de Programacion</th>
-                <th scope="col" onclick="sortTable(4)">Estado</th>
-                <th scope="col" onclick="sortTable(5)">Usuario</th>
-                <th scope="col" onclick="sortTable(6)">Responsable</th>
+                <th scope="col" >Id</th>
+                <th scope="col" >Fecha de Ingreso</th>
+                <th scope="col" >Nombre del Paciente</th>
+                <th scope="col" >Fecha de Programacion</th>
+                <th scope="col" >Estado</th>
+                <th scope="col" >Usuario</th>
+                <th scope="col" >Responsable</th>
             </thead>
             <tbody>
                 <?php
@@ -66,7 +74,9 @@
                 WHERE sede__db_area.id=$id and (a.id_estado=1 or a.id_estado=3);";
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
-                    echo "<tr class='fila'>";
+                ?>
+                <tr class='fila' onclick='javascript:location.href="despacho/despacho.php?codigo=<?php echo $row["id_accion"]; ?>";'>
+                <?php
                     echo "<td scope='row'>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha']."</td>";
                     echo "<td>". $row['nombre_paciente']."</td>";
@@ -82,14 +92,7 @@
         </table>
     </div>
 </div>
-<script>
-      $(document).ready(function() {
-        $('#editar_evento').click(function(event){
-          event.preventDefault();
-            alert("Hola Mundo");
-       });
-      });
-        
+<script> 
     function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("tabla-eventos");

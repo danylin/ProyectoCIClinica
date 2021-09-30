@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +14,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-      $(document).ready(function(){
-        $('form').submit(function(event){
+      $(document).ready(function() {
+        $('form').submit(function(event) {
           event.preventDefault();
           var codigo=$('#codigo').val();
           $.ajax({
@@ -25,17 +27,7 @@
                 $('form')[0].reset();
             }
         });
-       });
-       $('#evento').change(function () {
-        selectVal = $('#evento').val();
-        if (selectVal == 0) {
-          $('#codigo').prop("disabled", true);
-        }
-        else {
-          $('#codigo').prop("disabled", false);
-        }
-      })
-
+        });
       });
     </script>
   </head>
@@ -56,30 +48,42 @@
     </header>
     <section>
     <form method="post" id="formMaterial">
+      <h4 class='tituloDespacho'>EVENTO</h4>
       <div class="form-group">
-        <label>Elegir Evento</label>
-        <select name="id_accion" id="evento">
-          <option value="0">Seleccione Evento</option>
+        <table class='table table-light'>
+          <thead>
+            <th>Nombre del Paciente</th>
+            <th>Responsable</th>
+            <th>Evento</th>
+            <th>¿Devolución?</th>
+          </thead>
           <?php
           session_start();
           include("../include/bd_usuario.php");
           $idSesion=$_SESSION['id'];
-          $sql="SELECT id_accion,nombre_paciente FROM evento_acc_db WHERE dni_usuario=$idSesion and id_estado=1;";
+          $evento=$_GET['codigo'];
+          $sql="SELECT id_accion,nombre_paciente,nombre_responsable,a.nombre FROM evento_acc_db 
+          INNER JOIN eventos_db a on evento_acc_db.id_evento=a.id_evento
+          WHERE dni_usuario=$idSesion and id_estado=1 and id_accion=$evento;";
           $consulta=mysqli_query($conexion,$sql);
-          while($row=mysqli_fetch_array($consulta)){
-            echo "<option value=".$row['id_accion'].">".$row['nombre_paciente']."</option>";
-          }
+          $row=mysqli_fetch_array($consulta);
+          echo "<tr>";
+          echo "<td>" . $row['nombre_paciente']. "</td>";
+          echo "<td>" . $row['nombre_responsable']. "</td>";
+          echo "<td>" . $row['nombre']. "</td>";
+          echo "<td><input type='checkbox' name='devolucion' id='chkDevolucion' ></td>";
+          echo "</tr>";
           ?>
-        </select>
+        </table>
+        
       </div>
       <div class="form-group">
         <label>Codigo</label>
-        <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" required disabled >
+        <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" required >
       </div>
       <div class="form-group">
         <input type="submit"  id="enviar" class="btn btn-success" value="Buscar">
       </div>
-      
     </form>
     <table class="table table-striped">
       <thead>
@@ -88,8 +92,15 @@
         <th>Cantidad</th>
       </thead>
       <tbody id="mensaje"></tbody>
+        
     </table>
+    <button class="btn btn-success" onclick="alerta()">Registrar</button>
     </section>
 </body>
- 
+<script>
+    function alerta(){
+      alert("Hola Mundo");
+    }
+</script>
+</html>
 

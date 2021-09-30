@@ -10,5 +10,5 @@
         $row=mysqli_fetch_array($resultado);
         echo "<tr><td>". $row['codigo']." </td>";
         echo "<td>". $row['descripcion']." </td>";
-        echo "<td> <input type='number' min=1 value=1></td></tr>"
+        echo "<td> <input type='number' min=1 max=50 value=1></td></tr>"
     ?>
