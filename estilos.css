@@ -93,12 +93,8 @@ table{
     padding-right: 0rem;
     overflow: hidden;
   }
-  .table-title{
-      display: inline-flex;
-  }
   .table-title h3{
       text-align: center;
-      padding-left: 350px;
   }
 
   .usuarios{
@@ -119,4 +115,11 @@ table{
 }
 .tituloDespacho{
 text-align: center;
+}
+#input_buscar{
+    text-align: right;
+    padding-left: 63%;
+}
+.filtros{
+    display: flex;
 }

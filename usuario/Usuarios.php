@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <?php
 include("../include/titulo.php");
 ?>
@@ -31,12 +31,13 @@ include("../include/titulo.php");
               <th scope="col">Apellido</th>
               <th scope="col">Sede</th>
               <th scope="col">Tipo</th>
+              <th scope="col">Evento</th>
               <th scope="col">Accion</th>
             </thead>
               <tbody>
                 <?php
                 include("../include/bd_usuario.php");
-                $sql="SELECT dni,usuario,nombre,apellido,a.sede 'sede',id_tipo FROM usuarios_db INNER JOIN sede__db_area a on usuarios_db.id_sede=a.id;";
+                $sql="SELECT dni,usuario,nombre,apellido,a.sede 'sede',id_tipo,Evento1,Evento2,Evento3,Evento4 FROM usuarios_db INNER JOIN sede__db_area a on usuarios_db.id_sede=a.id;";
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                     echo "<tr>";
@@ -46,6 +47,20 @@ include("../include/titulo.php");
                     echo "<td>". $row['apellido']."</td>";
                     echo "<td>". $row['sede']."</td>";
                     echo "<td>". $row['id_tipo']."</td>";
+                    echo "<td>";
+                    if($row["Evento1"]==1){
+                    echo "Quimioterapia <br>";
+                    }
+                    if($row["Evento2"]==1){
+                      echo "Cirugia <br>";
+                    }
+                    if($row["Evento3"]==1){
+                      echo "Procedimiento Medico <br>";
+                    }
+                    if($row["Evento4"]==1){
+                      echo "Control Logistico <br>";
+                    }
+                    echo "</td>";
                     echo 
                     "<td>
                     <form action='EliminarU.php?dni=".$row['dni']."' method='post'>

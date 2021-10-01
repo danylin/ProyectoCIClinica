@@ -15,7 +15,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function() {
-        $('form').submit(function(event) {
+        $('#formMaterial').submit(function(event) {
           event.preventDefault();
           var codigo=$('#codigo').val();
           $.ajax({
@@ -24,7 +24,7 @@
             data:{codigo:codigo},
             success: function(data){
                 $('#mensaje').append(data);
-                $('form')[0].reset();
+                $('#formMaterial')[0].reset();
             }
         });
         });
@@ -62,45 +62,40 @@
           include("../include/bd_usuario.php");
           $idSesion=$_SESSION['id'];
           $evento=$_GET['codigo'];
-          $sql="SELECT id_accion,nombre_paciente,nombre_responsable,a.nombre FROM evento_acc_db 
+          $sql="SELECT id_accion,CONCAT(nombre_paciente,' ',apellido_paciente) nombre_completo ,nombre_responsable,a.nombre FROM evento_acc_db 
           INNER JOIN eventos_db a on evento_acc_db.id_evento=a.id_evento
-          WHERE dni_usuario=$idSesion and id_estado=1 and id_accion=$evento;";
+          WHERE dni_usuario=$idSesion and (id_estado=1 or id_estado=2) and id_accion=$evento;";
           $consulta=mysqli_query($conexion,$sql);
           $row=mysqli_fetch_array($consulta);
           echo "<tr>";
-          echo "<td>" . $row['nombre_paciente']. "</td>";
+          echo "<td>" . $row['nombre_completo']. "</td>";
           echo "<td>" . $row['nombre_responsable']. "</td>";
           echo "<td>" . $row['nombre']. "</td>";
           echo "<td><input type='checkbox' name='devolucion' id='chkDevolucion' ></td>";
           echo "</tr>";
           ?>
         </table>
-        
       </div>
       <div class="form-group">
         <label>Codigo</label>
         <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" required >
       </div>
       <div class="form-group">
-        <input type="submit"  id="enviar" class="btn btn-success" value="Buscar">
+        <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar">
       </div>
     </form>
-    <table class="table table-striped">
-      <thead>
-        <th>Codigo</th>
-        <th>Descripcion</th>
-        <th>Cantidad</th>
-      </thead>
-      <tbody id="mensaje"></tbody>
-        
-    </table>
-    <button class="btn btn-success" onclick="alerta()">Registrar</button>
+    <form action="registrarDespacho.php?codigo=<?php echo $evento ?>" method="POST" id="registro_Despacho">
+      <table class="table table-striped">
+        <thead>
+          <th>Codigo</th>
+          <th>Descripcion</th>
+          <th>Cantidad</th>
+        </thead>
+        <tbody id="mensaje"></tbody>  
+      </table>
+      <button type="submit" form="registro_Despacho" class="btn btn-success">Registrar</button>
+    </form>
     </section>
 </body>
-<script>
-    function alerta(){
-      alert("Hola Mundo");
-    }
-</script>
 </html>
 
