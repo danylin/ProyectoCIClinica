@@ -71,10 +71,11 @@
           echo "<td>" . $row['nombre_completo']. "</td>";
           echo "<td>" . $row['nombre_responsable']. "</td>";
           echo "<td>" . $row['nombre']. "</td>";
-          echo "<td><input type='checkbox' name='devolucion' id='chkDevolucion' ></td>";
+          echo "<td><button type='button' onclick='cambiar()' class='btn btn-success' id='btnDevolucion'>Devolución</button></td>";
           echo "</tr>";
           ?>
         </table>
+        
       </div>
       <div class="form-group">
         <label>Codigo</label>
@@ -91,11 +92,32 @@
           <th>Descripcion</th>
           <th>Cantidad</th>
         </thead>
-        <tbody id="mensaje"></tbody>  
+        <tbody id="mensaje">
+          <?php
+            $existencia="SELECT b.id_material,b.id_evento_acc,a.descripcion,cantidad FROM despacho_db b INNER JOIN material__db a
+            on a.codigo=b.id_material
+            WHERE id_evento_acc=$evento";
+            $referencia=mysqli_query($conexion,$existencia);
+            while($row=mysqli_fetch_array($referencia)){
+              if(isset($row)){
+                echo "<tr>";
+                echo "<td>".$row['id_material']."</td>";
+                echo "<td>".$row['descripcion']."</td>";
+                echo "<td> <input type='number' min=1 max=50 value=".$row['cantidad']." name='cantidad_Material[]'> </td>";
+                echo "</tr>";
+              }
+            }
+          ?>
+        </tbody>  
       </table>
       <button type="submit" form="registro_Despacho" class="btn btn-success">Registrar</button>
     </form>
     </section>
 </body>
+<script>
+        $('#btnDevolucion').on('click',function(){
+        $('.tituloDespacho').css('background-color','red');
+      });
+</script>
 </html>
 

@@ -1,5 +1,5 @@
 
-<div class="cre-evento">
+<div class="cre-evento" id='cre-evento'>
     <div class="formu-registro">
         <h3>Registrar Evento</h3>
         <form action="include/registro_evento.php" method="post" >
@@ -93,15 +93,21 @@
                     echo "<td>". $row['estado']."</td>";
                     echo "<td>". $row['usuario']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
-                    echo "<td><i class='fas fa-edit' id='editar_evento'></i></td>";
+                    echo "<td><button onclick='event.cancelBubble=true; return false;' class='btn btn-success' id='editButton' value=".$row['id_accion'].">Editar</button></td>";
                     echo "</tr>";
                 }
                 ?>
+                
             </tbody>
         </table>
     </div>
 </div>
 <script> 
+   $('#editButton').on('click',function(){
+    alert("Hola Mundo");
+
+   });
+            
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
         $('#tabla_contenido tr').filter(function(){
