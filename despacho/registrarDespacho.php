@@ -5,7 +5,11 @@
     {
     $codigo=$_POST['hidden_codigo'][$count];
     $cantidad=$_POST['cantidad_Material'][$count];
-    $query = " INSERT INTO despacho_db (id_material,id_evento_acc,cantidad) VALUES ($codigo,$idEvento,$cantidad)";
+    if ($_POST['devolucion']==1){
+        $query = " UPDATE despacho_db SET devolucion=$cantidad WHERE id_material=$codigo and id_evento_acc=$idEvento";
+    }else{
+        $query = " INSERT INTO despacho_db (id_material,id_evento_acc,cantidad) VALUES ($codigo,$idEvento,$cantidad)";
+    }
     $consulta=mysqli_query($conexion,$query);
     }
     $cambio="UPDATE evento_acc_db SET id_estado=2 WHERE id_accion=$idEvento;";

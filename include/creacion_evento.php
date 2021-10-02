@@ -93,7 +93,7 @@
                     echo "<td>". $row['estado']."</td>";
                     echo "<td>". $row['usuario']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
-                    echo "<td><button onclick='event.cancelBubble=true; return false;' class='btn btn-success' id='editButton' value=".$row['id_accion'].">Editar</button></td>";
+                    echo "<td><button class='btn btn-success' id='editButton' value=".$row['id_accion'].">Editar</button></td>";
                     echo "</tr>";
                 }
                 ?>
@@ -103,11 +103,6 @@
     </div>
 </div>
 <script> 
-   $('#editButton').on('click',function(){
-    alert("Hola Mundo");
-
-   });
-            
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
         $('#tabla_contenido tr').filter(function(){

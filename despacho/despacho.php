@@ -71,7 +71,7 @@
           echo "<td>" . $row['nombre_completo']. "</td>";
           echo "<td>" . $row['nombre_responsable']. "</td>";
           echo "<td>" . $row['nombre']. "</td>";
-          echo "<td><button type='button' onclick='cambiar()' class='btn btn-success' id='btnDevolucion'>Devolución</button></td>";
+          echo "<td><button type='button' class='btn btn-success' id='btnDevolucion'>Devolución</button></td>";
           echo "</tr>";
           ?>
         </table>
@@ -91,23 +91,9 @@
           <th>Codigo</th>
           <th>Descripcion</th>
           <th>Cantidad</th>
+          <th> <input type='hidden' id='devolucion' value='' name='devolucion'> </th>
         </thead>
         <tbody id="mensaje">
-          <?php
-            $existencia="SELECT b.id_material,b.id_evento_acc,a.descripcion,cantidad FROM despacho_db b INNER JOIN material__db a
-            on a.codigo=b.id_material
-            WHERE id_evento_acc=$evento";
-            $referencia=mysqli_query($conexion,$existencia);
-            while($row=mysqli_fetch_array($referencia)){
-              if(isset($row)){
-                echo "<tr>";
-                echo "<td>".$row['id_material']."</td>";
-                echo "<td>".$row['descripcion']."</td>";
-                echo "<td> <input type='number' min=1 max=50 value=".$row['cantidad']." name='cantidad_Material[]'> </td>";
-                echo "</tr>";
-              }
-            }
-          ?>
         </tbody>  
       </table>
       <button type="submit" form="registro_Despacho" class="btn btn-success">Registrar</button>
@@ -115,8 +101,17 @@
     </section>
 </body>
 <script>
+  var contar=0;
         $('#btnDevolucion').on('click',function(){
-        $('.tituloDespacho').css('background-color','red');
+          if(contar==0){
+            $('.tituloDespacho').css('background-color','red');
+            contar=1;
+            $('#devolucion').val(1);
+          } else{
+            $('.tituloDespacho').css('background-color','white');
+            contar=0;
+            $('#devolucion').val(0);
+          }
       });
 </script>
 </html>
