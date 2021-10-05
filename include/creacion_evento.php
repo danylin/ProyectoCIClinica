@@ -46,28 +46,20 @@
             <h3>Eventos Actuales</h3>
         </div>
         <div class='filtros'>
-            <select id="selector">
-                    <option value=0>Id</option>
-                    <option value=1>Fecha de Ingreso</option>
-                    <option value=2>Nombre del Paciente</option>
-                    <option value=3>Fecha de Programacion</option>
-                    <option value=6>Responsable</option>
-                </select>
-                <button onclick="sortTable(document.getElementById('selector').value)">Ordenar</button>
             <div id='input_buscar'>
                 <input type="search" name="" id="busqueda" placeholder="Buscar">
             </div>
         </div>
         <table class="table table-light" id='tabla-eventos'>
             <thead>
-                <th scope="col" >Id</th>
-                <th scope="col" >Fecha de Ingreso</th>
-                <th scope="col" >Nombre del Paciente</th>
-                <th scope="col" >Apellidos del Paciente</th>
-                <th scope="col" >Fecha de Programacion</th>
-                <th scope="col" >Estado</th>
-                <th scope="col" >Usuario</th>
-                <th scope="col" >Responsable</th>
+                <th scope="col" onclick="sortTable(0)">Id</th>
+                <th scope="col" onclick="sortTable(1)">Fecha de Registro</th>
+                <th scope="col" onclick="sortTable(2)">Nombre del Paciente</th>
+                <th scope="col" onclick="sortTable(3)">Apellidos del Paciente</th>
+                <th scope="col" onclick="sortTable(4)">Fecha de Programacion</th>
+                <th scope="col" onclick="sortTable(5)">Estado</th>
+                <th scope="col" onclick="sortTable(6)">Usuario</th>
+                <th scope="col" onclick="sortTable(7)">Responsable</th>
             </thead>
             <tbody id='tabla_contenido'>
                 <?php
@@ -78,7 +70,7 @@
                 INNER JOIN evento_acc_db a on b.id_estado=a.id_estado
                 INNER JOIN usuarios_db on a.dni_usuario =usuarios_db.dni 
                 INNER JOIN sede__db_area on sede__db_area.id=usuarios_db.id_sede 
-                WHERE sede__db_area.id=$id and (a.id_estado=1 or a.id_estado=2)
+                WHERE sede__db_area.id=$id and (a.id_estado=1 or a.id_estado=2) and a.fecha_programacion=DATE(NOW())
                 ORDER BY a.fecha_programacion desc;";
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
@@ -103,6 +95,7 @@
     </div>
 </div>
 <script> 
+    
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
         $('#tabla_contenido tr').filter(function(){

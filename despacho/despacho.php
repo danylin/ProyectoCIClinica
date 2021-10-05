@@ -28,7 +28,24 @@
             }
         });
         });
+        $('#formManual').submit(function(event) {
+          event.preventDefault();
+          var nombre=$('#nombreManual').val();
+          var cantidad=$('#cantidadManual').val();
+          $.ajax({
+            type:'POST',
+            url:'creacionDespacho.php',
+            data:{nombre:nombre,cantidad:cantidad},
+            success: function(data){
+                $('#mensaje').append(data);
+                $('#formManual')[0].reset();
+            }
+        });
+        });
+
+        
       });
+      
     </script>
   </head>
 <body>
@@ -75,16 +92,17 @@
           echo "</tr>";
           ?>
         </table>
-        
       </div>
       <div class="form-group">
         <label>Codigo</label>
         <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" required >
       </div>
-      <div class="form-group">
-        <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar">
-      </div>
+      <br>
     </form>
+    <div class="form-group">
+        <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar">
+        <button class="btn btn-success" onclick="busquedaManual()">Busqueda Manual</button>
+    </div>
     <form action="registrarDespacho.php?codigo=<?php echo $evento ?>" method="POST" id="registro_Despacho">
       <table class="table table-striped">
         <thead>
@@ -98,9 +116,26 @@
       </table>
       <button type="submit" form="registro_Despacho" class="btn btn-success">Registrar</button>
     </form>
+    <form action="" id="formManual">
+      <div class="overlay" id="overlay">
+        <div class="popup">
+          <a href="despacho.php?codigo=<?php echo $evento ?>" id="cerrar_Popup"><i class="fas fa-times"></i></a>
+          <h3>Busqueda Manual</h3>
+          <p>Nombre del Producto: <br><input type="text" id="nombreManual" name="nombreManual"></p>
+          <p>Cantidad <br><input type="number" id="cantidadManual" name="cantidadManual"></p>
+          <button type="submit" form='formManual' onclick="cerrar()">Registrar</button>
+        </div>
+      </div>
+    </form>
     </section>
 </body>
 <script>
+  function busquedaManual(){
+    document.getElementById("overlay").style.visibility = "visible";
+  };
+  function cerrar(){
+    document.getElementById("overlay").style.visibility = "hidden";
+  }
   var contar=0;
         $('#btnDevolucion').on('click',function(){
           if(contar==0){
