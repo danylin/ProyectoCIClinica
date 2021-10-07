@@ -119,7 +119,7 @@
     <form action="" id="formManual">
       <div class="overlay" id="overlay">
         <div class="popup">
-          <a href="despacho.php?codigo=<?php echo $evento ?>" id="cerrar_Popup"><i class="fas fa-times"></i></a>
+          <a onclick="cerrar()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           <h3>Busqueda Manual</h3>
           <p>Nombre del Producto: <br><input type="text" id="nombreManual" name="nombreManual"></p>
           <p>Cantidad <br><input type="number" id="cantidadManual" name="cantidadManual"></p>

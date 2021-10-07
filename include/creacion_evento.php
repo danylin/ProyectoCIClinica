@@ -1,12 +1,11 @@
-
-<div class="cre-evento" id='cre-evento'>
-    <div class="formu-registro">
+<div class="overlay" id='overlay'>
+    <div class="popup">
         <h3>Registrar Evento</h3>
         <form action="include/registro_evento.php" method="post" >
             <div class="container-flex">
                 <div class="row">
-                <div class="col-sm-3"><p>Nombre del Paciente <br> <input type="text" name="nombre" id="nombre" autocomplete="off"></p></div>
-                <div class="col-sm-3"><p>Apellidos del Paciente <br> <input type="text" name="apellido" id="apellido" autocomplete="off"></p></div>  
+                <div class="col-sm-6"><p>Nombre del Paciente <br> <input type="text" name="nombre" id="nombre" autocomplete="off" required></p></div>
+                <div class="col-sm-6"><p>Apellidos del Paciente <br> <input type="text" name="apellido" id="apellido" autocomplete="off" required></p></div>  
                 <?php
                     include("include/bd_usuario.php"); 
                     $sql="SELECT*FROM eventos_db;";
@@ -14,7 +13,7 @@
                     $resultado=mysqli_query($conexion,$sql);
                     $resultado2=mysqli_query($conexion,$sql2);
                     $row2=mysqli_fetch_array($resultado2);
-                    echo "<div class='col-sm-3'> <p> Evento <br> <select name='evento'>";
+                    echo "<div class='col-sm-6'> <p> Evento <br> <select name='evento' required>";
                     while($row=mysqli_fetch_array($resultado)){
                         if ($row2['Evento1']==1 and $row['id_evento']==1) {
                             echo "<option value=".$row['id_evento'].">". $row['nombre'] ."</option>";
@@ -31,9 +30,9 @@
                      }
                     echo "</select> </p> </div>";
                 ?>
-                    <div class="col-sm-3"><p>Fecha Programada <br> <input type="date" name="fecha" id="form-fecha"></p></div> 
-                    <div class="col-sm-12"><p>Responsable <br> <input type="text" name="responsable" id="responsable"></p></div> 
-                    <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3"></textarea> </p></div>      
+                    <div class="col-sm-6"><p>Fecha Programada <br> <input type="date" name="fecha" id="form-fecha" required></p></div> 
+                    <div class="col-sm-12"><p>Responsable <br> <input type="text" name="responsable" id="responsable" required></p></div> 
+                    <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3" required></textarea> </p></div>      
                 </div>
            <div><p><input type="submit" value="Registrar"></p></div>
             </div>
@@ -44,10 +43,12 @@
     <div class="container-table">
         <div class="table-title">
             <h3>Eventos Actuales</h3>
+            <button class='btn btn-info' onclick='mostrar()'>Nuevo Evento</button>
         </div>
         <div class='filtros'>
             <div id='input_buscar'>
-                <input type="search" name="" id="busqueda" placeholder="Buscar">
+                Desde: <input type="date" name="" id="fechaDesde" >
+                Hasta: <input type="date" name="" id="fechaHasta">
             </div>
         </div>
         <table class="table table-light" id='tabla-eventos'>
@@ -70,14 +71,14 @@
                 INNER JOIN evento_acc_db a on b.id_estado=a.id_estado
                 INNER JOIN usuarios_db on a.dni_usuario =usuarios_db.dni 
                 INNER JOIN sede__db_area on sede__db_area.id=usuarios_db.id_sede 
-                WHERE sede__db_area.id=$id and (a.id_estado=1 or a.id_estado=2) and a.fecha_programacion=DATE(NOW())
+                WHERE sede__db_area.id=$id and (a.id_estado=1 or a.id_estado=2)
                 ORDER BY a.fecha_programacion desc;";
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                 ?>
                 <tr class='fila' onclick='javascript:location.href="despacho/despacho.php?codigo=<?php echo $row["id_accion"]; ?>";'>
                 <?php
-                    echo "<td scope='row'>". $row['id_accion']."</td>";
+                    echo "<td>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha']."</td>";
                     echo "<td>". $row['nombre_paciente']."</td>";
                     echo "<td>". $row['apellido_paciente']."</td>";
@@ -85,17 +86,27 @@
                     echo "<td>". $row['estado']."</td>";
                     echo "<td>". $row['usuario']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
-                    echo "<td><button class='btn btn-success' id='editButton' value=".$row['id_accion'].">Editar</button></td>";
+                    echo "<td onclick='event.cancelBubble=true; return false;' id='except'>
+                    <div class='botonReporte'>
+                    <button class='btn btn-success' id='reporte'>Generar Reporte</button>
+                    </div>
+                    </td>'";
                     echo "</tr>";
                 }
                 ?>
-                
             </tbody>
         </table>
     </div>
-</div>
+
 <script> 
-    
+    $('#except .botonReporte button').on('click',function(){
+        var row=$(this).closest('tr');
+        var id=$(row).find("td").eq(0).html();
+        window.location="despacho/despacho.php?codigo="+id;
+    });
+    function mostrar(){
+    document.getElementById("overlay").style.visibility = "visible";
+    };
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
         $('#tabla_contenido tr').filter(function(){
@@ -148,6 +159,8 @@
     if(mes<10)
         mes='0'+mes 
     document.getElementById('form-fecha').min=year+"-"+mes+"-"+dia;
+    document.getElementById('fechaDesde').value=year+"-"+mes+"-"+dia;
+    document.getElementById('fechaHasta').value=year+"-"+mes+"-"+dia;
     }
 
 </script>

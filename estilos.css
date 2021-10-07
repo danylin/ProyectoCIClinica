@@ -12,6 +12,9 @@ section{
     background-color: #34c4d0;
     border: 2px solid black;
 }
+a{
+    cursor: pointer;
+}
 
 .formulario h4{
     font-size: 30px;
@@ -138,9 +141,13 @@ text-align: center;
 }
 
 .popup{
-    background: white;
     width: 600px;
     text-align: center;
+    background: #34c4d0;
+    border: 2px solid black;
+    padding-left:50px ;
+    padding-right:50px ;
+    border-radius: 10px;
 }
 
 #cerrar_Popup{
