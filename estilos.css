@@ -127,7 +127,7 @@ text-align: center;
     display: flex;
 }
 
-.overlay{
+#overlay1,#overlay2{
     background: rgba(0,0,0,0.3);
     position: fixed;
     top: 0;
@@ -153,4 +153,10 @@ text-align: center;
 #cerrar_Popup{
     text-align: right;
     display: block;
+}
+
+#encabezado_popup{
+    display: flex;
+    justify-content: space-between;
+    padding-left: 25%;
 }

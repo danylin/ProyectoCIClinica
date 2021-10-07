@@ -1,6 +1,9 @@
-<div class="overlay" id='overlay'>
+<div class="overlay" id='overlay1'>
     <div class="popup">
-        <h3>Registrar Evento</h3>
+        <div id="encabezado_popup">
+            <h3>Registrar Evento</h3>
+            <a onclick="cerrar()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
+        </div>
         <form action="include/registro_evento.php" method="post" >
             <div class="container-flex">
                 <div class="row">
@@ -32,9 +35,11 @@
                 ?>
                     <div class="col-sm-6"><p>Fecha Programada <br> <input type="date" name="fecha" id="form-fecha" required></p></div> 
                     <div class="col-sm-12"><p>Responsable <br> <input type="text" name="responsable" id="responsable" required></p></div> 
-                    <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3" required></textarea> </p></div>      
+                    <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3" required></textarea></p></div>      
                 </div>
-           <div><p><input type="submit" value="Registrar"></p></div>
+                <div>
+                    <p><input type="submit" value="Registrar"></p>
+                </div>
             </div>
         </form>
     </div>
@@ -44,14 +49,14 @@
         <div class="table-title">
             <h3>Eventos Actuales</h3>
             <button class='btn btn-info' onclick='mostrar()'>Nuevo Evento</button>
-        </div>
-        <div class='filtros'>
-            <div id='input_buscar'>
-                Desde: <input type="date" name="" id="fechaDesde" >
-                Hasta: <input type="date" name="" id="fechaHasta">
+            <div class='filtros'>
+                <div id='input_buscar'>
+                    Desde: <input type="date" name="" id="fechaDesde" >
+                    Hasta: <input type="date" name="" id="fechaHasta">
+                </div>
             </div>
         </div>
-        <table class="table table-light" id='tabla-eventos'>
+        <table class="table table-light" id='tabla_eventos' data-page-length='25'>
             <thead>
                 <th scope="col" onclick="sortTable(0)">Id</th>
                 <th scope="col" onclick="sortTable(1)">Fecha de Registro</th>
@@ -86,11 +91,9 @@
                     echo "<td>". $row['estado']."</td>";
                     echo "<td>". $row['usuario']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
-                    echo "<td onclick='event.cancelBubble=true; return false;' id='except'>
-                    <div class='botonReporte'>
-                    <button class='btn btn-success' id='reporte'>Generar Reporte</button>
-                    </div>
-                    </td>'";
+                    echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
+                    echo "<div class='botonReporte'><button class='btn btn-success' id='reporte'>Generar Reporte</button></div>";
+                    echo "</td>";
                     echo "</tr>";
                 }
                 ?>
@@ -99,14 +102,24 @@
     </div>
 
 <script> 
+function cerrar(){
+    document.getElementById("overlay1").style.visibility = "hidden";
+  };
+  function mostrar(){
+    document.getElementById("overlay1").style.visibility = "visible";
+    };
     $('#except .botonReporte button').on('click',function(){
         var row=$(this).closest('tr');
         var id=$(row).find("td").eq(0).html();
-        window.location="despacho/despacho.php?codigo="+id;
+        var estado=$(row).find("td").eq(5).html();
+        if (estado=="Programado"){
+            alert("Error. Este evento no está en proceso, asegurese de ingresar los elementos y que el estado del evento este en Proceso");
+        }else{
+            window.location="reporte/reporte.php?codigo="+id;
+        }
+        
     });
-    function mostrar(){
-    document.getElementById("overlay").style.visibility = "visible";
-    };
+
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
         $('#tabla_contenido tr').filter(function(){

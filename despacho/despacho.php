@@ -15,6 +15,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function() {
+
         $('#formMaterial').submit(function(event) {
           event.preventDefault();
           var codigo=$('#codigo').val();
@@ -42,10 +43,11 @@
             }
         });
         });
-
-        
       });
-      
+      $('#tabla_elementos').DataTable({
+          "lengthChange": false,
+          "pageLength": 5
+      }); 
     </script>
   </head>
 <body>
@@ -56,8 +58,6 @@
           <ul class="navbar-nav ms-auto">
             <li class="nav-item active"><a class="nav-link" href="../usuario2.php">CREACION DE EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
             <li class="nav-item"><a class="nav-link" href="../usuario/Usuarios.php">CREACION DE USUARIO <i class="fa fa-user" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="#">DESPACHO <i class="fa fa-archive" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="#">REPORTES <i class="fa fa-file" aria-hidden="true"></i></a></li>
             <li class="nav-item"><a class="nav-link" href="../include/logout.php">SALIR <i class="fas fa-sign-out-alt"></i></a></li>
           </ul>
         </div>
@@ -101,10 +101,11 @@
     </form>
     <div class="form-group">
         <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar">
+        <button class="btn btn-success" onclick="ingresoManual()">Ingreso Manual</button>
         <button class="btn btn-success" onclick="busquedaManual()">Busqueda Manual</button>
     </div>
     <form action="registrarDespacho.php?codigo=<?php echo $evento ?>" method="POST" id="registro_Despacho">
-      <table class="table table-striped">
+      <table class="table table-striped" id="tabla_elementos">
         <thead>
           <th>Codigo</th>
           <th>Descripcion</th>
@@ -117,24 +118,53 @@
       <button type="submit" form="registro_Despacho" class="btn btn-success">Registrar</button>
     </form>
     <form action="" id="formManual">
-      <div class="overlay" id="overlay">
+      <div class="overlay" id="overlay1">
         <div class="popup">
-          <a onclick="cerrar()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
-          <h3>Busqueda Manual</h3>
+          <div id="encabezado_popup">
+            <h3>Ingreso Manual</h3>
+            <a onclick="cerrar1()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
+          </div>
           <p>Nombre del Producto: <br><input type="text" id="nombreManual" name="nombreManual"></p>
           <p>Cantidad <br><input type="number" id="cantidadManual" name="cantidadManual"></p>
-          <button type="submit" form='formManual' onclick="cerrar()">Registrar</button>
+          <button type="submit" form='formManual' onclick="cerrar1()">Registrar</button>
+        </div>
+      </div>
+    </form>
+    <form action="" id="formBusqueda">
+      <div class="overlay" id="overlay2">
+        <div class="popup">
+          <div id="encabezado_popup">
+            <h3>Busqueda Manual</h3>
+            <a onclick="cerrar2()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
+          </div>
+          Nombre del Producto: <input type="search" name="busqueda" id="busqueda">
+          <table>
+            <thead>
+              <th>Nombre</th>
+              <th>Cantidad</th>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+          <button type="submit" form='formBusqueda' onclick="cerrar2()">Registrar</button>
         </div>
       </div>
     </form>
     </section>
 </body>
 <script>
-  function busquedaManual(){
-    document.getElementById("overlay").style.visibility = "visible";
+  function ingresoManual(){
+    document.getElementById("overlay1").style.visibility = "visible";
   };
-  function cerrar(){
-    document.getElementById("overlay").style.visibility = "hidden";
+  function cerrar1(){
+    document.getElementById("overlay1").style.visibility = "hidden";
+  }
+  function busquedaManual(){
+    document.getElementById("overlay2").style.visibility = "visible";
+  };
+  function cerrar2(){
+    document.getElementById("overlay2").style.visibility = "hidden";
   }
   var contar=0;
         $('#btnDevolucion').on('click',function(){
