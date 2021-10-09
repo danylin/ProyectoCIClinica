@@ -21,33 +21,63 @@
     <section>
         <?php
         include("../include/bd_usuario.php");
-        
+        $nroEvento=$_GET['codigo'];
+        $sql="SELECT a.fecha_programacion, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
+        FROM evento_acc_db a 
+        INNER JOIN eventos_db b ON
+        a.id_evento=b.id_evento
+        WHERE a.id_accion=$nroEvento;";
+        $resultado=mysqli_query($conexion,$sql);
+        $row=mysqli_fetch_array($resultado);
         ?>
-        <div id="titulo_reporte">
             <h3>Reporte de Evento</h3>
         </div>
         <div id="informacio-general">
-            <p>Nro de Encuentro</p>
-            <p>Fecha</p>
-            <p>Paciente</p>
-            <p>Procedimiento</p>
-            <p>Cirujano Principal</p>
+            <div class="container-flex">
+                <div class="row">
+                    <div class="col-sm-2"><p>Nro de Encuentro</p></div>
+                    <div class="col-sm-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><p>Fecha</p></div>
+                    <div class="col-sm-2"><?php echo $row['fecha_programacion'] ?></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><p>Paciente</p></div>
+                    <div class="col-sm-2"><?php echo $row['paciente'] ?></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><p>Procedimiento</p></div>
+                    <div class="col-sm-2"><?php echo $row['nombre'] ?></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><p>Cirujano Principal</p></div>
+                    <div class="col-sm-2"><?php echo $row['nombre_responsable'] ?></div>
+                </div>
+            </div>
         </div>
         <div>
-            <table>
+            <table class="table table-light">
                 <thead>
                     <th>Codigo de Material</th>
-                    <th>Cantidad</th>
                     <th>Descripcion del Material</th>
+                    <th>Cantidad</th>
                     <th>Tipo</th>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>10000</td>
-                        <td>2</td>
-                        <td>Hola</td>
-                        <td>K</td>
-                    </tr>
+            <?php
+            $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado
+            FROM despacho_db
+            WHERE id_evento_acc=$nroEvento";
+            $resultado=mysqli_query($conexion,$materiales);
+            while ($row=mysqli_fetch_array($resultado)){
+                echo "<tr>";
+                echo "<td>".$row['id_material']."</td>";
+                echo "<td>".$row['nombre']."</td>";
+                echo "<td>".$row['resultado']."</td>";
+                echo "</tr>";
+            }
+            ?>
                 </tbody>
             </table>
         </div>

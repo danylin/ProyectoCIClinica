@@ -16,7 +16,7 @@
                     $resultado=mysqli_query($conexion,$sql);
                     $resultado2=mysqli_query($conexion,$sql2);
                     $row2=mysqli_fetch_array($resultado2);
-                    echo "<div class='col-sm-6'> <p> Evento <br> <select name='evento' required>";
+                    echo "<div class='col-sm-6'> <p> Evento <br> <select name='evento' id='evento' required>";
                     while($row=mysqli_fetch_array($resultado)){
                         if ($row2['Evento1']==1 and $row['id_evento']==1) {
                             echo "<option value=".$row['id_evento'].">". $row['nombre'] ."</option>";
@@ -38,7 +38,8 @@
                     <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3" required></textarea></p></div>      
                 </div>
                 <div>
-                    <p><input type="submit" value="Registrar"></p>
+                    <p><input type="submit" value="Registrar" id=''>
+                    <input type="submit" value="Editar" id=''></p>
                 </div>
             </div>
         </form>
@@ -64,16 +65,17 @@
                 <th scope="col" onclick="sortTable(3)">Apellidos del Paciente</th>
                 <th scope="col" onclick="sortTable(4)">Fecha de Programacion</th>
                 <th scope="col" onclick="sortTable(5)">Estado</th>
-                <th scope="col" onclick="sortTable(6)">Usuario</th>
+                <th scope="col" onclick="sortTable(6)">Evento</th>
                 <th scope="col" onclick="sortTable(7)">Responsable</th>
+                <th scope="col" onclick="sortTable(8)">Descripción</th>
             </thead>
             <tbody id='tabla_contenido'>
                 <?php
                 $id=$_SESSION['id_sede'];
                 include("bd_usuario.php");
-                $sql="SELECT a.id_accion,a.nombre_responsable, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
-                FROM estados_db b
-                INNER JOIN evento_acc_db a on b.id_estado=a.id_estado
+                $sql="SELECT a.id_accion,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
+                FROM evento_acc_db a
+                INNER JOIN estados_db b on b.id_estado=a.id_estado
                 INNER JOIN usuarios_db on a.dni_usuario =usuarios_db.dni 
                 INNER JOIN sede__db_area on sede__db_area.id=usuarios_db.id_sede 
                 WHERE sede__db_area.id=$id and (a.id_estado=1 or a.id_estado=2)
@@ -89,10 +91,12 @@
                     echo "<td>". $row['apellido_paciente']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['estado']."</td>";
-                    echo "<td>". $row['usuario']."</td>";
+                    echo "<td>". $row['id_evento']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
+                    echo "<td>". $row['descripcion_evento']."</td>";
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-                    echo "<div class='botonReporte'><button class='btn btn-success' id='reporte'>Generar Reporte</button></div>";
+                    echo "<div class='botonReporte'><button class='btn btn-success' id='reporte'><i class='fas fa-file-alt'></i></button></div>";
+                    echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento'><i class='fas fa-edit'></i></button></div>";
                     echo "</td>";
                     echo "</tr>";
                 }
@@ -104,10 +108,16 @@
 <script> 
 function cerrar(){
     document.getElementById("overlay1").style.visibility = "hidden";
+        $('#nombre').val('');
+        $('#apellido').val('');
+        $('#form-fecha').val('');
+        $('#responsable').val('');
+        $('#evento option:selected').val('');
+        $('#descr-evento ').val('');
   };
   function mostrar(){
     document.getElementById("overlay1").style.visibility = "visible";
-    };
+  };
     $('#except .botonReporte button').on('click',function(){
         var row=$(this).closest('tr');
         var id=$(row).find("td").eq(0).html();
@@ -119,6 +129,23 @@ function cerrar(){
         }
         
     });
+    $('#except .editarEvento button').on('click',function(){
+        var row=$(this).closest('tr');
+        var nombre=$(row).find("td").eq(2).html(),
+        apellido=$(row).find("td").eq(3).html(),
+        evento=$(row).find("td").eq(6).html(),
+        fecha=$(row).find("td").eq(4).html(),
+        responsable=$(row).find("td").eq(7).html();
+        descripcion=$(row).find("td").eq(8).html();
+        mostrar();
+        $('#nombre').val(nombre);
+        $('#apellido').val(apellido);
+        $('#form-fecha').val(fecha);
+        $('#responsable').val(responsable);
+        $('#evento option:selected').val(evento);
+        $('#descr-evento ').val(descripcion);
+    });
+
 
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
@@ -175,5 +202,4 @@ function cerrar(){
     document.getElementById('fechaDesde').value=year+"-"+mes+"-"+dia;
     document.getElementById('fechaHasta').value=year+"-"+mes+"-"+dia;
     }
-
 </script>
