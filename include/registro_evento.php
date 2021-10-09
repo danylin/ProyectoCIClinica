@@ -8,8 +8,9 @@
     $fecha=$_POST['fecha'];
     $evento=$_POST['evento'];
     $responsanble=$_POST['responsable'];
-    $sql="INSERT INTO evento_acc_db(fecha,dni_usuario,id_evento,fecha_programacion,nombre_paciente,apellido_paciente,descripcion_evento,nombre_responsable,id_estado) 
-    values(NOW(),'$usuario',$evento,'$fecha','$paciente','$pacienteApellido','$descripcion','$responsanble',1);";
+    $codigoCierre=$_POST['encuentro'];
+    $sql="INSERT INTO evento_acc_db(fecha,dni_usuario,id_evento,fecha_programacion,nombre_paciente,apellido_paciente,descripcion_evento,nombre_responsable,id_estado,codigo_cierre) 
+    values(NOW(),'$usuario',$evento,'$fecha','$paciente','$pacienteApellido','$descripcion','$responsanble',1,$codigoCierre);";
     $resultado=mysqli_query($conexion,$sql);
     header("location:../usuario2.php");
 ?>

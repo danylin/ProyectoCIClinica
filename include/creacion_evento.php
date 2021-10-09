@@ -34,7 +34,8 @@
                     echo "</select> </p> </div>";
                 ?>
                     <div class="col-sm-6"><p>Fecha Programada <br> <input type="date" name="fecha" id="form-fecha" required></p></div> 
-                    <div class="col-sm-12"><p>Responsable <br> <input type="text" name="responsable" id="responsable" required></p></div> 
+                    <div class="col-sm-6"><p>Responsable <br> <input type="text" name="responsable" id="responsable" required></p></div> 
+                    <div class="col-sm-6"><p>Número de Encuentro <br> <input type="text" name="encuentro" id="encuentro" ></p></div> 
                     <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3" required></textarea></p></div>      
                 </div>
                 <div>
@@ -57,7 +58,7 @@
                 </div>
             </div>
         </div>
-        <table class="table table-light" id='tabla_eventos' data-page-length='25'>
+        <table class="table table-light" id='tabla_eventos'>
             <thead>
                 <th scope="col" onclick="sortTable(0)">Id</th>
                 <th scope="col" onclick="sortTable(1)">Fecha de Registro</th>
@@ -73,7 +74,7 @@
                 <?php
                 $id=$_SESSION['id_sede'];
                 include("bd_usuario.php");
-                $sql="SELECT a.id_accion,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
+                $sql="SELECT a.id_accion,a.codigo_cierre,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
                 FROM evento_acc_db a
                 INNER JOIN estados_db b on b.id_estado=a.id_estado
                 INNER JOIN usuarios_db on a.dni_usuario =usuarios_db.dni 
@@ -114,6 +115,7 @@ function cerrar(){
         $('#responsable').val('');
         $('#evento option:selected').val('');
         $('#descr-evento ').val('');
+        $('#encuentro').val('');
   };
   function mostrar(){
     document.getElementById("overlay1").style.visibility = "visible";
@@ -202,4 +204,7 @@ function cerrar(){
     document.getElementById('fechaDesde').value=year+"-"+mes+"-"+dia;
     document.getElementById('fechaHasta').value=year+"-"+mes+"-"+dia;
     }
+    $('#tabla_eventos').dataTable({
+    "pageLength":5
+    });
 </script>

@@ -44,8 +44,7 @@
         });
         });
       });
-      $('#tabla_elementos').DataTable({
-          "lengthChange": false,
+      $('#tabla_elementos').dataTable({
           "pageLength": 5
       }); 
     </script>
@@ -56,8 +55,8 @@
           <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna">
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item active"><a class="nav-link" href="../usuario2.php">CREACION DE EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="../usuario/Usuarios.php">CREACION DE USUARIO <i class="fa fa-user" aria-hidden="true"></i></a></li>
+            <li class="nav-item active"><a class="nav-link" href="../usuario2.php">EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="../usuario/Usuarios.php">USUARIOS <i class="fa fa-user" aria-hidden="true"></i></a></li>
             <li class="nav-item"><a class="nav-link" href="../include/logout.php">SALIR <i class="fas fa-sign-out-alt"></i></a></li>
           </ul>
         </div>
@@ -102,7 +101,7 @@
     <div class="form-group">
         <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar">
         <button class="btn btn-success" onclick="ingresoManual()">Ingreso Manual</button>
-        <button class="btn btn-success" onclick="busquedaManual()">Busqueda Manual</button>
+        <button class="btn btn-success" onclick="busquedaManual()">Búsqueda Manual</button>
     </div>
     <form action="registrarDespacho.php?codigo=<?php echo $evento ?>" method="POST" id="registro_Despacho">
       <table class="table table-striped" id="tabla_elementos">
@@ -138,13 +137,22 @@
             <a onclick="cerrar2()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
           Nombre del Producto: <input type="search" name="busqueda" id="busqueda">
-          <table>
+          <table id="materialesDespacho">
             <thead>
               <th>Nombre</th>
               <th>Cantidad</th>
             </thead>
             <tbody>
-
+              <?php
+                $consultaProductos="SELECT TOP 50 *FROM material__db";
+                $resultadoProductos=mysqli_query($conexion,$consultaProductos);
+                while($filaP=mysqli_fetch_array($resultadoProductos)){
+                  echo "<tr>";
+                  echo "<td>".$fila['codigo']."</td>";
+                  echo "<td>".$fila['descripcion']."</td>";
+                  echo "</tr>";
+                }
+              ?>
             </tbody>
           </table>
           <button type="submit" form='formBusqueda' onclick="cerrar2()">Registrar</button>
@@ -165,7 +173,7 @@
   };
   function cerrar2(){
     document.getElementById("overlay2").style.visibility = "hidden";
-  }
+  };
   var contar=0;
         $('#btnDevolucion').on('click',function(){
           if(contar==0){

@@ -11,8 +11,8 @@
           <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna">
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item active"><a class="nav-link" href="../usuario2.php">CREACION DE EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="../usuario/Usuarios.php">CREACION DE USUARIO <i class="fa fa-user" aria-hidden="true"></i></a></li>
+            <li class="nav-item active"><a class="nav-link" href="../usuario2.php">EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
+            <li class="nav-item"><a class="nav-link" href="../usuario/Usuarios.php">USUARIOS <i class="fa fa-user" aria-hidden="true"></i></a></li>
             <li class="nav-item"><a class="nav-link" href="../include/logout.php">SALIR <i class="fas fa-sign-out-alt"></i></a></li>
           </ul>
         </div>
@@ -22,7 +22,7 @@
         <?php
         include("../include/bd_usuario.php");
         $nroEvento=$_GET['codigo'];
-        $sql="SELECT a.fecha_programacion, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
+        $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
         FROM evento_acc_db a 
         INNER JOIN eventos_db b ON
         a.id_evento=b.id_evento
@@ -30,13 +30,14 @@
         $resultado=mysqli_query($conexion,$sql);
         $row=mysqli_fetch_array($resultado);
         ?>
+        <div id="reporteEvento">
             <h3>Reporte de Evento</h3>
         </div>
         <div id="informacio-general">
             <div class="container-flex">
                 <div class="row">
                     <div class="col-sm-2"><p>Nro de Encuentro</p></div>
-                    <div class="col-sm-2"></div>
+                    <div class="col-sm-2"><?php echo $row['codigo_cierre'] ?></div>
                 </div>
                 <div class="row">
                     <div class="col-sm-2"><p>Fecha</p></div>
