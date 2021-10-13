@@ -18,9 +18,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function() {
-        $('#tabla_elementos').DataTable( {
-        "pageLength": 15
-        } );
+
         $('#formMaterial').submit(function(event) {
           event.preventDefault();
           var codigo=$('#codigo').val();
@@ -75,6 +73,12 @@
             }
         });
       });
+      $('#except .botonReporte button').on('click',function(){
+        var row=$(this).closest('tr');
+        var id=$(row).find("td").eq(3).html();
+        var estado=$(row).find("td").eq(5).html();
+        window.location="../reporte/reporte.php?codigo="+id;
+    });
       });
     </script>
     <script>
@@ -129,7 +133,10 @@
           echo "<td>" . $row['nombre_completo']. "</td>";
           echo "<td>" . $row['nombre_responsable']. "</td>";
           echo "<td>" . $row['nombre']. "</td>";
+          echo "<td style='display:none;'>".$row['id_accion']."</td>";
           echo "<td><button type='button' class='btn btn-success' id='btnDevolucion'>Activar</button></td>";
+          echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
+          echo "<div class='botonReporte'><button class='btn btn-success' id='reporte'><i class='fas fa-file-alt'></i></button></div>";
           echo "</tr>";
           ?>
         </table>

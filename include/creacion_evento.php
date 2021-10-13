@@ -51,7 +51,7 @@
 <div class="usuarios">
     <div class="container-table">
         <div class="table-title">
-            <h3>Eventos Actuales</h3>
+            <h3>Eventos</h3>
             <button class='btn btn-info' onclick='mostrar(0)'>Nuevo Evento</button>
             <div class='filtros'>
                 <div id='input_buscar'>
@@ -94,7 +94,6 @@
                     echo "<td>". $row['nombre_responsable']."</td>";
                     echo "<td>". $row['descripcion_evento']."</td>";
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-                    echo "<div class='botonReporte'><button class='btn btn-success' id='reporte'><i class='fas fa-file-alt'></i></button></div>";
                     echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento'><i class='fas fa-edit'></i></button></div>";
                     echo "</td>";
                     echo "</tr>";
@@ -132,16 +131,6 @@ function cerrar(){
     }
     document.getElementById("overlay1").style.visibility = "visible";
   };
-    $('#except .botonReporte button').on('click',function(){
-        var row=$(this).closest('tr');
-        var id=$(row).find("td").eq(0).html();
-        var estado=$(row).find("td").eq(5).html();
-        if (estado=="Programado"){
-            alert("Error. Este evento no está en proceso, asegurese de ingresar los elementos y que el estado del evento este en Proceso");
-        }else{
-            window.location="reporte/reporte.php?codigo="+id;
-        }
-    });
     $('#except .editarEvento button').on('click',function(){
         var row=$(this).closest('tr');
         var nombre=$(row).find("td").eq(2).html(),
