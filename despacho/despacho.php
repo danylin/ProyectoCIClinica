@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <?php
+  session_start();
+  ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../estilos.css">
@@ -10,12 +13,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;400&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function() {
-
+        $('#tabla_elementos').DataTable( {
+        "pageLength": 15
+        } );
         $('#formMaterial').submit(function(event) {
           event.preventDefault();
           var codigo=$('#codigo').val();
@@ -43,11 +48,49 @@
             }
         });
         });
+        var contar=0;
+        $('#btnDevolucion').on('click',function(){
+          if(contar==0){
+            $('.tituloDespacho').css('background-color','red');
+            console.log(contar);
+            contar=1;
+            $('#devolucion').val(1);
+            $('#btnDevolucion').html('Desactivar');
+          } else{
+            $('.tituloDespacho').css('background-color','white');
+            contar=0;
+            $('#devolucion').val(0);
+            $('#btnDevolucion').html('Activar');
+          }
       });
-      $('#tabla_elementos').dataTable({
-          "pageLength": 5
-      }); 
+      $('#busqueda').on('keyup',function(){
+        $("#resultadoBusqueda tr").remove(); 
+        var nombre=$('#busqueda').val();
+          $.ajax({
+            type:'POST',
+            url:'busquedaManual.php',
+            data:{nombre:nombre},
+            success: function(data){
+                $('#resultadoBusqueda').append(data);
+            }
+        });
+      });
+      });
     </script>
+    <script>
+  function ingresoManual(){
+    document.getElementById("overlay1").style.visibility = "visible";
+  };
+  function cerrar1(){
+    document.getElementById("overlay1").style.visibility = "hidden";
+  }
+  function busquedaManual(){
+    document.getElementById("overlay2").style.visibility = "visible";
+  };
+  function cerrar2(){
+    document.getElementById("overlay2").style.visibility = "hidden";
+  };
+</script>
   </head>
 <body>
     <header>
@@ -74,7 +117,6 @@
             <th>¿Devolución?</th>
           </thead>
           <?php
-          session_start();
           include("../include/bd_usuario.php");
           $idSesion=$_SESSION['id'];
           $evento=$_GET['codigo'];
@@ -87,7 +129,7 @@
           echo "<td>" . $row['nombre_completo']. "</td>";
           echo "<td>" . $row['nombre_responsable']. "</td>";
           echo "<td>" . $row['nombre']. "</td>";
-          echo "<td><button type='button' class='btn btn-success' id='btnDevolucion'>Devolución</button></td>";
+          echo "<td><button type='button' class='btn btn-success' id='btnDevolucion'>Activar</button></td>";
           echo "</tr>";
           ?>
         </table>
@@ -137,22 +179,12 @@
             <a onclick="cerrar2()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
           Nombre del Producto: <input type="search" name="busqueda" id="busqueda">
-          <table id="materialesDespacho">
+          <table class='table table-dark' id="materialesDespacho">
             <thead>
               <th>Nombre</th>
               <th>Cantidad</th>
             </thead>
-            <tbody>
-              <?php
-                $consultaProductos="SELECT TOP 50 *FROM material__db";
-                $resultadoProductos=mysqli_query($conexion,$consultaProductos);
-                while($filaP=mysqli_fetch_array($resultadoProductos)){
-                  echo "<tr>";
-                  echo "<td>".$fila['codigo']."</td>";
-                  echo "<td>".$fila['descripcion']."</td>";
-                  echo "</tr>";
-                }
-              ?>
+            <tbody id="resultadoBusqueda">
             </tbody>
           </table>
           <button type="submit" form='formBusqueda' onclick="cerrar2()">Registrar</button>
@@ -161,31 +193,5 @@
     </form>
     </section>
 </body>
-<script>
-  function ingresoManual(){
-    document.getElementById("overlay1").style.visibility = "visible";
-  };
-  function cerrar1(){
-    document.getElementById("overlay1").style.visibility = "hidden";
-  }
-  function busquedaManual(){
-    document.getElementById("overlay2").style.visibility = "visible";
-  };
-  function cerrar2(){
-    document.getElementById("overlay2").style.visibility = "hidden";
-  };
-  var contar=0;
-        $('#btnDevolucion').on('click',function(){
-          if(contar==0){
-            $('.tituloDespacho').css('background-color','red');
-            contar=1;
-            $('#devolucion').val(1);
-          } else{
-            $('.tituloDespacho').css('background-color','white');
-            contar=0;
-            $('#devolucion').val(0);
-          }
-      });
-</script>
 </html>
 

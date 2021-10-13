@@ -6,6 +6,11 @@
     session_start();
     ?>     
   </head>
+  <script>
+      $('#tabla_eventos').DataTable( {
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+    } );
+  </script>
 <body>
     <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">

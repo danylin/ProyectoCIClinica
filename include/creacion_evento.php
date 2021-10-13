@@ -39,8 +39,10 @@
                     <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3" required></textarea></p></div>      
                 </div>
                 <div>
-                    <p><input type="submit" value="Registrar" id=''>
-                    <input type="submit" value="Editar" id=''></p>
+                    <input type="hidden" name="verificadorEditar" id="verificadorEditar">
+                    <input type="hidden" name="id_accion" id="id_accion">
+                    <p><input type="submit" value="Registrar" id='btnRegistrar'>
+                    <input type="submit" value="Editar" id='btnEditar'></p>
                 </div>
             </div>
         </form>
@@ -50,7 +52,7 @@
     <div class="container-table">
         <div class="table-title">
             <h3>Eventos Actuales</h3>
-            <button class='btn btn-info' onclick='mostrar()'>Nuevo Evento</button>
+            <button class='btn btn-info' onclick='mostrar(0)'>Nuevo Evento</button>
             <div class='filtros'>
                 <div id='input_buscar'>
                     Desde: <input type="date" name="" id="fechaDesde" >
@@ -61,14 +63,12 @@
         <table class="table table-light" id='tabla_eventos'>
             <thead>
                 <th scope="col" onclick="sortTable(0)">Id</th>
-                <th scope="col" onclick="sortTable(1)">Fecha de Registro</th>
+                <th scope="col" onclick="sortTable(1)">Fecha de Programacion</th>
                 <th scope="col" onclick="sortTable(2)">Nombre del Paciente</th>
                 <th scope="col" onclick="sortTable(3)">Apellidos del Paciente</th>
-                <th scope="col" onclick="sortTable(4)">Fecha de Programacion</th>
-                <th scope="col" onclick="sortTable(5)">Estado</th>
-                <th scope="col" onclick="sortTable(6)">Evento</th>
-                <th scope="col" onclick="sortTable(7)">Responsable</th>
-                <th scope="col" onclick="sortTable(8)">Descripción</th>
+                <th scope="col" onclick="sortTable(4)">Estado</th>
+                <th scope="col" onclick="sortTable(5)">Responsable</th>
+                <th scope="col" onclick="sortTable(6)">Descripción</th>
             </thead>
             <tbody id='tabla_contenido'>
                 <?php
@@ -87,12 +87,10 @@
                 <tr class='fila' onclick='javascript:location.href="despacho/despacho.php?codigo=<?php echo $row["id_accion"]; ?>";'>
                 <?php
                     echo "<td>". $row['id_accion']."</td>";
-                    echo "<td>". $row['fecha']."</td>";
+                    echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['nombre_paciente']."</td>";
                     echo "<td>". $row['apellido_paciente']."</td>";
-                    echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['estado']."</td>";
-                    echo "<td>". $row['id_evento']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
                     echo "<td>". $row['descripcion_evento']."</td>";
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
@@ -107,6 +105,7 @@
     </div>
 
 <script> 
+
 function cerrar(){
     document.getElementById("overlay1").style.visibility = "hidden";
         $('#nombre').val('');
@@ -116,8 +115,21 @@ function cerrar(){
         $('#evento option:selected').val('');
         $('#descr-evento ').val('');
         $('#encuentro').val('');
+        btnEditar.setAttribute("type","hidden");
   };
-  function mostrar(){
+  function mostrar(n){
+      var btnRegistrar=document.getElementById("btnRegistrar");
+      var btnEditar=document.getElementById("btnEditar");
+      var valorEditar=document.getElementById("verificadorEditar");
+      if(n==1){
+        btnRegistrar.setAttribute("type","hidden");
+        btnEditar.setAttribute("type","submit");
+        valorEditar.value=1;
+    }else{
+        btnRegistrar.setAttribute("type","submit");
+        btnEditar.setAttribute("type","hidden");
+        valorEditar.value=0;
+    }
     document.getElementById("overlay1").style.visibility = "visible";
   };
     $('#except .botonReporte button').on('click',function(){
@@ -129,17 +141,18 @@ function cerrar(){
         }else{
             window.location="reporte/reporte.php?codigo="+id;
         }
-        
     });
     $('#except .editarEvento button').on('click',function(){
         var row=$(this).closest('tr');
         var nombre=$(row).find("td").eq(2).html(),
         apellido=$(row).find("td").eq(3).html(),
         evento=$(row).find("td").eq(6).html(),
-        fecha=$(row).find("td").eq(4).html(),
-        responsable=$(row).find("td").eq(7).html();
-        descripcion=$(row).find("td").eq(8).html();
-        mostrar();
+        fecha=$(row).find("td").eq(1).html(),
+        id=$(row).find("td").eq(0).html(),
+        responsable=$(row).find("td").eq(5).html();
+        descripcion=$(row).find("td").eq(6).html();
+        mostrar(1);
+        $('#id_accion').val(id);
         $('#nombre').val(nombre);
         $('#apellido').val(apellido);
         $('#form-fecha').val(fecha);
@@ -147,8 +160,6 @@ function cerrar(){
         $('#evento option:selected').val(evento);
         $('#descr-evento ').val(descripcion);
     });
-
-
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
         $('#tabla_contenido tr').filter(function(){
@@ -157,7 +168,7 @@ function cerrar(){
     });
     function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("tabla-eventos");
+    table = document.getElementById("tabla_eventos");
     switching = true;
     dir = "asc";
     while (switching) {
@@ -203,8 +214,5 @@ function cerrar(){
     document.getElementById('form-fecha').min=year+"-"+mes+"-"+dia;
     document.getElementById('fechaDesde').value=year+"-"+mes+"-"+dia;
     document.getElementById('fechaHasta').value=year+"-"+mes+"-"+dia;
-    }
-    $('#tabla_eventos').dataTable({
-    "pageLength":5
-    });
+    };
 </script>
