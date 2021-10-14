@@ -4,6 +4,9 @@
     <?php
     include("../include/titulo.php")
     ?>
+<link rel="stylesheet" href="../estilos.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+<script type="text/javascript" src="html2canvas.js"></script>
 </head>
 <body>
 <header>
@@ -19,69 +22,84 @@
       </nav>
     </header>
     <section>
-        <?php
-        include("../include/bd_usuario.php");
-        $nroEvento=$_GET['codigo'];
-        $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
-        FROM evento_acc_db a 
-        INNER JOIN eventos_db b ON
-        a.id_evento=b.id_evento
-        WHERE a.id_accion=$nroEvento;";
-        $resultado=mysqli_query($conexion,$sql);
-        $row=mysqli_fetch_array($resultado);
-        ?>
-        <div id="reporteEvento">
-            <h3>Reporte de Evento</h3>
-        </div>
-        <div id="informacio-general">
-            <div class="container-flex">
-                <div class="row">
-                    <div class="col-sm-2"><p>Nro de Encuentro</p></div>
-                    <div class="col-sm-2"><?php echo $row['codigo_cierre'] ?></div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2"><p>Fecha</p></div>
-                    <div class="col-sm-2"><?php echo $row['fecha_programacion'] ?></div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2"><p>Paciente</p></div>
-                    <div class="col-sm-2"><?php echo $row['paciente'] ?></div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2"><p>Procedimiento</p></div>
-                    <div class="col-sm-2"><?php echo $row['nombre'] ?></div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-2"><p>Cirujano Principal</p></div>
-                    <div class="col-sm-2"><?php echo $row['nombre_responsable'] ?></div>
+    <a href="javascript:generarPDF()">Generar PDF</a>
+        <div id="reporteResultado">
+            <?php
+            include("../include/bd_usuario.php");
+            $nroEvento=$_GET['codigo'];
+            $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
+            FROM evento_acc_db a 
+            INNER JOIN eventos_db b ON
+            a.id_evento=b.id_evento
+            WHERE a.id_accion=$nroEvento;";
+            $resultado=mysqli_query($conexion,$sql);
+            $row=mysqli_fetch_array($resultado);
+            ?>
+            <div id="reporteEvento">
+                <h3>Reporte de Evento</h3>
+            </div>
+            <div id="informacio-general">
+                <div class="container-flex">
+                    <div class="row">
+                        <div class="col-sm-2"><p>Nro de Encuentro</p></div>
+                        <div class="col-sm-2"><?php echo $row['codigo_cierre'] ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><p>Fecha</p></div>
+                        <div class="col-sm-2"><?php echo $row['fecha_programacion'] ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><p>Paciente</p></div>
+                        <div class="col-sm-2"><?php echo $row['paciente'] ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><p>Procedimiento</p></div>
+                        <div class="col-sm-2"><?php echo $row['nombre'] ?></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2"><p>Cirujano Principal</p></div>
+                        <div class="col-sm-2"><?php echo $row['nombre_responsable'] ?></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div>
-            <table class="table table-light">
-                <thead>
-                    <th>Codigo de Material</th>
-                    <th>Descripcion del Material</th>
-                    <th>Cantidad</th>
-                    <th>Tipo</th>
-                </thead>
-                <tbody>
-            <?php
-            $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado
-            FROM despacho_db
-            WHERE id_evento_acc=$nroEvento";
-            $resultado=mysqli_query($conexion,$materiales);
-            while ($row=mysqli_fetch_array($resultado)){
-                echo "<tr>";
-                echo "<td>".$row['id_material']."</td>";
-                echo "<td>".$row['nombre']."</td>";
-                echo "<td>".$row['resultado']."</td>";
-                echo "</tr>";
-            }
-            ?>
-                </tbody>
-            </table>
+            <div>
+                <table class="table table-light">
+                    <thead>
+                        <th>Codigo de Material</th>
+                        <th>Descripcion del Material</th>
+                        <th>Cantidad</th>
+                        <th>Tipo</th>
+                    </thead>
+                    <tbody>
+                <?php
+                $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado
+                FROM despacho_db
+                WHERE id_evento_acc=$nroEvento";
+                $resultado=mysqli_query($conexion,$materiales);
+                while ($row=mysqli_fetch_array($resultado)){
+                    echo "<tr>";
+                    echo "<td>".$row['id_material']."</td>";
+                    echo "<td>".$row['nombre']."</td>";
+                    echo "<td>".$row['resultado']."</td>";
+                    echo "</tr>";
+                }
+                ?>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 </body>
+<script>
+    function generarPDF() {
+       html2canvas(document.getElementById('reporteResultado'),{
+        onrendered:function(canvas){
+            var img=canvas.toDataUrl("../img/png");
+            var doc= new jsPDF();
+            doc.addImage(img,"JPEG",20,20);
+            doc.save("prueba.pdf");
+        }
+       });
+    }
+</script>
 </html>

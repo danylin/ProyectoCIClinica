@@ -93,6 +93,7 @@
                     echo "<td>". $row['estado']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
                     echo "<td>". $row['descripcion_evento']."</td>";
+                    echo "<td style='display:none;'>". $row['codigo_cierre']."</td>";
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
                     echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento'><i class='fas fa-edit'></i></button></div>";
                     echo "</td>";
@@ -136,11 +137,12 @@ function cerrar(){
         var row=$(this).closest('tr');
         var nombre=$(row).find("td").eq(2).html(),
         apellido=$(row).find("td").eq(3).html(),
-        evento=$(row).find("td").eq(6).html(),
+        evento=$(row).find("td").eq(4).html(),
         fecha=$(row).find("td").eq(1).html(),
         id=$(row).find("td").eq(0).html(),
         responsable=$(row).find("td").eq(5).html();
         descripcion=$(row).find("td").eq(6).html();
+        codigoCierre=$(row).find("td").eq(7).html();
         mostrar(1);
         $('#id_accion').val(id);
         $('#nombre').val(nombre);
@@ -149,7 +151,7 @@ function cerrar(){
         $('#responsable').val(responsable);
         $('#evento option:selected').val(evento);
         $('#descr-evento ').val(descripcion);
-        console.log($('#encuentro').val());
+        $('#encuentro ').val(codigoCierre);
     });
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
