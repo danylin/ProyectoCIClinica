@@ -4,7 +4,7 @@
             <h3>Registrar Evento</h3>
             <a onclick="cerrar()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
         </div>
-        <form action="include/registro_evento.php" method="post" >
+        <form action="include/registro_evento.php" method="post" id="formEvento">
             <div class="container-flex">
                 <div class="row">
                 <div class="col-sm-6"><p>Nombre del Paciente <br> <input type="text" name="nombre" id="nombre" autocomplete="off" required></p></div>
@@ -41,8 +41,8 @@
                 <div>
                     <input type="hidden" name="verificadorEditar" id="verificadorEditar">
                     <input type="hidden" name="id_accion" id="id_accion">
-                    <p><input type="submit" value="Registrar" id='btnRegistrar'>
-                    <input type="submit" value="Editar" id='btnEditar'></p>
+                    <button type="submit" form='formEvento' id='btnRegistrar'>Registrar</button>
+                    <button type="submit" form='formEvento' id='btnEditar'>Editar</button>
                 </div>
             </div>
         </form>
@@ -114,20 +114,21 @@ function cerrar(){
         $('#evento option:selected').val('');
         $('#descr-evento ').val('');
         $('#encuentro').val('');
-        btnEditar.setAttribute("type","hidden");
   };
   function mostrar(n){
       var btnRegistrar=document.getElementById("btnRegistrar");
       var btnEditar=document.getElementById("btnEditar");
       var valorEditar=document.getElementById("verificadorEditar");
       if(n==1){
-        btnRegistrar.setAttribute("type","hidden");
-        btnEditar.setAttribute("type","submit");
+        btnRegistrar.style.display='none';
+        btnEditar.style.display='block'
         valorEditar.value=1;
+        console.log(valorEditar.value);
     }else{
-        btnRegistrar.setAttribute("type","submit");
-        btnEditar.setAttribute("type","hidden");
+        btnRegistrar.style.display='block';
+        btnEditar.style.display='none'
         valorEditar.value=0;
+        console.log(valorEditar.value);
     }
     document.getElementById("overlay1").style.visibility = "visible";
   };
@@ -148,6 +149,7 @@ function cerrar(){
         $('#responsable').val(responsable);
         $('#evento option:selected').val(evento);
         $('#descr-evento ').val(descripcion);
+        console.log($('#encuentro').val());
     });
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
