@@ -18,9 +18,9 @@ while($fila=mysqli_fetch_array($consulta)){
             var id=$(e).find("td").eq(0).html();
             var descripcion=$(e).find("td").eq(1).html();
             if(devolucion==1){
-                $('#mensaje').prepend('<tr style="background-color: rgba(241, 91, 91, 0.3);"><td>'+id+'<input type="hidden" name="hidden_codigo[]" id="codigo" class="codigo" value='+id+'></td><td>'+descripcion+'<input type="hidden" name="hidden_nombre[]" id="nombre" class="nombre" value="'+descripcion+'"></td><td><input type="number" min=1 max=50 value=1 name="cantidad_Material[]"></td><td><input type="checkbox" name="chk1" id="chkEliminar" value=1 onchange="isChecked(this)"></td></tr>');
+                $('#mensaje').prepend('<tr style="background-color: rgba(241, 91, 91, 0.3);"><td>'+id+'<input type="hidden" name="hidden_codigo[]" id="codigo" class="codigo" value='+id+'></td><td>'+descripcion+'<input type="hidden" name="hidden_nombre[]" id="nombre" class="nombre" value="'+descripcion+'"></td><td><input type="number" min=1 max=50 value=1 name="cantidad_Material[]"></td><td><input type="checkbox" name="chk1" id="chkEliminar" value=0 onchange="isChecked(this)"></td></tr>');
             } else {
-                $('#mensaje').prepend('<tr><td>'+id+'<input type="hidden" name="hidden_codigo[]" id="codigo" class="codigo" value='+id+'></td><td>'+descripcion+'<input type="hidden" name="hidden_nombre[]" id="nombre" class="nombre" value="'+descripcion+'"></td><td><input type="number" min=1 max=50 value=1 name="cantidad_Material[]"></td><td><input type="checkbox" name="chk1" id="chkEliminar" value=1 onchange="isChecked(this)" ></td></tr>');
+                $('#mensaje').prepend('<tr><td>'+id+'<input type="hidden" name="hidden_codigo[]" id="codigo" class="codigo" value='+id+'></td><td>'+descripcion+'<input type="hidden" name="hidden_nombre[]" id="nombre" class="nombre" value="'+descripcion+'"></td><td><input type="number" min=1 max=50 value=1 name="cantidad_Material[]"></td><td><input type="checkbox" name="chk1" id="chkEliminar" value=0 onchange="isChecked(this)" ></td></tr>');
             }
             cerrar2();
         }; 

@@ -35,13 +35,13 @@
                 echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'><td>". $row['codigo']. "<input type='hidden' name='hidden_codigo[]' id='codigo' class='codigo' value='". $row['codigo']."'></td>";
                 echo "<td>". $row['descripcion']." <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='". $row['descripcion']."'></td>";
                 echo "<td> <input type='number' min=1 max=50 value=1 name='cantidad_Material[]'></td>";
-                echo "<td><input type='checkbox' id='chkEliminar' name='chk1' value=1 onchange='isChecked(this)'></td>";
+                echo "<td><input type='checkbox' id='chkEliminar' name='chk1' value=0 onchange='isChecked(this)'></td>";
                 echo "</tr>";
             }else{
                 echo "<tr ><td>". $row['codigo']. "<input type='hidden' name='hidden_codigo[]' id='codigo' class='codigo' value='". $row['codigo']."'></td>";
                 echo "<td>". $row['descripcion']." <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='". $row['descripcion']."'></td>";
                 echo "<td> <input type='number' min=1 max=50 value=1 name='cantidad_Material[]'></td>"; 
-                echo "<td><input type='checkbox' id='chkEliminar' name='chk1' value=1 onchange='isChecked(this)'></td>";
+                echo "<td><input type='checkbox' id='chkEliminar' name='chk1' value=0 onchange='isChecked(this)'></td>";
                 echo "</tr>";   
             }
         }

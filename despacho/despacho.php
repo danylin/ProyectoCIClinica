@@ -3,6 +3,7 @@
 <head>
   <?php
   session_start();
+  include("../include/bd_usuario.php");
   ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -118,16 +119,30 @@
 <script>
  function isChecked(checkbox) {
     var button = document.getElementById('btnEliminar');
-
+    checkbox.value=1;
     if (checkbox.checked === true) {
         button.disabled = "";
+        checkbox.value=1;
     } else {
         button.disabled = "disabled";
+        checkbox.value=0;
     }
 }
-  function eliminar(){
-
-  }
+function eliminar(){
+  $("#mensaje tr").each(function(){
+    var codigo=$(this).find("td").eq(0).html();
+    var id=$(this).find("input:checkbox").val();
+    var evento=$('#tituloEvento').find("td").eq(3).html();
+    if(id==1){
+      $(this).remove();
+      $.ajax({
+            type:'POST',
+            url:'eliminacionMaterial.php',
+            data:{codigo:codigo,evento:evento},
+        });
+    }
+  });
+}
 </script>
   </head>
 <body>
@@ -147,7 +162,7 @@
     <form method="post" id="formMaterial">
       <h4 class='tituloDespacho'>EVENTO</h4>
       <div class="form-group">
-        <table class='table table-light'>
+        <table class='table table-light' id='tituloEvento'>
           <thead>
             <th>Nombre del Paciente</th>
             <th>Responsable</th>
@@ -210,20 +225,20 @@
               echo "<td>".$filaConsulta['id_material']."</td>";
               echo "<td>".$filaConsulta['nombre']."</td>";
               echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
-              echo "<td><input type='checkbox' name='chk1' value=1 onchange='isChecked(this)' ></td>";
+              echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
               echo "</tr>";
             }else{
               echo "<tr>";
               echo "<td>".$filaConsulta['id_material']."</td>";
               echo "<td>".$filaConsulta['nombre']."</td>";
               echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
-              echo "<td><input type='checkbox' name='chk1' value=1 onchange='isChecked(this)' ></td>";
+              echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
               echo "</tr>";
               echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'>";
               echo "<td>".$filaConsulta['id_material']."</td>";
               echo "<td>".$filaConsulta['nombre']."</td>";
               echo "<td><input type='number' value=".$filaConsulta['devolucion']."></td>";
-              echo "<td><input type='checkbox' name='chk1' value=1 onchange='isChecked(this)' ></td>";
+              echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
               echo "</tr>";
             }
           }
