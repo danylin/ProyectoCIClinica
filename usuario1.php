@@ -20,7 +20,7 @@
     </header>
     <section>
     <div class= "sesion" id="encabezado">
-            <h2>Bienvenido(a) a la Sesion <?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido']?></h2>
+            <p>Usuario: <?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido']?></p>
     </div>
       <?php
         include("include/creacion_evento.php")

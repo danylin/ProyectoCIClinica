@@ -6,11 +6,6 @@
     session_start();
     ?>     
   </head>
-  <script>
-      $('#tabla_eventos').DataTable( {
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
-    } );
-  </script>
 <body>
     <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -25,7 +20,7 @@
       </nav>
     </header>
     <div class= "sesion">
-      <h2>Bienvenido(a) a la Sesion <?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido'] ?> </h2>
+    <p>Usuario: <?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido']?></p>
     </div>
     <section>
       <?php

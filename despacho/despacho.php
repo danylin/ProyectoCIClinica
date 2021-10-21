@@ -18,16 +18,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function() {
-
+        $("#codigo").keyup(function(event) {
+          event.preventDefault();
+          if (event.keyCode === 13) {
+              $("#enviar").trigger("click");
+              $('#codigo').val("");
+          }
+      });
         $('#formMaterial').submit(function(event) {
           event.preventDefault();
           var codigo=$('#codigo').val();
+          var devolucion=$('#devolucion').val();
           $.ajax({
             type:'POST',
             url:'creacionDespacho.php',
-            data:{codigo:codigo},
+            data:{codigo:codigo,devolucion:devolucion},
             success: function(data){
-                $('#mensaje').append(data);
+                $('#mensaje').prepend(data);
                 $('#formMaterial')[0].reset();
             }
         });
@@ -36,12 +43,13 @@
           event.preventDefault();
           var nombre=$('#nombreManual').val();
           var cantidad=$('#cantidadManual').val();
+          var devolucion=$('#devolucion').val();
           $.ajax({
             type:'POST',
             url:'creacionDespacho.php',
-            data:{nombre:nombre,cantidad:cantidad},
+            data:{nombre:nombre,cantidad:cantidad,devolucion:devolucion},
             success: function(data){
-                $('#mensaje').append(data);
+                $('#mensaje').prepend(data);
                 $('#formManual')[0].reset();
             }
         });
@@ -50,34 +58,39 @@
         $('#btnDevolucion').on('click',function(){
           if(contar==0){
             $('.tituloDespacho').css('background-color','red');
-            console.log(contar);
             contar=1;
             $('#devolucion').val(1);
+            $('#devolucionVer').val(1);
             $('#btnDevolucion').html('Desactivar');
+            $('#btnDevolucion').attr("class","btn btn-danger")
           } else{
             $('.tituloDespacho').css('background-color','white');
             contar=0;
             $('#devolucion').val(0);
+            $('#devolucionVer').val(0);
             $('#btnDevolucion').html('Activar');
+            $('#btnDevolucion').attr("class","btn btn-success")
           }
       });
       $('#busqueda').on('keyup',function(){
         $("#resultadoBusqueda tr").remove(); 
         var nombre=$('#busqueda').val();
+        var devolucion=$('#devolucion').val();
           $.ajax({
             type:'POST',
             url:'busquedaManual.php',
-            data:{nombre:nombre},
+            data:{nombre:nombre,devolucion:devolucion},
             success: function(data){
-                $('#resultadoBusqueda').append(data);
+                $('#resultadoBusqueda').prepend(data);
             }
         });
       });
-      $('#except .botonReporte button').on('click',function(){
-        var row=$(this).closest('tr');
+      $('#llenadoEncuentro').on('click',function(){
+        var row=$('#except .botonReporte button').closest('tr');
         var id=$(row).find("td").eq(3).html();
-        var estado=$(row).find("td").eq(5).html();
-        window.location="../reporte/reporte.php?codigo="+id;
+        var encuentro=$('#encuentro').val();
+        window.location="../reporte/reporte.php?codigo="+id+"&encuentro="+encuentro;
+        
     });
       });
     </script>
@@ -94,6 +107,27 @@
   function cerrar2(){
     document.getElementById("overlay2").style.visibility = "hidden";
   };
+  function encuentro(){
+    document.getElementById("overlay3").style.visibility = "visible";
+
+  };
+  function cerrar3(){
+    document.getElementById("overlay3").style.visibility = "hidden";
+  };
+</script>
+<script>
+ function isChecked(checkbox) {
+    var button = document.getElementById('btnEliminar');
+
+    if (checkbox.checked === true) {
+        button.disabled = "";
+    } else {
+        button.disabled = "disabled";
+    }
+}
+  function eliminar(){
+
+  }
 </script>
   </head>
 <body>
@@ -129,31 +163,37 @@
           WHERE dni_usuario=$idSesion and (id_estado=1 or id_estado=2) and id_accion=$evento;";
           $consulta=mysqli_query($conexion,$sql);
           $row=mysqli_fetch_array($consulta);
-          echo "<tr>";
-          echo "<td>" . $row['nombre_completo']. "</td>";
-          echo "<td>" . $row['nombre_responsable']. "</td>";
-          echo "<td>" . $row['nombre']. "</td>";
-          echo "<td style='display:none;'>".$row['id_accion']."</td>";
-          echo "<td><button type='button' class='btn btn-success' id='btnDevolucion'>Activar</button></td>";
-          echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-          echo "<div class='botonReporte'><button class='btn btn-success' id='reporte'><i class='fas fa-file-alt'></i></button></div>";
-          echo "</tr>";
+            echo "<tr>";
+            echo "<td>" . $row['nombre_completo']. "</td>";
+            echo "<td>" . $row['nombre_responsable']. "</td>";
+            echo "<td>" . $row['nombre']. "</td>";
+            echo "<td style='display:none;'>".$row['id_accion']."</td>";
+            echo "<td><button type='button' class='btn btn-success' id='btnDevolucion'>Activar</button></td>";
+            echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
+            echo "<div class='botonReporte'><button class='btn btn-success' id='reporte' onclick='encuentro();'><i class='fas fa-file-alt'></i></button></div>";
+            echo "</tr>";
           ?>
         </table>
       </div>
-      <div class="form-group">
+    </form>
+    <div class="form-group">
         <label>Codigo</label>
         <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" required >
       </div>
-      <br>
-    </form>
     <div class="form-group">
-        <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar">
+      <div id="ingresos">
+        <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar" style="display:none">
         <button class="btn btn-success" onclick="ingresoManual()">Ingreso Manual</button>
         <button class="btn btn-success" onclick="busquedaManual()">Búsqueda Manual</button>
+      </div>
+        <div id='botonesEdicion'>
+        <button type="submit" form="registro_Despacho" class="btn btn-success">Registrar</button>
+        <button class="btn btn-success" id="btnEliminar" onclick='eliminar()' disabled>Eliminar</button>
+        </div>
     </div>
+    
     <form action="registrarDespacho.php?codigo=<?php echo $evento ?>" method="POST" id="registro_Despacho">
-      <table class="table table-striped" id="tabla_elementos">
+      <table class="table" id="tabla_elementos">
         <thead>
           <th>Codigo</th>
           <th>Descripcion</th>
@@ -161,9 +201,35 @@
           <th> <input type='hidden' id='devolucion' value='' name='devolucion'> </th>
         </thead>
         <tbody id="mensaje">
+          <?php
+          $sqlMateriales="SELECT*FROM despacho_db Where id_evento_acc=$evento order by nombre asc ;";
+          $consultaMateriales=mysqli_query($conexion,$sqlMateriales);
+          while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
+            if($filaConsulta['devolucion']==0){
+              echo "<tr>";
+              echo "<td>".$filaConsulta['id_material']."</td>";
+              echo "<td>".$filaConsulta['nombre']."</td>";
+              echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
+              echo "<td><input type='checkbox' name='chk1' value=1 onchange='isChecked(this)' ></td>";
+              echo "</tr>";
+            }else{
+              echo "<tr>";
+              echo "<td>".$filaConsulta['id_material']."</td>";
+              echo "<td>".$filaConsulta['nombre']."</td>";
+              echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
+              echo "<td><input type='checkbox' name='chk1' value=1 onchange='isChecked(this)' ></td>";
+              echo "</tr>";
+              echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'>";
+              echo "<td>".$filaConsulta['id_material']."</td>";
+              echo "<td>".$filaConsulta['nombre']."</td>";
+              echo "<td><input type='number' value=".$filaConsulta['devolucion']."></td>";
+              echo "<td><input type='checkbox' name='chk1' value=1 onchange='isChecked(this)' ></td>";
+              echo "</tr>";
+            }
+          }
+          ?>
         </tbody>  
       </table>
-      <button type="submit" form="registro_Despacho" class="btn btn-success">Registrar</button>
     </form>
     <form action="" id="formManual">
       <div class="overlay" id="overlay1">
@@ -194,10 +260,20 @@
             <tbody id="resultadoBusqueda">
             </tbody>
           </table>
-          <button type="submit" form='formBusqueda' onclick="cerrar2()">Registrar</button>
         </div>
       </div>
     </form>
+    <div class="overlay" id="overlay3">
+        <div class="popup">
+          <div id="encabezado_popup">
+            <h3>Ingrese Numero de Encuentro</h3>
+            <a onclick="cerrar3()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
+          </div>
+          <p>Numero de Encuentro</p> 
+          <input type="text" name="encuentro" id="encuentro"> <br>
+          <div><button id='llenadoEncuentro'>Registrar</button></div>
+        </div>
+      </div>
     </section>
 </body>
 </html>

@@ -10,18 +10,13 @@
     $fecha=$_POST['fecha'];
     $evento=$_POST['evento'];
     $responsable=$_POST['responsable'];
-    if($_POST['encuentro']==''){
-        $codigoCierre=0;
-    } else{ 
-        $codigoCierre=$_POST['encuentro'];
-    };
     if ($verificador==0){
-        $sql="INSERT INTO evento_acc_db(fecha,dni_usuario,id_evento,fecha_programacion,nombre_paciente,apellido_paciente,descripcion_evento,nombre_responsable,id_estado,codigo_cierre) 
-        values(NOW(),$usuario,$evento,'$fecha','$paciente','$pacienteApellido','$descripcion','$responsable',1,'$codigoCierre');";
+        $sql="INSERT INTO evento_acc_db(fecha,dni_usuario,id_evento,fecha_programacion,nombre_paciente,apellido_paciente,descripcion_evento,nombre_responsable,id_estado) 
+        values(NOW(),$usuario,$evento,'$fecha','$paciente','$pacienteApellido','$descripcion','$responsable',1);";
         $resultado=mysqli_query($conexion,$sql);
     } else{
         $sql="UPDATE evento_acc_db
-        SET fecha_programacion='$fecha',nombre_paciente='$paciente',apellido_paciente='$pacienteApellido',descripcion_evento='$descripcion',nombre_responsable='$responsable',codigo_cierre=$codigoCierre
+        SET fecha_programacion='$fecha',nombre_paciente='$paciente',apellido_paciente='$pacienteApellido',descripcion_evento='$descripcion',nombre_responsable='$responsable'
         WHERE id_accion=$id_accion;";
         $resultado=mysqli_query($conexion,$sql);
     };

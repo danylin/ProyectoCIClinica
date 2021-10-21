@@ -34,8 +34,7 @@
                     echo "</select> </p> </div>";
                 ?>
                     <div class="col-sm-6"><p>Fecha Programada <br> <input type="date" name="fecha" id="form-fecha" required></p></div> 
-                    <div class="col-sm-6"><p>Responsable <br> <input type="text" name="responsable" id="responsable" required></p></div> 
-                    <div class="col-sm-6"><p>Número de Encuentro <br> <input type="text" name="encuentro" id="encuentro" ></p></div> 
+                    <div class="col-sm-12"><p>Responsable <br> <input type="text" name="responsable" id="responsable" required autocomplete='off'></p></div> 
                     <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3" required></textarea></p></div>      
                 </div>
                 <div>
@@ -52,17 +51,27 @@
     <div class="container-table">
         <div class="table-title">
             <h3>Eventos</h3>
-            <button class='btn btn-info' onclick='mostrar(0)'>Nuevo Evento</button>
-            <div class='filtros'>
-                <div id='input_buscar'>
-                    Desde: <input type="date" name="" id="fechaDesde" >
-                    Hasta: <input type="date" name="" id="fechaHasta">
+            <div id='cajaOpciones'>
+                <button class='btn btn-info' id='nuevoEvento'onclick='mostrar(0)'>Nuevo Evento</button>
+                <div class='filtros'>
+                    <div id='input_buscar'>
+                       Filtros: <select name="filtroEleccion" id="filtroEleccion">
+                       <option selected disabled>Tipo Evento</option>
+                            <option value="1" >Programado</option>
+                            <option value="2">En Proceso</option>
+                            <option value="3">Cerrado</option>
+                            <option value="4">Suspendido</option>
+                        </select>
+                        <input type="search" name="filtroBusqueda" id="filtroBusqueda" onkeyup="filtrado()"placeholder="Buscar">
+                        <p id='desde'>Desde: <input type="date" name="" id="fechaDesde" >
+                        Hasta:<input type="date" name="" id="fechaHasta">
+                    </p>
+                    </div>
                 </div>
             </div>
         </div>
         <table class="table table-light" id='tabla_eventos'>
             <thead>
-                <th scope="col" onclick="sortTable(0)">Id</th>
                 <th scope="col" onclick="sortTable(1)">Fecha de Programacion</th>
                 <th scope="col" onclick="sortTable(2)">Nombre del Paciente</th>
                 <th scope="col" onclick="sortTable(3)">Apellidos del Paciente</th>
@@ -86,14 +95,13 @@
                 ?>
                 <tr class='fila' onclick='javascript:location.href="despacho/despacho.php?codigo=<?php echo $row["id_accion"]; ?>";'>
                 <?php
-                    echo "<td>". $row['id_accion']."</td>";
+                    echo "<td style='display:none;'>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['nombre_paciente']."</td>";
                     echo "<td>". $row['apellido_paciente']."</td>";
                     echo "<td>". $row['estado']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
                     echo "<td>". $row['descripcion_evento']."</td>";
-                    echo "<td style='display:none;'>". $row['codigo_cierre']."</td>";
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
                     echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento'><i class='fas fa-edit'></i></button></div>";
                     echo "</td>";
@@ -103,9 +111,7 @@
             </tbody>
         </table>
     </div>
-
 <script> 
-
 function cerrar(){
     document.getElementById("overlay1").style.visibility = "hidden";
         $('#nombre').val('');
@@ -114,7 +120,6 @@ function cerrar(){
         $('#responsable').val('');
         $('#evento option:selected').val('');
         $('#descr-evento ').val('');
-        $('#encuentro').val('');
   };
   function mostrar(n){
       var btnRegistrar=document.getElementById("btnRegistrar");
@@ -133,6 +138,19 @@ function cerrar(){
     }
     document.getElementById("overlay1").style.visibility = "visible";
   };
+  $('#filtroEleccion').on('change',function(){
+        $("#tabla_eventos tr td").remove(); 
+        var estado=$('#filtroEleccion').val();
+        console.log(estado);
+          $.ajax({
+            type:'POST',
+            url:'include/filtroEventos.php',
+            data:{estado:estado},
+            success: function(data){
+                $('#tabla_contenido').append(data);
+            }
+        });
+      });
     $('#except .editarEvento button').on('click',function(){
         var row=$(this).closest('tr');
         var nombre=$(row).find("td").eq(2).html(),
@@ -142,7 +160,6 @@ function cerrar(){
         id=$(row).find("td").eq(0).html(),
         responsable=$(row).find("td").eq(5).html();
         descripcion=$(row).find("td").eq(6).html();
-        codigoCierre=$(row).find("td").eq(7).html();
         mostrar(1);
         $('#id_accion').val(id);
         $('#nombre').val(nombre);
@@ -151,7 +168,6 @@ function cerrar(){
         $('#responsable').val(responsable);
         $('#evento option:selected').val(evento);
         $('#descr-evento ').val(descripcion);
-        $('#encuentro ').val(codigoCierre);
     });
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
@@ -207,5 +223,68 @@ function cerrar(){
     document.getElementById('form-fecha').min=year+"-"+mes+"-"+dia;
     document.getElementById('fechaDesde').value=year+"-"+mes+"-"+dia;
     document.getElementById('fechaHasta').value=year+"-"+mes+"-"+dia;
+    document.getElementById('fechaDesde').max=year+"-"+mes+"-"+dia;
+    document.getElementById('fechaHasta').max=year+"-"+mes+"-"+dia;
     };
+    function filtrado(){
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("filtroBusqueda");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tabla_eventos");
+        tr = table.getElementsByTagName("tr");
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+            }
+        }
+    }
+</script>
+<script>
+    $('#fechaDesde').on('change',function(){
+        $("#tabla_contenido tr").each(function() {
+    var from=$('#fechaDesde').val();
+    var to=$('#fechaHasta').val();
+    var row = $(this);
+    var date = row.find("td").eq(1).html();
+    console.log(from);
+    console.log(to);
+    console.log(date);
+    var show = true;
+    if (from && date < from)
+      show = false;
+    
+    if (to && date > to)
+      show = false;
+
+    if (show)
+      row.show();
+    else
+      row.hide();
+  });
+    })
+    $('#fechaHasta').on('change',function(){
+        $("#tabla_contenido tr").each(function() {
+    var from=$('#fechaDesde').val();
+    var to=$('#fechaHasta').val();
+    var row = $(this);
+    var date = row.find("td").eq(1).html();
+    var show = true;
+    if (from && date < from)
+      show = false;
+    
+    if (to && date > to)
+      show = false;
+
+    if (show)
+      row.show();
+    else
+      row.hide();
+  });
+    })
 </script>

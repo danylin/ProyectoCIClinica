@@ -126,11 +126,8 @@ text-align: center;
     text-align: right;
     padding-left: 63%;
 }
-.filtros{
-    display: flex;
-}
 
-#overlay1,#overlay2{
+#overlay1,#overlay2,#overlay3{
     background: rgba(0,0,0,0.3);
     position: fixed;
     top: 0;
@@ -166,4 +163,40 @@ text-align: center;
 
 #reporteEvento h3{
     text-align: center;
+}
+
+#cajaOpciones #nuevoEvento{
+float: left;
+}
+
+
+#ingresos{
+float: left;
+}
+
+#botonesEdicion{
+    float: right;
+}
+
+#informacio-general{
+    width: 100%;
+}
+
+#informacio-general tr td{
+    text-align: left;
+    border: 1px solid black;
+    width: 26%;
+}
+
+#registroElementos{
+    padding-top: 3rem;
+}
+
+#registroElementos th{
+    border: 1px solid black;
+    background-color: cyan;
+}
+#registroElementos tr td{
+    border: 1px solid black;
+    width: 26%;
 }

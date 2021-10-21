@@ -21,7 +21,7 @@ include("../include/titulo.php");
         <div class='btn btn-info' onclick='location="Registro_Usuario.php"'> Nuevo Usuario <i class="fas fa-plus"></i></div>
         <div class="usuarios-actuales">
           <h3>Usuarios Actuales</h3>
-          <table class="table table-light">
+          <table class="table-responsive">
             <thead>
               <th scope="col">DNI</th>
               <th scope="col">Usuario</th>
