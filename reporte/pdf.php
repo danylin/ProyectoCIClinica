@@ -110,7 +110,6 @@ table tr td{
     <tr>
         <td>Nro de Encuentro</td>
         <td>'. $row['codigo_cierre'].'</td>
-        <td>'.$pdf->write1DBarcode($codigoPaciente, 'C128A', 105, '', 90, 15, 0.4, $style, 'N').'</td>
     </tr>
     <tr>
         <td>Fecha</td>
