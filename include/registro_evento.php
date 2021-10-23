@@ -20,5 +20,10 @@
         WHERE id_accion=$id_accion;";
         $resultado=mysqli_query($conexion,$sql);
     };
-    header("location:../usuario2.php");
+    if($_SESSION['tipousuario']==1){
+        header("location:../usuario1.php");
+    } else{
+        header("location:../usuario2.php");
+    }
+    
 ?>

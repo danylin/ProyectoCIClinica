@@ -12,9 +12,7 @@ error_reporting(0);
           <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna">
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item active"><a class="nav-link" href="../usuario2.php">CREACION DE EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="Usuarios.php">CREACION DE USUARIO <i class="fa fa-user" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="../include/logout.php">SALIR <i class="fas fa-sign-out-alt"></i></a></li>
+          <?php include("../include/barraNavegacion.php") ?>
           </ul>
         </div>
       </nav>
@@ -44,9 +42,9 @@ error_reporting(0);
                 <?php
                       $sql="SELECT*FROM tipo_db;";
                       $tipoResultado=mysqli_query($conexion,$sql);
-                      echo "<p class='col-sm-6'> Tipo de Usuario <br> <select name='cargo'";
+                      echo "<p class='col-sm-6'> Tipo de Usuario <br> <select name='cargo'>";
                       while($row=mysqli_fetch_array($tipoResultado)){
-                        if($row['id_tipo']==$resultado['id_tipo']){
+                        if($row['id_tipo']==$_SESSION['tipousuario']){
                           echo "<option value=".$row['id_tipo']." selected>". $row['id_tipo'] ."</option>";
                         }
                         else{

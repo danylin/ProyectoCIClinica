@@ -2,6 +2,7 @@
 <html >
 <head>
     <?php
+    session_start();
     include("../include/titulo.php")
     ?>
 <link rel="stylesheet" href="../estilos.css">
@@ -16,22 +17,22 @@
           <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna">
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item active"><a class="nav-link" href="../usuario2.php">EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="../usuario/Usuarios.php">USUARIOS <i class="fa fa-user" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="../include/logout.php">SALIR <i class="fas fa-sign-out-alt"></i></a></li>
+            <?php include("../include/barraNavegacion.php");?>
           </ul>
         </div>
       </nav>
     </header>
     <section>
-        <button onclick='generarPDF(<?php echo $_GET["codigo"]; ?>,<?php echo $_GET["encuentro"]; ?> )' id='botonGenerar'>Generar PDF</button>
+        <button onclick='generarPDF(<?php echo $_GET["codigo"]; ?>)' id='botonGenerar'>Generar PDF</button>
         <div id="reporteResultado">
             <?php
             include("../include/bd_usuario.php");
             $nroEvento=$_GET['codigo'];
-            $nroEncuentro=$_GET['encuentro'];
-            $encuentro="UPDATE evento_acc_db SET codigo_cierre=$nroEncuentro,id_estado=3 WHERE id_accion=$nroEvento";
-            $resultado=mysqli_query($conexion,$encuentro);
+            if (isset($_GET['encuentro'])){
+                $nroEncuentro=$_GET['encuentro'];
+                $encuentro="UPDATE evento_acc_db SET codigo_cierre=$nroEncuentro,id_estado=3 WHERE id_accion=$nroEvento";
+                $resultado=mysqli_query($conexion,$encuentro);
+            }
             $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
             FROM evento_acc_db a 
             INNER JOIN eventos_db b ON
@@ -85,34 +86,83 @@
                 <table id="elementos">
                     <thead>
                         <th>Codigo de Material</th>
-                        <th>Descripcion del Material</th>
                         <th>Cantidad</th>
+                        <th>Descripcion del Material</th>
                         <th>Tipo</th>
                     </thead>
                     <tbody>
                 <?php
                 $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo
                 FROM despacho_db
-                WHERE id_evento_acc=$nroEvento";
+                WHERE id_evento_acc=$nroEvento and tipo=''
+                ORDER BY nombre asc";
                 $resultado=mysqli_query($conexion,$materiales);
                 while ($row=mysqli_fetch_array($resultado)){
                     echo "<tr>";
                     echo "<td>".$row['id_material']."</td>";
-                    echo "<td>".$row['nombre']."</td>";
                     echo "<td>".$row['resultado']."</td>";
+                    echo "<td>".$row['nombre']."</td>";
                     echo "<td>".$row['tipo']."</td>";
                     echo "</tr>";
                 }
                 ?>
                     </tbody>
                 </table>
+                <?php
+                $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo
+                FROM despacho_db
+                WHERE id_evento_acc=$nroEvento and tipo='K'";
+                $resultado=mysqli_query($conexion,$materiales);
+                if(!empty($resultado)){
+                    echo  '<table id="elementos">
+                    <thead>
+                        <th>Codigo de Material</th>
+                        <th>Cantidad</th>
+                        <th>Descripcion del Material</th>
+                        <th>Tipo</th>
+                    </thead>
+                    <tbody>';
+                    while ($row=mysqli_fetch_array($resultado)){
+                        echo "<tr>";
+                        echo "<td>".$row['id_material']."</td>";
+                        echo "<td>".$row['resultado']."</td>";
+                        echo "<td>".$row['nombre']."</td>";
+                        echo "<td>".$row['tipo']."</td>";
+                        echo "</tr>";
+                    echo '</tbody></table>';
+                }
+                }
+                $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo
+                FROM despacho_db
+                WHERE id_evento_acc=$nroEvento and tipo='I'";
+                $resultado=mysqli_query($conexion,$materiales);
+                if(!empty($resultado)){
+                    echo  '<table id="elementos">
+                    <thead>
+                        <th>Codigo de Material</th>
+                        <th>Cantidad</th>
+                        <th>Descripcion del Material</th>
+                        <th>Tipo</th>
+                    </thead>
+                    <tbody>';
+                    while ($row=mysqli_fetch_array($resultado)){
+                        echo "<tr>";
+                        echo "<td>".$row['id_material']."</td>";
+                        echo "<td>".$row['resultado']."</td>";
+                        echo "<td>".$row['nombre']."</td>";
+                        echo "<td>".$row['tipo']."</td>";
+                        echo "</tr>";
+                    echo '</tbody></table>';
+                }
+                }
+                ?>
             </div>
         </div>
     </section>
 </body>
 <script>
-    function generarPDF(a,b) {
-            window.open('pdf.php?codigo='+a+'&encuentro='+b);
+    function generarPDF(a) {
+            window.open('pdf.php?codigo='+a);
     }
 </script>
 </html>

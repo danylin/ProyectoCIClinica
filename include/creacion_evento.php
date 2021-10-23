@@ -62,7 +62,7 @@
                             <option value="3">Cerrado</option>
                             <option value="4">Suspendido</option>
                         </select>
-                        <input type="search" name="filtroBusqueda" id="filtroBusqueda" onkeyup="filtrado()"placeholder="Buscar">
+                        <input type="search" name="filtroBusqueda" id="filtroBusqueda" onkeyup="filtrado()"placeholder="Buscar por Apellido">
                         <p id='desde'>Desde: <input type="date" name="" id="fechaDesde" >
                         Hasta:<input type="date" name="" id="fechaHasta">
                     </p>
@@ -83,7 +83,7 @@
                 <?php
                 $id=$_SESSION['id_sede'];
                 include("bd_usuario.php");
-                $sql="SELECT a.id_accion,a.codigo_cierre,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
+                $sql="SELECT a.id_accion,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
                 FROM evento_acc_db a
                 INNER JOIN estados_db b on b.id_estado=a.id_estado
                 INNER JOIN usuarios_db on a.dni_usuario =usuarios_db.dni 
@@ -93,7 +93,7 @@
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                 ?>
-                <tr class='fila' onclick='javascript:location.href="despacho/despacho.php?codigo=<?php echo $row["id_accion"]; ?>";'>
+                <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"]; ?>)'>
                 <?php
                     echo "<td style='display:none;'>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
@@ -112,6 +112,9 @@
         </table>
     </div>
 <script> 
+function redireccion(a,b){
+    window.location="despacho/comprobar.php?estado="+a+"&codigo="+b;
+}
 function cerrar(){
     document.getElementById("overlay1").style.visibility = "hidden";
         $('#nombre').val('');
@@ -223,9 +226,24 @@ function cerrar(){
     document.getElementById('form-fecha').min=year+"-"+mes+"-"+dia;
     document.getElementById('fechaDesde').value=year+"-"+mes+"-"+dia;
     document.getElementById('fechaHasta').value=year+"-"+mes+"-"+dia;
-    document.getElementById('fechaDesde').max=year+"-"+mes+"-"+dia;
-    document.getElementById('fechaHasta').max=year+"-"+mes+"-"+dia;
-    };
+    $("#tabla_contenido tr").each(function() {
+    var from=$('#fechaDesde').val();
+    var to=$('#fechaHasta').val();
+    var row = $(this);
+    var date = row.find("td").eq(1).html();
+    var show = true;
+    if (from && date < from)
+      show = false;
+    
+    if (to && date > to)
+      show = false;
+
+    if (show)
+      row.show();
+    else
+      row.hide();
+  }); 
+  };
     function filtrado(){
         var input, filter, table, tr, td, i, txtValue;
         input = document.getElementById("filtroBusqueda");
@@ -252,9 +270,6 @@ function cerrar(){
     var to=$('#fechaHasta').val();
     var row = $(this);
     var date = row.find("td").eq(1).html();
-    console.log(from);
-    console.log(to);
-    console.log(date);
     var show = true;
     if (from && date < from)
       show = false;

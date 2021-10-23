@@ -151,9 +151,7 @@ function eliminar(){
           <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna">
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item active"><a class="nav-link" href="../usuario2.php">EVENTOS <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="../usuario/Usuarios.php">USUARIOS <i class="fa fa-user" aria-hidden="true"></i></a></li>
-            <li class="nav-item"><a class="nav-link" href="../include/logout.php">SALIR <i class="fas fa-sign-out-alt"></i></a></li>
+            <?php include("../include/barraNavegacion.php")?>
           </ul>
         </div>
       </nav>
@@ -214,6 +212,7 @@ function eliminar(){
           <th>Descripcion</th>
           <th>Cantidad</th>
           <th> <input type='hidden' id='devolucion' value='' name='devolucion'> </th>
+          <th>Tipo</th>
         </thead>
         <tbody id="mensaje">
           <?php
@@ -226,6 +225,7 @@ function eliminar(){
               echo "<td>".$filaConsulta['nombre']."</td>";
               echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
               echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
+              echo "<td>".$filaConsulta['tipo']."</td>";
               echo "</tr>";
             }else{
               echo "<tr>";
@@ -233,12 +233,14 @@ function eliminar(){
               echo "<td>".$filaConsulta['nombre']."</td>";
               echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
               echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
+              echo "<td>".$filaConsulta['tipo']."</td>";
               echo "</tr>";
               echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'>";
               echo "<td>".$filaConsulta['id_material']."</td>";
               echo "<td>".$filaConsulta['nombre']."</td>";
               echo "<td><input type='number' value=".$filaConsulta['devolucion']."></td>";
               echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
+              echo "<td>".$filaConsulta['tipo']."</td>";
               echo "</tr>";
             }
           }
@@ -280,12 +282,11 @@ function eliminar(){
     </form>
     <div class="overlay" id="overlay3">
         <div class="popup">
-          <div id="encabezado_popup">
+          <div id="encabezado_encuentro">
             <h3>Ingrese Numero de Encuentro</h3>
             <a onclick="cerrar3()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
-          <p>Numero de Encuentro</p> 
-          <input type="text" name="encuentro" id="encuentro"> <br>
+          <div><input type="text" name="encuentro" id="encuentro"> <br></div>
           <div><button id='llenadoEncuentro'>Registrar</button></div>
         </div>
       </div>

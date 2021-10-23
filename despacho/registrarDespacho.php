@@ -16,5 +16,9 @@
     }
     $cambio="UPDATE evento_acc_db SET id_estado=2 WHERE id_accion=$idEvento;";
     $actualizar=mysqli_query($conexion,$cambio);
-    header("location:../usuario2.php");
+    if($_SESSION['tipousuario']==1){
+        header("location:../usuario1.php");
+    } else{
+        header("location:../usuario2.php");
+    }
 ?>

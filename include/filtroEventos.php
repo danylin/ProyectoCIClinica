@@ -3,7 +3,7 @@
                 session_start();
                 $id=$_SESSION['id_sede'];
                 $estado=$_POST['estado'];
-                $sql="SELECT a.id_accion,a.codigo_cierre,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
+                $sql="SELECT a.id_accion,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
                 FROM evento_acc_db a
                 INNER JOIN estados_db b on b.id_estado=a.id_estado
                 INNER JOIN usuarios_db on a.dni_usuario =usuarios_db.dni 
@@ -13,7 +13,7 @@
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                 ?>
-                <tr class='fila' onclick='javascript:location.href="despacho/despacho.php?codigo=<?php echo $row["id_accion"]; ?>";'>
+                <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"]; ?>)'>
                 <?php
                     echo "<td style='display:none;'>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";

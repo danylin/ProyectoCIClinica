@@ -21,6 +21,7 @@
     $_SESSION['nombre']=$row['nombre'];
     $_SESSION['apellido']=$row['apellido'];
     $_SESSION['id_sede']=$row['id_sede'];
+    $_SESSION['tipousuario']=$row['id_tipo'];
 
         if ($row['id_tipo']==1) {
             header("location:usuario1.php");
@@ -29,7 +30,7 @@
             header("location:usuario2.php");
         }
         elseif($row['id_tipo']==3) {
-            header("location:usuario3.php");
+            header("location:usuario2.php");
         }
         else{
             if(isset($_POST['clave'])){
