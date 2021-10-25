@@ -11,8 +11,8 @@
                 <div class="col-sm-6"><p>Apellidos del Paciente <br> <input type="text" name="apellido" id="apellido" autocomplete="off" required></p></div>  
                 <?php
                     include("include/bd_usuario.php"); 
-                    $sql="SELECT*FROM eventos_db;";
-                    $sql2="SELECT*FROM usuarios_db WHERE dni=".$_SESSION['id'];
+                    $sql="SELECT*FROM sop__eventos_db;";
+                    $sql2="SELECT*FROM sop__usuarios_db WHERE dni=".$_SESSION['id'];
                     $resultado=mysqli_query($conexion,$sql);
                     $resultado2=mysqli_query($conexion,$sql2);
                     $row2=mysqli_fetch_array($resultado2);
@@ -83,11 +83,11 @@
                 <?php
                 $id=$_SESSION['id_sede'];
                 include("bd_usuario.php");
-                $sql="SELECT a.id_accion,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
-                FROM evento_acc_db a
-                INNER JOIN estados_db b on b.id_estado=a.id_estado
-                INNER JOIN usuarios_db on a.dni_usuario =usuarios_db.dni 
-                INNER JOIN sede__db_area on sede__db_area.id=usuarios_db.id_sede 
+                $sql="SELECT a.id_accion,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
+                FROM sop__evento_acc_db a
+                INNER JOIN sop__estados_db b on b.id_estado=a.id_estado
+                INNER JOIN sop__usuarios_db on a.dni_usuario =sop__usuarios_db.dni 
+                INNER JOIN sede__db_area on sede__db_area.id=sop__usuarios_db.id_sede 
                 WHERE sede__db_area.id=$id and (a.id_estado=1 or a.id_estado=2)
                 ORDER BY a.fecha_programacion desc;";
                 $resultado=mysqli_query($conexion,$sql);

@@ -30,10 +30,11 @@
           event.preventDefault();
           var codigo=$('#codigo').val();
           var devolucion=$('#devolucion').val();
+          var tipoEvento=$('#tipoEvento').val();
           $.ajax({
             type:'POST',
             url:'creacionDespacho.php',
-            data:{codigo:codigo,devolucion:devolucion},
+            data:{codigo:codigo,devolucion:devolucion,tipoEvento:tipoEvento},
             success: function(data){
                 $('#mensaje').prepend(data);
                 $('#formMaterial')[0].reset();
@@ -45,10 +46,11 @@
           var nombre=$('#nombreManual').val();
           var cantidad=$('#cantidadManual').val();
           var devolucion=$('#devolucion').val();
+          var tipoEvento=$('#tipoEvento').val();
           $.ajax({
             type:'POST',
             url:'creacionDespacho.php',
-            data:{nombre:nombre,cantidad:cantidad,devolucion:devolucion},
+            data:{nombre:nombre,cantidad:cantidad,devolucion:devolucion,tipoEvento:tipoEvento},
             success: function(data){
                 $('#mensaje').prepend(data);
                 $('#formManual')[0].reset();
@@ -77,10 +79,11 @@
         $("#resultadoBusqueda tr").remove(); 
         var nombre=$('#busqueda').val();
         var devolucion=$('#devolucion').val();
+        var tipoEvento=$('#tipoEvento').val();
           $.ajax({
             type:'POST',
             url:'busquedaManual.php',
-            data:{nombre:nombre,devolucion:devolucion},
+            data:{nombre:nombre,devolucion:devolucion,tipoEvento:tipoEvento},
             success: function(data){
                 $('#resultadoBusqueda').prepend(data);
             }
@@ -171,15 +174,16 @@ function eliminar(){
           include("../include/bd_usuario.php");
           $idSesion=$_SESSION['id'];
           $evento=$_GET['codigo'];
-          $sql="SELECT id_accion,CONCAT(nombre_paciente,' ',apellido_paciente) nombre_completo ,nombre_responsable,a.nombre FROM evento_acc_db 
-          INNER JOIN eventos_db a on evento_acc_db.id_evento=a.id_evento
+          $sql="SELECT id_accion,CONCAT(nombre_paciente,' ',apellido_paciente) nombre_completo ,nombre_responsable,a.nombre FROM sop__evento_acc_db 
+          INNER JOIN sop__eventos_db a on sop__evento_acc_db.id_evento=a.id_evento
           WHERE dni_usuario=$idSesion and (id_estado=1 or id_estado=2) and id_accion=$evento;";
           $consulta=mysqli_query($conexion,$sql);
           $row=mysqli_fetch_array($consulta);
+          $tipoEvento=$row['nombre'];
             echo "<tr>";
             echo "<td>" . $row['nombre_completo']. "</td>";
             echo "<td>" . $row['nombre_responsable']. "</td>";
-            echo "<td>" . $row['nombre']. "</td>";
+            echo "<td>" . $tipoEvento. "<input type='hidden' id='tipoEvento' value='".$tipoEvento."'</td>";
             echo "<td style='display:none;'>".$row['id_accion']."</td>";
             echo "<td><button type='button' class='btn btn-success' id='btnDevolucion'>Activar</button></td>";
             echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
@@ -189,9 +193,10 @@ function eliminar(){
         </table>
       </div>
     </form>
+    
     <div class="form-group">
         <label>Codigo</label>
-        <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" required >
+        <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" required autocomplete=off>
       </div>
     <div class="form-group">
       <div id="ingresos">
@@ -211,12 +216,13 @@ function eliminar(){
           <th>Codigo</th>
           <th>Descripcion</th>
           <th>Cantidad</th>
-          <th> <input type='hidden' id='devolucion' value='' name='devolucion'> </th>
           <th>Tipo</th>
+          <th>Subtipo</th>
+          <th> <input type='hidden' id='devolucion' value='' name='devolucion'> </th>
         </thead>
         <tbody id="mensaje">
           <?php
-          $sqlMateriales="SELECT*FROM despacho_db Where id_evento_acc=$evento order by nombre asc ;";
+          $sqlMateriales="SELECT*FROM sop__despacho_db Where id_evento_acc=$evento order by nombre asc ;";
           $consultaMateriales=mysqli_query($conexion,$sqlMateriales);
           while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
             if($filaConsulta['devolucion']==0){
@@ -224,23 +230,27 @@ function eliminar(){
               echo "<td>".$filaConsulta['id_material']."</td>";
               echo "<td>".$filaConsulta['nombre']."</td>";
               echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
-              echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
               echo "<td>".$filaConsulta['tipo']."</td>";
+              echo "<td>".$filaConsulta['subtipo']."</td>";
+              echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
+
               echo "</tr>";
             }else{
               echo "<tr>";
               echo "<td>".$filaConsulta['id_material']."</td>";
               echo "<td>".$filaConsulta['nombre']."</td>";
               echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
-              echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
               echo "<td>".$filaConsulta['tipo']."</td>";
+              echo "<td>".$filaConsulta['subtipo']."</td>";
+              echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
               echo "</tr>";
               echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'>";
               echo "<td>".$filaConsulta['id_material']."</td>";
               echo "<td>".$filaConsulta['nombre']."</td>";
               echo "<td><input type='number' value=".$filaConsulta['devolucion']."></td>";
-              echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
               echo "<td>".$filaConsulta['tipo']."</td>";
+              echo "<td>".$filaConsulta['subtipo']."</td>";
+              echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
               echo "</tr>";
             }
           }

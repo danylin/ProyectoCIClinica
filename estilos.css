@@ -107,6 +107,10 @@ table{
       padding-top: 1rem;
   }
 
+  #tablaUsuarios{
+      width: 100%;
+  }
+
   .registro{
       padding-top: 2rem;
       padding-right: 20rem;

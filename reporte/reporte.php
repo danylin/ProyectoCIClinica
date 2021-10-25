@@ -23,23 +23,22 @@
       </nav>
     </header>
     <section>
-        <button onclick='generarPDF(<?php echo $_GET["codigo"]; ?>)' id='botonGenerar'>Generar PDF</button>
         <div id="reporteResultado">
             <?php
             include("../include/bd_usuario.php");
             $nroEvento=$_GET['codigo'];
             if (isset($_GET['encuentro'])){
                 $nroEncuentro=$_GET['encuentro'];
-                $encuentro="UPDATE evento_acc_db SET codigo_cierre=$nroEncuentro,id_estado=3 WHERE id_accion=$nroEvento";
+                $encuentro="UPDATE sop__evento_acc_db SET codigo_cierre=$nroEncuentro,id_estado=3 WHERE id_accion=$nroEvento";
                 $resultado=mysqli_query($conexion,$encuentro);
             }
             $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
-            FROM evento_acc_db a 
-            INNER JOIN eventos_db b ON
+            FROM sop__evento_acc_db a 
+            INNER JOIN sop__eventos_db b ON
             a.id_evento=b.id_evento
             WHERE a.id_accion=$nroEvento;";
-            $cantidadConsulta="SELECT SUM(cantidad-devolucion) total FROM despacho_db WHERE id_evento_acc=$nroEvento;";
-            $itemsConsulta="SELECT  COUNT(nombre) total FROM despacho_db WHERE id_evento_acc=$nroEvento;";
+            $cantidadConsulta="SELECT SUM(cantidad-devolucion) total FROM sop__despacho_db WHERE id_evento_acc=$nroEvento;";
+            $itemsConsulta="SELECT  COUNT(nombre) total FROM sop__despacho_db WHERE id_evento_acc=$nroEvento;";
             $resultado=mysqli_query($conexion,$sql);
             $cantidadTotal=mysqli_query($conexion,$cantidadConsulta);
             $cantidadItems=mysqli_query($conexion,$itemsConsulta);
@@ -49,6 +48,7 @@
             ?>
             <div id="reporteEvento">
                 <h3>Reporte de Evento</h3>
+                <button class="btn btn-info" onclick='generarPDF(<?php echo $_GET["codigo"]; ?>)' id='botonGenerar'>Generar PDF</button>
             </div>
             <div id="informacio-general">
                     <table>
@@ -89,11 +89,12 @@
                         <th>Cantidad</th>
                         <th>Descripcion del Material</th>
                         <th>Tipo</th>
+                        <th>Subtipo</th>
                     </thead>
                     <tbody>
                 <?php
-                $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo
-                FROM despacho_db
+                $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
+                FROM sop__despacho_db
                 WHERE id_evento_acc=$nroEvento and tipo=''
                 ORDER BY nombre asc";
                 $resultado=mysqli_query($conexion,$materiales);
@@ -103,23 +104,27 @@
                     echo "<td>".$row['resultado']."</td>";
                     echo "<td>".$row['nombre']."</td>";
                     echo "<td>".$row['tipo']."</td>";
+                    echo "<td>".$row['subtipo']."</td>";
                     echo "</tr>";
                 }
                 ?>
                     </tbody>
                 </table>
+
                 <?php
-                $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo
-                FROM despacho_db
+                $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
+                FROM sop__despacho_db
                 WHERE id_evento_acc=$nroEvento and tipo='K'";
                 $resultado=mysqli_query($conexion,$materiales);
-                if(!empty($resultado)){
-                    echo  '<table id="elementos">
+                $filas=mysqli_num_rows($resultado);
+                if($filas>0){
+                    echo  '<div id="registroElementos"><table id="elementos">
                     <thead>
                         <th>Codigo de Material</th>
                         <th>Cantidad</th>
                         <th>Descripcion del Material</th>
                         <th>Tipo</th>
+                        <th>SubTipo</th>
                     </thead>
                     <tbody>';
                     while ($row=mysqli_fetch_array($resultado)){
@@ -128,21 +133,24 @@
                         echo "<td>".$row['resultado']."</td>";
                         echo "<td>".$row['nombre']."</td>";
                         echo "<td>".$row['tipo']."</td>";
+                        echo "<td>".$row['subtipo']."</td>";
                         echo "</tr>";
-                    echo '</tbody></table>';
+                    echo '</tbody></table></div>';
                 }
                 }
-                $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo
-                FROM despacho_db
+                $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
+                FROM sop__despacho_db
                 WHERE id_evento_acc=$nroEvento and tipo='I'";
                 $resultado=mysqli_query($conexion,$materiales);
-                if(!empty($resultado)){
-                    echo  '<table id="elementos">
+                $filas=mysqli_num_rows($resultado);
+                if($filas>0){
+                    echo  '<div id="registroElementos"><table id="elementos">
                     <thead>
                         <th>Codigo de Material</th>
                         <th>Cantidad</th>
                         <th>Descripcion del Material</th>
                         <th>Tipo</th>
+                        <th>SubTipo</th>
                     </thead>
                     <tbody>';
                     while ($row=mysqli_fetch_array($resultado)){
@@ -151,8 +159,9 @@
                         echo "<td>".$row['resultado']."</td>";
                         echo "<td>".$row['nombre']."</td>";
                         echo "<td>".$row['tipo']."</td>";
+                        echo "<td>".$row['subtipo']."</td>";
                         echo "</tr>";
-                    echo '</tbody></table>';
+                    echo '</tbody></table></div>';
                 }
                 }
                 ?>

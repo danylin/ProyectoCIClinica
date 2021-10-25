@@ -2,6 +2,7 @@
 <html lang="es">
 <?php
 include("../include/titulo.php");
+session_start();
 ?>
 <link rel="stylesheet" href="../estilos.css">
 <body>
@@ -21,7 +22,7 @@ include("../include/titulo.php");
         <div class='btn btn-info' onclick='location="Registro_Usuario.php"'> Nuevo Usuario <i class="fas fa-plus"></i></div>
         <div class="usuarios-actuales">
           <h3>Usuarios Actuales</h3>
-          <table class="table">
+          <table class="table" id="tablaUsuarios">
             <thead>
               <th scope="col">DNI</th>
               <th scope="col">Usuario</th>
@@ -35,7 +36,7 @@ include("../include/titulo.php");
               <tbody>
                 <?php
                 include("../include/bd_usuario.php");
-                $sql="SELECT dni,usuario,nombre,apellido,a.sede 'sede',id_tipo,Evento1,Evento2,Evento3,Evento4 FROM usuarios_db INNER JOIN sede__db_area a on usuarios_db.id_sede=a.id;";
+                $sql="SELECT dni,usuario,nombre,apellido,a.sede 'sede',id_tipo,Evento1,Evento2,Evento3,Evento4 FROM sop__usuarios_db INNER JOIN sede__db_area a on sop__usuarios_db.id_sede=a.id;";
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                     echo "<tr>";

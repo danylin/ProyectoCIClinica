@@ -5,13 +5,13 @@
         if (isset($_POST['clave'])){
             $usuario=$_POST['usuario'];
             $pass=$_POST['clave'];
-            $sql="SELECT*FROM usuarios_db where usuario='$usuario' and clave='$pass';";
+            $sql="SELECT*FROM sop__usuarios_db where usuario='$usuario' and clave='$pass';";
             $resultado=mysqli_query($conexion,$sql);
             $row=mysqli_fetch_array($resultado);
         }
     else{
         $usuario=$_POST['usuario'];
-        $sql="SELECT*FROM usuarios_db where dni=$usuario;";
+        $sql="SELECT*FROM sop__usuarios_db where dni=$usuario;";
         $resultado=mysqli_query($conexion,$sql);
         $row=mysqli_fetch_array($resultado);
     }

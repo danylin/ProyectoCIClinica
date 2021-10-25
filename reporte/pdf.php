@@ -2,38 +2,20 @@
 session_start();
 include("../include/bd_usuario.php");
 require_once("../TCPDF/tcpdf.php");
-$style = array(
-    'position' => '',
-    'align' => 'C',
-    'stretch' => false,
-    'fitwidth' => true,
-    'cellfitalign' => '',
-    'border' => true,
-    'hpadding' => 'auto',
-    'vpadding' => 'auto',
-    'fgcolor' => array(0,0,0),
-    'bgcolor' => false, //array(255,255,255),
-    'text' => true,
-    'font' => 'helvetica',
-    'fontsize' => 8,
-    'stretchtext' => 4
-);
             $nroEvento=$_GET['codigo'];
             $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
-            FROM evento_acc_db a 
-            INNER JOIN eventos_db b ON
+            FROM sop__evento_acc_db a 
+            INNER JOIN sop__eventos_db b ON
             a.id_evento=b.id_evento
             WHERE a.id_accion=$nroEvento;";
-            $cantidadConsulta="SELECT SUM(cantidad-devolucion) total FROM despacho_db WHERE id_evento_acc=$nroEvento;";
-            $itemsConsulta="SELECT  COUNT(nombre) total FROM despacho_db WHERE id_evento_acc=$nroEvento;";
+            $cantidadConsulta="SELECT SUM(cantidad-devolucion) total FROM sop__despacho_db WHERE id_evento_acc=$nroEvento;";
+            $itemsConsulta="SELECT  COUNT(nombre) total FROM sop__despacho_db WHERE id_evento_acc=$nroEvento;";
             $resultado=mysqli_query($conexion,$sql);
             $cantidadTotal=mysqli_query($conexion,$cantidadConsulta);
             $cantidadItems=mysqli_query($conexion,$itemsConsulta);
             $row=mysqli_fetch_array($resultado);
             $resultadoCantidad=mysqli_fetch_array($cantidadTotal);
             $totalItems=mysqli_fetch_array($cantidadItems);
-            $codigoPaciente=$row['codigo_cierre'];
-            
 class MYPDF extends TCPDF {
 
      //Page header
@@ -45,7 +27,7 @@ class MYPDF extends TCPDF {
             $sede=mysqli_fetch_array($resultadoSede);
                     // Logo
                     $image_file = '../img/logotipo_auna.jpg';
-                    $this->Image($image_file,100, 0, 20, '', 'JPG', '', 'R', false, 300, '', false, false, 0, false, false, false);
+                    $this->Image($image_file,180, 0, 20, '', 'JPG', '', 'R', false, 300, '', false, false, 0, false, false, false);
                     // Set font
                     $this->SetFont('helvetica', 'B', 12);
                     // Title
@@ -66,7 +48,6 @@ class MYPDF extends TCPDF {
             
             // create new PDF document
             $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            
             // set document information
             $pdf->SetCreator(PDF_CREATOR);
             $pdf->SetAuthor('Nicola Asuni');
@@ -109,7 +90,7 @@ $pdf->setFontSubsetting(true);
 $pdf->SetFont('times', '', 12, '', true);
 
 $pdf->AddPage();
-
+$params = $pdf->serializeTCPDFtagParameters(array($row['codigo_cierre'], 'C39', '', '', 50, 15, 1, array('position'=>'', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
 $html = '<style>
 
 table tr td{
@@ -123,6 +104,7 @@ table tr td{
     <tr>
         <td width="185px">Nro de Encuentro</td>
         <td width="175px">'. $row['codigo_cierre'].'</td>
+        <tcpdf method="write1DBarcode" params="'.$params.'" />
     </tr>
     <tr>
         <td width="185px">Fecha</td>
@@ -154,72 +136,89 @@ table tr td{
 <div id="registroElementos">
 <table id="elementos">
 <tr>
-    <td width="100px" bgcolor="#4dbac4">Codigo de Material</td>
-    <td width="300px" bgcolor="#4dbac4">Descripcion del Material</td>
+    <td width="120px" bgcolor="#4dbac4">BarCode</td>
+    <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
+    <td width="225px" bgcolor="#4dbac4">Descripcion del Material</td>
     <td width="75px" bgcolor="#4dbac4">Cantidad</td>
     <td width="75px" bgcolor="#4dbac4">Tipo</td>
+    <td width="75px" bgcolor="#4dbac4">Subtipo</td>
 </tr>   ';
-$materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo
-FROM despacho_db
+$materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
+FROM sop__despacho_db
 WHERE id_evento_acc=$nroEvento and tipo=''
 ORDER BY nombre asc";
 $resultado=mysqli_query($conexion,$materiales);
 $consultaresultado=mysqli_fetch_all($resultado);
 foreach($consultaresultado as $row){
+    $params = $pdf->serializeTCPDFtagParameters(array($row[0], 'C39', '', '', 32, 15, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
     $html.='
     <tr>
+    <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
     <td>'.$row[0].'</td>
     <td>'.$row[1].'</td>
     <td>'.$row[2].'</td>
     <td>'.$row[3].'</td>
+    <td>'.$row[4].'</td>
     </tr>';
 };
 
 $html.='</table>
 </div>
 ';
-$materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo
-FROM despacho_db
+$materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
+FROM sop__despacho_db
 WHERE id_evento_acc=$nroEvento and tipo='I'";
 $resultado=mysqli_query($conexion,$materiales);
-if(!empty($resultado)){
+$filas=mysqli_num_rows($resultado);
+if($filas>0){
     $html.= '<div><table id="elementos">
     <tr>
-    <td width="100px" bgcolor="#4dbac4">Codigo de Material</td>
-    <td width="300px" bgcolor="#4dbac4">Descripcion del Material</td>
+    <td width="120px" bgcolor="#4dbac4">BarCode</td>
+    <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
+    <td width="225px" bgcolor="#4dbac4">Descripcion del Material</td>
     <td width="75px" bgcolor="#4dbac4">Cantidad</td>
     <td width="75px" bgcolor="#4dbac4">Tipo</td>
+    <td width="75px" bgcolor="#4dbac4">Subtipo</td>
     </tr>
     <tbody>';
     while ($row=mysqli_fetch_array($resultado)){
+        $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 15, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
         $html.= '<tr>
+        <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
         <td>'.$row['id_material'].'</td>
         <td>'.$row['nombre'].'</td>
         <td>'.$row['resultado'].'</td>
         <td>'.$row['tipo'].'</td>
+        <td>'.$row['subtipo'].'</td>
         </tr>
      </tbody></table></div>';
 }
 }
-$materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo
-FROM despacho_db
+$materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
+FROM sop__despacho_db
 WHERE id_evento_acc=$nroEvento and tipo='K'";
 $resultado=mysqli_query($conexion,$materiales);
-if(!empty($resultado)){
+$filas=mysqli_num_rows($resultado);
+if($filas>0){
     $html.= '<table>
     <tr>
-    <td width="100px" bgcolor="#4dbac4">Codigo de Material</td>
-    <td width="300px" bgcolor="#4dbac4">Descripcion del Material</td>
+    <td width="120px" bgcolor="#4dbac4">BarCode</td>
+    <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
+    <td width="225px" bgcolor="#4dbac4">Descripcion del Material</td>
     <td width="75px" bgcolor="#4dbac4">Cantidad</td>
     <td width="75px" bgcolor="#4dbac4">Tipo</td>
+    <td width="75px" bgcolor="#4dbac4">Subtipo</td>
     </tr>
     <tbody>';
     while ($row=mysqli_fetch_array($resultado)){
+        $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 15, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
         $html.= '<tr>
+        <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
         <td>'.$row['id_material'].'</td>
         <td>'.$row['nombre'].'</td>
         <td>'.$row['resultado'].'</td>
         <td>'.$row['tipo'].'</td>
+        <td>'.$row['sub tipo'].'</td>
         </tr>
      </tbody></table>';
 }

@@ -3,11 +3,11 @@
                 session_start();
                 $id=$_SESSION['id_sede'];
                 $estado=$_POST['estado'];
-                $sql="SELECT a.id_accion,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,usuarios_db.usuario
-                FROM evento_acc_db a
-                INNER JOIN estados_db b on b.id_estado=a.id_estado
-                INNER JOIN usuarios_db on a.dni_usuario =usuarios_db.dni 
-                INNER JOIN sede__db_area on sede__db_area.id=usuarios_db.id_sede 
+                $sql="SELECT a.id_accion,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
+                FROM sop__evento_acc_db a
+                INNER JOIN sop__estados_db b on b.id_estado=a.id_estado
+                INNER JOIN sop__usuarios_db on a.dni_usuario =sop__usuarios_db.dni 
+                INNER JOIN sede__db_area on sede__db_area.id=sop__usuarios_db.id_sede 
                 WHERE sede__db_area.id=$id and a.id_estado=$estado
                 ORDER BY a.fecha_programacion desc;";
                 $resultado=mysqli_query($conexion,$sql);
