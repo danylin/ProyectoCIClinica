@@ -11,7 +11,6 @@ while($fila=mysqli_fetch_array($consulta)){
     echo $fila['codigo'];
     echo "</td>";
     echo "<td>".$fila['descripcion']."</td>";
-    echo "<td style='display:none'>".$fila['tipo']."</td>";
     echo "</tr>";
 }
 ?>
@@ -19,7 +18,7 @@ while($fila=mysqli_fetch_array($consulta)){
     function registrar(e,devolucion){
             var id=$(e).find("td").eq(0).html();
             var descripcion=$(e).find("td").eq(1).html();
-            var tipo=$(e).find("td").eq(2).html();
+            var tipo='';
             var tipoEvento='<?php echo $tipoEvento ?>';
             if(devolucion==1){
                 if (tipoEvento=="Cirugia"){

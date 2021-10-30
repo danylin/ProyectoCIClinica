@@ -3,10 +3,14 @@
     $idEvento=$_GET['codigo'];
     for($count = 0; $count<count($_POST['hidden_codigo']); $count++)
     {
+    if(isset($_POST['tipo'][$count])){
+        $tipo=$_POST['tipo'][$count];
+    }else {
+        $tipo='';
+    }
     $codigo=$_POST['hidden_codigo'][$count];
     $cantidad=$_POST['cantidad_Material'][$count];
     $nombre=$_POST['hidden_nombre'][$count];
-    $tipo=$_POST['tipo'][$count];
     $subtipo=$_POST['subtipos'][$count];
     if ($_POST['devolucion']==1){
         $query = " UPDATE sop__despacho_db SET devolucion=IF($cantidad<cantidad,$cantidad,cantidad) WHERE id_material=$codigo and id_evento_acc=$idEvento";
@@ -26,9 +30,5 @@
     }
     $cambio="UPDATE sop__evento_acc_db SET id_estado=2 WHERE id_accion=$idEvento;";
     $actualizar=mysqli_query($conexion,$cambio);
-    if($_SESSION['tipousuario']==1){
-        header("location:../usuario1.php");
-    } else{
-        header("location:../usuario2.php");
-    }
+    header("location:despacho.php?codigo=$idEvento");
 ?>

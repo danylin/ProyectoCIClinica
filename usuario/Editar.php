@@ -1,5 +1,6 @@
 <?php
 include("../include/titulo.php");
+session_start();
 if(isset($_POST['dni'])){
   header("Location:Usuarios.php");
 } 
@@ -9,7 +10,7 @@ error_reporting(0);
 <body>
     <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna">
+          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" >
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
           <?php include("../include/barraNavegacion.php") ?>
@@ -25,7 +26,7 @@ error_reporting(0);
                 <?php
                   include("../include/bd_usuario.php"); 
                   $dniComparacion=$_GET['dni'];
-                  $editUsuario="SELECT*from usuarios_db where dni=$dniComparacion ;";
+                  $editUsuario="SELECT*from sop__usuarios_db where dni=$dniComparacion ;";
                   $consultaUsuario=mysqli_query($conexion,$editUsuario);
                   $resultado=mysqli_fetch_array($consultaUsuario);
                 ?>
@@ -40,7 +41,7 @@ error_reporting(0);
                 <div class="row">
                   <p class='col-sm-6' id='apellido'>Apellido <br> <input type="text" name='apellido' value=<?php echo $resultado['apellido']; ?>></p>
                 <?php
-                      $sql="SELECT*FROM tipo_db;";
+                      $sql="SELECT*FROM sop__tipo_db;";
                       $tipoResultado=mysqli_query($conexion,$sql);
                       echo "<p class='col-sm-6'> Tipo de Usuario <br> <select name='cargo'>";
                       while($row=mysqli_fetch_array($tipoResultado)){

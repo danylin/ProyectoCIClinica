@@ -3,6 +3,11 @@ session_start();
 include("../include/bd_usuario.php");
 require_once("../TCPDF/tcpdf.php");
             $nroEvento=$_GET['codigo'];
+            if (isset($_GET['encuentro'])){
+                $nroEncuentro=$_GET['encuentro'];
+                $encuentro="UPDATE sop__evento_acc_db SET codigo_cierre=$nroEncuentro,id_estado=3 WHERE id_accion=$nroEvento";
+                $resultado=mysqli_query($conexion,$encuentro);
+            }
             $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
             FROM sop__evento_acc_db a 
             INNER JOIN sop__eventos_db b ON
@@ -102,33 +107,33 @@ table tr td{
 <table>
 <tbody>
     <tr>
-        <td width="185px">Nro de Encuentro</td>
-        <td width="175px">'. $row['codigo_cierre'].'</td>
+        <td width="185px" align="left">Nro de Encuentro</td>
+        <td width="175px" align="left">'. $row['codigo_cierre'].'</td>
         <tcpdf method="write1DBarcode" params="'.$params.'" />
     </tr>
     <tr>
-        <td width="185px">Fecha</td>
-        <td width="175px">'.$row['fecha_programacion'].'</td>
+        <td width="185px" align="left">Fecha</td>
+        <td width="175px" align="left">'.$row['fecha_programacion'].'</td>
     </tr>
     <tr>
-        <td width="185px">Paciente</td>
-        <td width="175px">'.$row['paciente'].'</td>
+        <td width="185px" align="left">Paciente</td>
+        <td width="175px" align="left">'.$row['paciente'].'</td>
     </tr>
     <tr>
-        <td width="185px">Procedimiento</td>
-        <td width="175px">'.$row['nombre'].'</td>
+        <td width="185px" align="left">Procedimiento</td>
+        <td width="175px" align="left">'.$row['nombre'].'</td>
     </tr>
     <tr>
-        <td width="185px">Cirujano Principal</td>
-        <td width="175px">'.$row['nombre_responsable'].'</td>
+        <td width="185px" align="left">Cirujano Principal</td>
+        <td width="175px" align="left">'.$row['nombre_responsable'].'</td>
     </tr>
     <tr>
-        <td width="185px">Número de Items</td>
-        <td width="175px">'.$totalItems['total'].' </td>
+        <td width="185px" align="left">Número de Items</td>
+        <td width="175px" align="left">'.$totalItems['total'].' </td>
     </tr>
     <tr>
-        <td width="185px">Cantidad Total Utilizada</td>
-        <td width="175px">'.$resultadoCantidad['total'].'</td>
+        <td width="185px" align="left">Cantidad Total Utilizada</td>
+        <td width="175px" align="left">'.$resultadoCantidad['total'].'</td>
     </tr>
 </tbody>    
 </table>

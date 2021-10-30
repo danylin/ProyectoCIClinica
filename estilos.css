@@ -1,6 +1,6 @@
 *{
     padding: 0;
-    margin: 0;
+    margin: 0px ;
     font-family: 'Roboto Slab', serif;
 }
 
@@ -23,10 +23,6 @@ a{
     font-size: 30px;
 }
 
-#descr-evento{
-    padding-left: 100px;
-    padding-right: 100px;
-}
 
 .formulario #error {
     text-align: center ;
@@ -132,7 +128,7 @@ text-align: center;
 }
 
 #overlay1,#overlay2,#overlay3{
-    background: rgba(0,0,0,0.3);
+    background: rgba(119, 122, 120,0.5);
     position: fixed;
     top: 0;
     left: 0;
@@ -144,6 +140,13 @@ text-align: center;
     visibility: hidden;
 }
 
+.btn-success{
+background-color:rgba(119, 122, 120,0.5);
+color: #FFF;
+}
+#busquedaCodigo{
+    padding-right: 80%;
+}
 .popup{
     width: 600px;
     text-align: center;

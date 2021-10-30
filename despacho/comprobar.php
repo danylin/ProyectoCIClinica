@@ -2,7 +2,7 @@
 $idEstado=$_GET['estado'];
 $codigo=$_GET['codigo'];
 if($idEstado==3){
-    header("location:../reporte/reporte.php?codigo=".$codigo);
+    header("location:../reporte/pdf.php?codigo=".$codigo);
 }else{
     header("location:despacho.php?codigo=".$codigo);
 }

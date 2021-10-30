@@ -93,7 +93,8 @@
         var row=$('#except .botonReporte button').closest('tr');
         var id=$(row).find("td").eq(3).html();
         var encuentro=$('#encuentro').val();
-        window.location="../reporte/reporte.php?codigo="+id+"&encuentro="+encuentro;
+        window.open("../reporte/pdf.php?codigo="+id+"&encuentro="+encuentro,'_blank');
+        window.location="../usuario2.php";
         
     });
       });
@@ -132,10 +133,13 @@
     }
 }
 function eliminar(){
-  $("#mensaje tr").each(function(){
+  if(confirm("¿Estas seguro de eliminar estos datos?")){
+    $("#mensaje tr").each(function(){
     var codigo=$(this).find("td").eq(0).html();
     var id=$(this).find("input:checkbox").val();
     var evento=$('#tituloEvento').find("td").eq(3).html();
+    var button = document.getElementById('btnEliminar');
+    button.disabled = "disabled";
     if(id==1){
       $(this).remove();
       $.ajax({
@@ -145,13 +149,14 @@ function eliminar(){
         });
     }
   });
+  }
 }
 </script>
   </head>
 <body>
     <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna">
+          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" width="75px">
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <?php include("../include/barraNavegacion.php")?>
@@ -193,20 +198,19 @@ function eliminar(){
         </table>
       </div>
     </form>
-    
-    <div class="form-group">
-        <label>Codigo</label>
-        <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" required autocomplete=off>
+    <div class="form-group" id="busquedaCodigo">
+        <label>Codigo del Producto</label>
+        <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" size="10"required autocomplete=off>
       </div>
     <div class="form-group">
       <div id="ingresos">
         <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar" style="display:none">
-        <button class="btn btn-success" onclick="ingresoManual()">Ingreso Manual</button>
-        <button class="btn btn-success" onclick="busquedaManual()">Búsqueda Manual</button>
+        <button class="btn btn-info" onclick="ingresoManual()">Ingreso Manual</button>
+        <button class="btn btn-info" onclick="busquedaManual()">Búsqueda Manual</button>
       </div>
         <div id='botonesEdicion'>
-        <button type="submit" form="registro_Despacho" class="btn btn-success">Registrar</button>
-        <button class="btn btn-success" id="btnEliminar" onclick='eliminar()' disabled>Eliminar</button>
+        <button type="submit" form="registro_Despacho" class="btn btn-info">Guardar</button>
+        <button class="btn btn-info" id="btnEliminar" onclick='eliminar()' disabled>Eliminar</button>
         </div>
     </div>
     

@@ -50,19 +50,18 @@
 <div class="usuarios">
     <div class="container-table">
         <div class="table-title">
-            <h3>Eventos</h3>
+            <h3>Registro de Movimientos</h3>
             <div id='cajaOpciones'>
                 <button class='btn btn-info' id='nuevoEvento'onclick='mostrar(0)'>Nuevo Evento</button>
                 <div class='filtros'>
                     <div id='input_buscar'>
                        Filtros: <select name="filtroEleccion" id="filtroEleccion">
-                       <option selected disabled>Tipo Evento</option>
+                       <option selected disabled>Status de Evento</option>
                             <option value="1" >Programado</option>
-                            <option value="2">En Proceso</option>
+                            <option value="2" selected>En Proceso</option>
                             <option value="3">Cerrado</option>
                             <option value="4">Suspendido</option>
                         </select>
-                        <input type="search" name="filtroBusqueda" id="filtroBusqueda" onkeyup="filtrado()"placeholder="Buscar por Apellido">
                         <p id='desde'>Desde: <input type="date" name="" id="fechaDesde" >
                         Hasta:<input type="date" name="" id="fechaHasta">
                     </p>
@@ -88,7 +87,7 @@
                 INNER JOIN sop__estados_db b on b.id_estado=a.id_estado
                 INNER JOIN sop__usuarios_db on a.dni_usuario =sop__usuarios_db.dni 
                 INNER JOIN sede__db_area on sede__db_area.id=sop__usuarios_db.id_sede 
-                WHERE sede__db_area.id=$id and (a.id_estado=1 or a.id_estado=2)
+                WHERE sede__db_area.id=$id and a.id_estado=2
                 ORDER BY a.fecha_programacion desc;";
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
@@ -154,7 +153,7 @@ function cerrar(){
             }
         });
       });
-    $('#except .editarEvento button').on('click',function(){
+    $('.editarEvento button').on('click',function(){
         var row=$(this).closest('tr');
         var nombre=$(row).find("td").eq(2).html(),
         apellido=$(row).find("td").eq(3).html(),
@@ -244,24 +243,7 @@ function cerrar(){
       row.hide();
   }); 
   };
-    function filtrado(){
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("filtroBusqueda");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("tabla_eventos");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[3];
-            if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
-            }
-            }
-        }
-    }
+
 </script>
 <script>
     $('#fechaDesde').on('change',function(){

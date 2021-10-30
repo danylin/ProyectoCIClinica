@@ -1,5 +1,6 @@
 <?php
 include("../include/titulo.php");
+session_start();
 if(isset($_POST['dni'])){
   header("Location:Usuarios.php");
 } 
@@ -8,7 +9,7 @@ if(isset($_POST['dni'])){
 <body>
 <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna">
+          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" width="75px">
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
           <?php include("../include/barraNavegacion.php") ?>
