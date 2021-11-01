@@ -11,6 +11,7 @@ section{
     text-align: center;
     background-color: #34c4d0;
     border: 2px solid black;
+    margin: 20px 20%;
 }
 a{
     cursor: pointer;
@@ -50,7 +51,9 @@ th {
 table{
     text-align: center;
 }
-
+.backgroundRojo{
+    background: red;
+}
 .navegacion{
     text-align: right;
     margin-left: 250px;
@@ -121,11 +124,51 @@ table{
 }
 .tituloDespacho{
 text-align: center;
+
 }
-#input_buscar{
+.backgroundRojo{
+    -moz-transition:all 0.5s ease-in-out;
+    -webkit-transition:all 0.5s ease-in-out;
+    -o-transition:all 0.5s ease-in-out;
+    -ms-transition:all 0.5s ease-in-out;
+    transition:all 0.5s ease-in-out;
+    -moz-animation:blink normal 1.5s infinite ease-in-out;
+    -webkit-animation:blink normal 1.5s infinite ease-in-out;
+    -ms-animation:blink normal 1.5s infinite ease-in-out;
+    animation:blink normal 1.5s infinite ease-in-out;
+}
+@keyframes blink {
+    0% {
+           background-color: rgba(255,0,0,1)
+    }
+    50% {
+           background-color: rgba(255,0,0,0.2)
+    }
+    100% {
+           background-color: rgba(255,0,0,1)
+    }
+}
+@-webkit-keyframes blink {
+    0% {
+           background-color: rgba(255,0,0,1)
+    }
+    50% {
+           background-color: rgba(255,0,0,0.2)
+    }
+    100% {
+           background-color: rgba(255,0,0,1)
+    }
+}
+.filtros{
     text-align: right;
-    padding-left: 63%;
+    padding-left: 35%;
+    float:right;
+
 }
+#cajaOpciones{
+    display: flex;
+}
+
 
 #overlay1,#overlay2,#overlay3{
     background: rgba(119, 122, 120,0.5);
@@ -212,5 +255,17 @@ float: left;
     border: 1px solid black;
     width: auto;
     height: 20%;
+}
+
+#cantidadSelect{
+    width: 50px;
+}
+
+#botonesGuardado{
+   margin-left: 40%;
+}
+
+#botonesEncuentro{
+    padding-top: 20px;
 }
 

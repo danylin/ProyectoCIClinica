@@ -34,14 +34,14 @@
                     echo "</select> </p> </div>";
                 ?>
                     <div class="col-sm-6"><p>Fecha Programada <br> <input type="date" name="fecha" id="form-fecha" required></p></div> 
-                    <div class="col-sm-12"><p>Responsable <br> <input type="text" name="responsable" id="responsable" required autocomplete='off'></p></div> 
+                    <div class="col-sm-12"><p>Médico Tratante <br> <input type="text" name="responsable" id="responsable" required autocomplete='off'></p></div> 
                     <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3" required></textarea></p></div>      
                 </div>
-                <div>
+                <div id='botonesGuardado'>
                     <input type="hidden" name="verificadorEditar" id="verificadorEditar">
                     <input type="hidden" name="id_accion" id="id_accion">
-                    <button type="submit" form='formEvento' id='btnRegistrar'>Registrar</button>
-                    <button type="submit" form='formEvento' id='btnEditar'>Editar</button>
+                    <button type="submit" class='btn btn-success' form='formEvento' id='btnRegistrar'>Registrar</button>
+                    <button type="submit" class='btn btn-success' form='formEvento' id='btnEditar'>Editar</button>
                 </div>
             </div>
         </form>
@@ -50,21 +50,21 @@
 <div class="usuarios">
     <div class="container-table">
         <div class="table-title">
-            <h3>Registro de Movimientos</h3>
+            <h3>Registro de Eventos</h3>
             <div id='cajaOpciones'>
                 <button class='btn btn-info' id='nuevoEvento'onclick='mostrar(0)'>Nuevo Evento</button>
                 <div class='filtros'>
                     <div id='input_buscar'>
-                       Filtros: <select name="filtroEleccion" id="filtroEleccion">
+                       Status de Evento: <select name="filtroEleccion" id="filtroEleccion">
                        <option selected disabled>Status de Evento</option>
                             <option value="1" >Programado</option>
                             <option value="2" selected>En Proceso</option>
                             <option value="3">Cerrado</option>
                             <option value="4">Suspendido</option>
                         </select>
-                        <p id='desde'>Desde: <input type="date" name="" id="fechaDesde" >
-                        Hasta:<input type="date" name="" id="fechaHasta">
-                    </p>
+                    Desde: <input type="date" name="" id="fechaDesde" >
+                    Hasta:<input type="date" name="" id="fechaHasta">
+                    </div>
                     </div>
                 </div>
             </div>
@@ -75,7 +75,7 @@
                 <th scope="col" onclick="sortTable(2)">Nombre del Paciente</th>
                 <th scope="col" onclick="sortTable(3)">Apellidos del Paciente</th>
                 <th scope="col" onclick="sortTable(4)">Estado</th>
-                <th scope="col" onclick="sortTable(5)">Responsable</th>
+                <th scope="col" onclick="sortTable(5)">Médico Tratante</th>
                 <th scope="col" onclick="sortTable(6)">Descripción</th>
             </thead>
             <tbody id='tabla_contenido'>
@@ -141,9 +141,8 @@ function cerrar(){
     document.getElementById("overlay1").style.visibility = "visible";
   };
   $('#filtroEleccion').on('change',function(){
-        $("#tabla_eventos tr td").remove(); 
+        $("#tabla_contenido tr td").remove(); 
         var estado=$('#filtroEleccion').val();
-        console.log(estado);
           $.ajax({
             type:'POST',
             url:'include/filtroEventos.php',

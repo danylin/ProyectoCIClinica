@@ -23,9 +23,11 @@
                     echo "<td>". $row['nombre_responsable']."</td>";
                     echo "<td>". $row['descripcion_evento']."</td>";
                     echo "<td style='display:none;'>". $row['codigo_cierre']."</td>";
+                if ($estado!=3){
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
                     echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento'><i class='fas fa-edit'></i></button></div>";
                     echo "</td>";
+                }
                     echo "</tr>";
                 }
                 ?>

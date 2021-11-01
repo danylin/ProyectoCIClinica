@@ -4,6 +4,8 @@
   <?php
   session_start();
   include("../include/bd_usuario.php");
+  $idSesion=$_SESSION['id'];
+  $evento=$_GET['codigo'];
   ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +21,48 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function() {
+          setInterval(function(){ 
+            var table = document.getElementById("mensaje");
+            var subtipo=document.getElementById("subtipo").value;
+              for (var i = 0, row; row = table.rows[i]; i++) {
+                var codigo=row.cells[0].innerText;
+                var descripcion=row.cells[1].innerText;
+                var cantidad=row.cells[2].children[0].value;
+                var tipo=row.cells[3].innerText;
+                var update=row.cells[5].children[0].value;
+                var devObjeto=row.cells[6].children[0].value;
+                $.ajax({
+                type:'POST',
+                url:'registrarDespacho.php?evento=<?php echo $evento ?>',
+                data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update},
+               });
+               if(update==0){
+                row.cells[5].children[0].value=1
+               }
+              }
+            }, 50000);
+            $('#btnGuardado').on('click',function(event){
+              event.preventDefault();
+              var table = document.getElementById("mensaje");
+            var subtipo=document.getElementById("subtipo").value;
+              for (var i = 0, row; row = table.rows[i]; i++) {
+                var codigo=row.cells[0].innerText;
+                var descripcion=row.cells[1].innerText;
+                var cantidad=row.cells[2].children[0].value;
+                var tipo=row.cells[3].innerText;
+                var update=row.cells[5].children[0].value;
+                var devObjeto=row.cells[6].children[0].value;
+                $.ajax({
+                type:'POST',
+                url:'registrarDespacho.php?evento=<?php echo $evento ?>',
+                data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update},
+               });
+               if(update==0){
+                row.cells[5].children[0].value=1
+               }
+            }
+            alert("Se han guardado los items con éxito");
+            });
         $("#codigo").keyup(function(event) {
           event.preventDefault();
           if (event.keyCode === 13) {
@@ -60,14 +104,14 @@
         var contar=0;
         $('#btnDevolucion').on('click',function(){
           if(contar==0){
-            $('.tituloDespacho').css('background-color','red');
+              $('.tituloDespacho').toggleClass("backgroundRojo");
             contar=1;
             $('#devolucion').val(1);
             $('#devolucionVer').val(1);
             $('#btnDevolucion').html('Desactivar');
             $('#btnDevolucion').attr("class","btn btn-danger")
           } else{
-            $('.tituloDespacho').css('background-color','white');
+              $('.tituloDespacho').toggleClass("backgroundRojo");
             contar=0;
             $('#devolucion').val(0);
             $('#devolucionVer').val(0);
@@ -89,13 +133,32 @@
             }
         });
       });
-      $('#llenadoEncuentro').on('click',function(){
+      $('#llenadoEncuentro2').on('click',function(){
         var row=$('#except .botonReporte button').closest('tr');
         var id=$(row).find("td").eq(3).html();
         var encuentro=$('#encuentro').val();
         window.open("../reporte/pdf.php?codigo="+id+"&encuentro="+encuentro,'_blank');
         window.location="../usuario2.php";
-        
+    });
+    $('#llenadoEncuentro1').on('click',function(){
+        var row=$('#except .botonReporte button').closest('tr');
+        var id=$(row).find("td").eq(3).html();
+        var encuentro=$('#encuentro').val();
+        var tipoEvento=$('#tipoEvento').val();
+        window.open("../reporte/pdf_subTipo.php?codigo="+id+"&encuentro="+encuentro+"&tipoEvento="+tipoEvento,'_blank');
+        window.location="../usuario2.php";
+    });
+    $('#subtipo').on('change',function(){
+      $("#mensaje tr").remove();
+      var subtipo=$(this).val();
+          $.ajax({
+            type:'POST',
+            url:'filtroDespacho.php?evento=<?php echo $evento ?>',
+            data:{subtipo:subtipo},
+            success: function(data){
+                $('#mensaje').append(data);
+            }
+        });
     });
       });
     </script>
@@ -134,23 +197,24 @@
 }
 function eliminar(){
   if(confirm("¿Estas seguro de eliminar estos datos?")){
-    $("#mensaje tr").each(function(){
-    var codigo=$(this).find("td").eq(0).html();
-    var id=$(this).find("input:checkbox").val();
-    var evento=$('#tituloEvento').find("td").eq(3).html();
+    var table = document.getElementById("mensaje");
     var button = document.getElementById('btnEliminar');
-    button.disabled = "disabled";
-    if(id==1){
-      $(this).remove();
+    var evento=$('#tituloEvento').find("td").eq(3).html();
+    for (var i = 0, row; row = table.rows[i]; i++) {
+      var codigo=row.cells[0].innerText;
+      var eliminar=row.cells[4].children[0].value;
+      if(eliminar==1){
       $.ajax({
             type:'POST',
             url:'eliminacionMaterial.php',
             data:{codigo:codigo,evento:evento},
         });
+      table.deleteRow(i);
+      }
     }
-  });
+    button.disabled = "disabled";
   }
-}
+};
 </script>
   </head>
 <body>
@@ -166,19 +230,16 @@ function eliminar(){
     </header>
     <section>
     <form method="post" id="formMaterial">
-      <h4 class='tituloDespacho'>EVENTO</h4>
+      <h4 class='tituloDespacho'>Registro de Movimientos</h4>
       <div class="form-group">
         <table class='table table-light' id='tituloEvento'>
           <thead>
             <th>Nombre del Paciente</th>
-            <th>Responsable</th>
+            <th>Médico Tratante</th>
             <th>Evento</th>
             <th>¿Devolución?</th>
           </thead>
           <?php
-          include("../include/bd_usuario.php");
-          $idSesion=$_SESSION['id'];
-          $evento=$_GET['codigo'];
           $sql="SELECT id_accion,CONCAT(nombre_paciente,' ',apellido_paciente) nombre_completo ,nombre_responsable,a.nombre FROM sop__evento_acc_db 
           INNER JOIN sop__eventos_db a on sop__evento_acc_db.id_evento=a.id_evento
           WHERE dni_usuario=$idSesion and (id_estado=1 or id_estado=2) and id_accion=$evento;";
@@ -199,6 +260,20 @@ function eliminar(){
       </div>
     </form>
     <div class="form-group" id="busquedaCodigo">
+    Subtipo de Producto<select id="subtipo">
+      <?php
+       if($tipoEvento=="Cirugia"){
+        echo "<option value='Material de Anestesia'>Material de Anestesia</option>";
+        echo "<option value='Medicación de Anestesia'>Medicación de Anestesia</option>";
+        echo "<option value='Dispensación regular'>Dispensación regular</option>";
+        echo "<option value='Adicionales'>Adicionales</option>";
+      } elseif($tipoEvento=="Quimioterapia"){
+        echo "<option value='Hidratación prequimioterapia'>Hidratación prequimioterapia</option>";
+        echo "<option value='Dispensación regular'>Dispensación regular</option>";
+        echo "<option value='Alta postquimioterapia'>Alta postquimioterapia</option>";
+      }
+      ?>
+      </select>  <br>
         <label>Codigo del Producto</label>
         <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" size="10"required autocomplete=off>
       </div>
@@ -209,7 +284,7 @@ function eliminar(){
         <button class="btn btn-info" onclick="busquedaManual()">Búsqueda Manual</button>
       </div>
         <div id='botonesEdicion'>
-        <button type="submit" form="registro_Despacho" class="btn btn-info">Guardar</button>
+        <button type="submit" id='btnGuardado' form="registro_Despacho" class="btn btn-info">Guardar</button>
         <button class="btn btn-info" id="btnEliminar" onclick='eliminar()' disabled>Eliminar</button>
         </div>
     </div>
@@ -218,10 +293,9 @@ function eliminar(){
       <table class="table" id="tabla_elementos">
         <thead>
           <th>Codigo</th>
-          <th>Descripcion</th>
+          <th style='text-align:left;width:450px'>Descripcion</th>
           <th>Cantidad</th>
           <th>Tipo</th>
-          <th>Subtipo</th>
           <th> <input type='hidden' id='devolucion' value='' name='devolucion'> </th>
         </thead>
         <tbody id="mensaje">
@@ -232,29 +306,31 @@ function eliminar(){
             if($filaConsulta['devolucion']==0){
               echo "<tr>";
               echo "<td>".$filaConsulta['id_material']."</td>";
-              echo "<td>".$filaConsulta['nombre']."</td>";
-              echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
+              echo "<td style='text-align:left'>".$filaConsulta['nombre']."</td>";
+              echo "<td><input type='number' id='cantidadSelect' value=".$filaConsulta['cantidad']."></td>";
               echo "<td>".$filaConsulta['tipo']."</td>";
-              echo "<td>".$filaConsulta['subtipo']."</td>";
               echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
-
+              echo "<td><input type='hidden' id='update' value='1'></td>";
+              echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'></td>";
               echo "</tr>";
             }else{
               echo "<tr>";
               echo "<td>".$filaConsulta['id_material']."</td>";
-              echo "<td>".$filaConsulta['nombre']."</td>";
-              echo "<td><input type='number' value=".$filaConsulta['cantidad']."></td>";
+              echo "<td style='text-align:left'>".$filaConsulta['nombre']."</td>";
+              echo "<td><input type='number' id='cantidadSelect' value=".$filaConsulta['cantidad']."></td>";
               echo "<td>".$filaConsulta['tipo']."</td>";
-              echo "<td>".$filaConsulta['subtipo']."</td>";
               echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
+              echo "<td><input type='hidden' id='update' value='1'></td>";
+              echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'></td>";
               echo "</tr>";
               echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'>";
               echo "<td>".$filaConsulta['id_material']."</td>";
-              echo "<td>".$filaConsulta['nombre']."</td>";
-              echo "<td><input type='number' value=".$filaConsulta['devolucion']."></td>";
+              echo "<td style='text-align:left'>".$filaConsulta['nombre']."</td>";
+              echo "<td><input type='number' id='cantidadSelect' value=".$filaConsulta['devolucion']."></td>";
               echo "<td>".$filaConsulta['tipo']."</td>";
-              echo "<td>".$filaConsulta['subtipo']."</td>";
               echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
+              echo "<td><input type='hidden' id='update' value='1'></td>";
+              echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='1'></td>";
               echo "</tr>";
             }
           }
@@ -300,8 +376,11 @@ function eliminar(){
             <h3>Ingrese Numero de Encuentro</h3>
             <a onclick="cerrar3()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
-          <div><input type="text" name="encuentro" id="encuentro"> <br></div>
-          <div><button id='llenadoEncuentro'>Registrar</button></div>
+          <div><input type="text" name="encuentro" id="encuentro" required> <br></div>
+          <div id="botonesEncuentro">
+            <button class='btn btn-success' id='llenadoEncuentro1'>Reporte por Subtipo</button>
+            <button class='btn btn-success' id='llenadoEncuentro2'>Reporte por Tipo Material</button>
+        </div>
         </div>
       </div>
     </section>
