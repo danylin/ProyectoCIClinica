@@ -143,7 +143,6 @@ h4{
 </tbody>    
 </table>
 </div>
-<div id="registroElementos">
 <h4>Materiales de Compra</h4>
 <table id="elementos" border="0.5" >
 <tr>
@@ -170,17 +169,14 @@ foreach($consultaresultado as $row){
     <td>'.$row[3].'</td>
     </tr>';
 };
-
-$html.='</table>
-</div>
-';
+$html.='</table>';
 $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
 FROM sop__despacho_db
 WHERE id_evento_acc=$nroEvento and tipo='I'";
 $resultado=mysqli_query($conexion,$materiales);
 $filas=mysqli_num_rows($resultado);
 if($filas>0){
-    $html.= '<div><h4>Materiales Tipo I</h4><table id="elementos" border="0.5" nobr="true">
+    $html.= '<h4>Materiales Tipo I</h4><table id="elementos" border="0.5" nobr="true">
     <tr>
     <td width="120px" bgcolor="#4dbac4">BarCode</td>
     <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
@@ -197,9 +193,9 @@ if($filas>0){
         <td>'.$row['nombre'].'</td>
         <td>'.$row['resultado'].'</td>
         <td>'.$row['tipo'].'</td>
-        </tr>
-     </tbody></table></div>';
-}
+        </tr>';
+    }   
+    $html.= '</tbody></table>';
 }
 $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
 FROM sop__despacho_db
@@ -224,9 +220,10 @@ if($filas>0){
         <td>'.$row['nombre'].'</td>
         <td>'.$row['resultado'].'</td>
         <td>'.$row['tipo'].'</td>
-        </tr>
-     </tbody></table>';
-}
+        </tr>';
+    
+    }
+$html.='</tbody></table>';
 }
 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 ob_end_clean();

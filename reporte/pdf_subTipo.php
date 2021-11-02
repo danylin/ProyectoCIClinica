@@ -147,7 +147,7 @@ if($eventoAccion=='Cirugia'){
     $resultado=mysqli_query($conexion,$materiales);
     $filas=mysqli_num_rows($resultado);
     if($filas>0){
-        $html.= '<div><table id="elementos" border="0.5">
+        $html.= '<h4>Material de Anestesia</h4><table id="elementos" border="0.5">
         <tr>
         <td width="120px" bgcolor="#4dbac4">BarCode</td>
         <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
@@ -166,7 +166,7 @@ if($eventoAccion=='Cirugia'){
             <td>'.$row['tipo'].'</td>
             </tr>';
         }
-        $html.='</tbody></table></div>';
+        $html.='</tbody></table>';
     }
     $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
     FROM sop__despacho_db
@@ -174,7 +174,7 @@ if($eventoAccion=='Cirugia'){
     $resultado=mysqli_query($conexion,$materiales);
     $filas=mysqli_num_rows($resultado);
     if($filas>0){
-        $html.= '<div><table id="elementos" border="0.5">
+        $html.= '<h4>Medicacion de Anestesia</h4><table id="elementos" border="0.5">
         <tr>
         <td width="120px" bgcolor="#4dbac4">BarCode</td>
         <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
@@ -193,7 +193,7 @@ if($eventoAccion=='Cirugia'){
             <td>'.$row['tipo'].'</td>
             </tr>';
         }
-        $html.='</tbody></table></div>';
+        $html.='</tbody></table>';
     }
     $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
     FROM sop__despacho_db
@@ -201,7 +201,7 @@ if($eventoAccion=='Cirugia'){
     $resultado=mysqli_query($conexion,$materiales);
     $filas=mysqli_num_rows($resultado);
     if($filas>0){
-        $html.= '<div><table border="0.5">
+        $html.= '<h4>Dispensacion Regular</h4><table border="0.5">
         <tr>
         <td width="120px" bgcolor="#4dbac4">BarCode</td>
         <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
@@ -220,7 +220,7 @@ if($eventoAccion=='Cirugia'){
             <td>'.$row['tipo'].'</td>
             </tr>';
         }
-        $html.='</tbody></table></div>';
+        $html.='</tbody></table>';
     }
     $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
     FROM sop__despacho_db
@@ -228,7 +228,7 @@ if($eventoAccion=='Cirugia'){
     $resultado=mysqli_query($conexion,$materiales);
     $filas=mysqli_num_rows($resultado);
     if($filas>0){
-        $html.= '<div><table border="0.5">
+        $html.= '<h4>Adicionales</h4><table border="0.5">
         <tr>
         <td width="120px" bgcolor="#4dbac4">BarCode</td>
         <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
@@ -247,7 +247,7 @@ if($eventoAccion=='Cirugia'){
             <td>'.$row['tipo'].'</td>
             </tr>';
         }
-        $html.='</tbody></table></div>';
+        $html.='</tbody></table>';
     }
 }else{
     $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
@@ -256,7 +256,7 @@ if($eventoAccion=='Cirugia'){
     $resultado=mysqli_query($conexion,$materiales);
     $filas=mysqli_num_rows($resultado);
     if($filas>0){
-        $html.= '<div><table id="elementos" border="0.5">
+        $html.= '<h4>Hidratacion prequimioterapia</h4><table id="elementos" border="0.5">
         <tr>
         <td width="120px" bgcolor="#4dbac4">BarCode</td>
         <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
@@ -275,7 +275,7 @@ if($eventoAccion=='Cirugia'){
             <td>'.$row['tipo'].'</td>
             </tr>';
         }
-        $html.='</tbody></table></div>';
+        $html.='</tbody></table>';
     }
     $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
     FROM sop__despacho_db
@@ -283,7 +283,7 @@ if($eventoAccion=='Cirugia'){
     $resultado=mysqli_query($conexion,$materiales);
     $filas=mysqli_num_rows($resultado);
     if($filas>0){
-        $html.= '<div><table border="0.5">
+        $html.= '<h4>Dispensacion Regular</h4><table border="0.5">
         <tr>
         <td width="120px" bgcolor="#4dbac4">BarCode</td>
         <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
@@ -302,7 +302,7 @@ if($eventoAccion=='Cirugia'){
             <td>'.$row['tipo'].'</td>
             </tr>';
         }
-        $html.='</tbody></table></div>';
+        $html.='</tbody></table>';
     }
     $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
     FROM sop__despacho_db
@@ -310,7 +310,7 @@ if($eventoAccion=='Cirugia'){
     $resultado=mysqli_query($conexion,$materiales);
     $filas=mysqli_num_rows($resultado);
     if($filas>0){
-        $html.= '<div><table border="0.5">
+        $html.= '<h4>Alta postquimioterapia</h4><table border="0.5">
         <tr>
         <td width="120px" bgcolor="#4dbac4">BarCode</td>
         <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
@@ -329,7 +329,7 @@ if($eventoAccion=='Cirugia'){
             <td>'.$row['tipo'].'</td>
             </tr>';
         }
-        $html.='</tbody></table></div>';
+        $html.='</tbody></table>';
     }
 }
 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);

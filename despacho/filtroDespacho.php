@@ -8,7 +8,7 @@ while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
     if($filaConsulta['devolucion']==0){
         echo "<tr>";
         echo "<td>".$filaConsulta['id_material']."</td>";
-        echo "<td>".$filaConsulta['nombre']."</td>";
+        echo "<td style='text-align:left'>".$filaConsulta['nombre']."</td>";
         echo "<td><input type='number' id='cantidadSelect' value=".$filaConsulta['cantidad']."></td>";
         echo "<td>".$filaConsulta['tipo']."</td>";
         echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
@@ -18,7 +18,7 @@ while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
       }else{
         echo "<tr>";
         echo "<td>".$filaConsulta['id_material']."</td>";
-        echo "<td>".$filaConsulta['nombre']."</td>";
+        echo "<td style='text-align:left'>".$filaConsulta['nombre']."</td>";
         echo "<td><input type='number' id='cantidadSelect' value=".$filaConsulta['cantidad']."></td>";
         echo "<td>".$filaConsulta['tipo']."</td>";
         echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";
@@ -27,7 +27,7 @@ while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
         echo "</tr>";
         echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'>";
         echo "<td>".$filaConsulta['id_material']."</td>";
-        echo "<td>".$filaConsulta['nombre']."</td>";
+        echo "<td style='text-align:left'>".$filaConsulta['nombre']."</td>";
         echo "<td><input type='number' id='cantidadSelect' value=".$filaConsulta['devolucion']."></td>";
         echo "<td>".$filaConsulta['tipo']."</td>";
         echo "<td><input type='checkbox' name='chk1' id='chkEliminar' value=0 onchange='isChecked(this)' ></td>";

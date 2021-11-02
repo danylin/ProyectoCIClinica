@@ -40,7 +40,7 @@
                 row.cells[5].children[0].value=1
                }
               }
-            }, 50000);
+            }, 35000);
             $('#btnGuardado').on('click',function(event){
               event.preventDefault();
               var table = document.getElementById("mensaje");
@@ -138,7 +138,11 @@
         var id=$(row).find("td").eq(3).html();
         var encuentro=$('#encuentro').val();
         window.open("../reporte/pdf.php?codigo="+id+"&encuentro="+encuentro,'_blank');
-        window.location="../usuario2.php";
+        if($_SESSION['tipousuario']==1){
+          window.location="../usuario1.php";
+        }else{
+          window.location="../usuario2.php";
+        }
     });
     $('#llenadoEncuentro1').on('click',function(){
         var row=$('#except .botonReporte button').closest('tr');
@@ -146,7 +150,12 @@
         var encuentro=$('#encuentro').val();
         var tipoEvento=$('#tipoEvento').val();
         window.open("../reporte/pdf_subTipo.php?codigo="+id+"&encuentro="+encuentro+"&tipoEvento="+tipoEvento,'_blank');
-        window.location="../usuario2.php";
+        if(<?php echo $_SESSION['tipousuario']?>==1){
+          window.location="../usuario1.php";
+        }else{
+          window.location="../usuario2.php";
+        }
+       
     });
     $('#subtipo').on('change',function(){
       $("#mensaje tr").remove();
@@ -261,6 +270,7 @@ function eliminar(){
     </form>
     <div class="form-group" id="busquedaCodigo">
     Subtipo de Producto<select id="subtipo">
+      <option disabled selected>Elija un Subtipo</option>
       <?php
        if($tipoEvento=="Cirugia"){
         echo "<option value='Material de Anestesia'>Material de Anestesia</option>";
