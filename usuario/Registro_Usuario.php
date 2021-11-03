@@ -34,7 +34,7 @@ if(isset($_POST['dni'])){
                 <?php
                       include("../include/bd_usuario.php"); 
                       error_reporting(0);
-                      $sql="SELECT*FROM tipo_db;";
+                      $sql="SELECT*FROM sop__tipo_db;";
                       $resultado=mysqli_query($conexion,$sql);
                       echo "<p class='col-sm-6'> Tipo de Usuario <br> <select name='cargo'>";
                       while($row=mysqli_fetch_array($resultado)){
@@ -93,7 +93,7 @@ if(isset($_POST['dni'])){
                 $logistico=0;
               }
               
-              $sql="INSERT INTO usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo,$quimio,$cirugia,$medico,$logistico);";
+              $sql="INSERT INTO sop__usuarios_db values ($dni,'$usuario','$contraseña','$nombre','$apellido',$sede,$cargo,$quimio,$cirugia,$medico,$logistico);";
               $resultado=mysqli_query($conexion,$sql);
             ?>
           </form>

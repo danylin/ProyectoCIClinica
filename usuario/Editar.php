@@ -126,7 +126,7 @@ error_reporting(0);
           else{
             $logistico=0;
           }
-          $sqlEditar="UPDATE usuarios_db SET dni=$dni,nombre='$nombre',apellido='$apellido',usuario='$usuario',clave='$contraseña',id_sede=$sede,id_tipo=$tipo,
+          $sqlEditar="UPDATE sop__usuarios_db SET dni=$dni,nombre='$nombre',apellido='$apellido',usuario='$usuario',clave='$contraseña',id_sede=$sede,id_tipo=$tipo,
           Evento1=$quimio,Evento2=$cirugia,Evento3=$medico,Evento4=$logistico WHERE dni=$dniComparacion;";
           $consultaUsuario=mysqli_query($conexion,$sqlEditar);
           ?>

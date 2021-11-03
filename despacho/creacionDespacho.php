@@ -53,12 +53,12 @@
                     $resultado=mysqli_query($conexion,$sql);
                     $row=mysqli_fetch_array($resultado);
                 }elseif(strlen($codigo)==13){
-                    $sql="SELECT codigo,descripcion,tipo FROM material__db WHERE gtin=$codigo";
+                    $sql="SELECT codigo,descripcion FROM material__db WHERE gtin=$codigo";
                     $resultado=mysqli_query($conexion,$sql);
                     $row=mysqli_fetch_array($resultado);
                     $tipo=$row['tipo'];
                 }else{
-                    $sql="SELECT codigo,descripcion,tipo FROM material__db WHERE codigo=$codigo";
+                    $sql="SELECT codigo,descripcion FROM material__db WHERE codigo=$codigo";
                     $resultado=mysqli_query($conexion,$sql);
                     $row=mysqli_fetch_array($resultado);
                     $tipo=$row['tipo'];

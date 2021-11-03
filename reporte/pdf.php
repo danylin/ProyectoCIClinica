@@ -95,7 +95,7 @@ $pdf->setFontSubsetting(true);
 $pdf->SetFont('times', '', 12, '', true);
 
 $pdf->AddPage();
-$params = $pdf->serializeTCPDFtagParameters(array($row['codigo_cierre'], 'C39', '', '', 50, 15, 1, array('position'=>'', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+$params = $pdf->serializeTCPDFtagParameters(array($row['codigo_cierre'], 'C39', '', '', 50, 10, 1, array('position'=>'', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
 $html = '<style>
 
 table tr td{
@@ -108,13 +108,12 @@ h4{
     margin:0;
 }
 </style>
-<div id="informacio-general">
 <table>
 <tbody>
     <tr>
         <td width="185px" align="left" >Nro de Encuentro</td>
         <td width="175px" align="left">'. $row['codigo_cierre'].'</td>
-        <tcpdf method="write1DBarcode" params="'.$params.'" />
+        <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
     </tr>
     <tr>
         <td width="185px" align="left">Fecha</td>
@@ -129,7 +128,7 @@ h4{
         <td width="175px" align="left">'.$row['nombre'].'</td>
     </tr>
     <tr>
-        <td width="185px" align="left">Médico Tratane</td>
+        <td width="185px" align="left">Médico Tratante</td>
         <td width="175px" align="left">'.$row['nombre_responsable'].'</td>
     </tr>
     <tr>
@@ -142,7 +141,6 @@ h4{
     </tr>
 </tbody>    
 </table>
-</div>
 <h4>Materiales de Compra</h4>
 <table id="elementos" border="0.5" >
 <tr>
@@ -150,7 +148,7 @@ h4{
     <td width="80px" bgcolor="#4dbac4">Codigo de Material</td>
     <td width="300px" bgcolor="#4dbac4">Descripcion del Material</td>
     <td width="75px" bgcolor="#4dbac4">Cantidad</td>
-    <td width="75px" bgcolor="#4dbac4">Tipo</td>
+    <td width="45px" bgcolor="#4dbac4">Tipo</td>
 </tr>   ';
 $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
 FROM sop__despacho_db
@@ -159,7 +157,7 @@ ORDER BY nombre asc";
 $resultado=mysqli_query($conexion,$materiales);
 $consultaresultado=mysqli_fetch_all($resultado);
 foreach($consultaresultado as $row){
-    $params = $pdf->serializeTCPDFtagParameters(array($row[0], 'C39', '', '', 32, 15, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>false, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+    $params = $pdf->serializeTCPDFtagParameters(array($row[0], 'C128', '', '', 32, 15, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
     $html.='
     <tr nobr="true">
     <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>

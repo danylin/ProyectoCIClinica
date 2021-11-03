@@ -7,7 +7,7 @@
     }
     else{
         if(isset($dni)){
-            $sql="DELETE from usuarios_db where dni=$dni;";
+            $sql="DELETE from sop__usuarios_db where dni=$dni;";
             $eliminar= mysqli_query($conexion,$sql);
             header('location:Usuarios.php');
         }
