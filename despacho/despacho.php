@@ -167,7 +167,6 @@
         }else{
           window.location="../usuario2.php";
         }
-       
     });
     $('#subtipo').on('change',function(){
             var table = document.getElementById("mensaje");
@@ -192,7 +191,7 @@
       var subtipo=$(this).val();
           $.ajax({
             type:'POST',
-            url:'filtroDespacho.php?evento=<?php echo $evento ?>',
+            url:'filtroDespacho.php?evento=<?php echo  $evento ?>',
             data:{subtipo:subtipo},
             success: function(data){
                 $('#mensaje').append(data);
@@ -312,11 +311,11 @@ function eliminar(){
        if($tipoEvento=="Cirugia"){
         echo "<option value='Material de Anestesia'>Material de Anestesia</option>";
         echo "<option value='Medicación de Anestesia'>Medicación de Anestesia</option>";
-        echo "<option value='Dispensación regular'>Dispensación regular</option>";
+        echo "<option value='Protocolo'>Protocolo</option>";
         echo "<option value='Adicionales'>Adicionales</option>";
       } elseif($tipoEvento=="Quimioterapia"){
         echo "<option value='Hidratación prequimioterapia'>Hidratación prequimioterapia</option>";
-        echo "<option value='Dispensación regular'>Dispensación regular</option>";
+        echo "<option value='Protocolo'>Protocolo</option>";
         echo "<option value='Alta postquimioterapia'>Alta postquimioterapia</option>";
       }
       ?>
@@ -404,7 +403,7 @@ function eliminar(){
             <h3>Busqueda Manual</h3>
             <a onclick="cerrar2()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
-          <div>Nombre del Producto: <input type="search" name="busqueda" id="busqueda" autocomplete="off"></div> 
+          <div>Nombre del Producto: <input type="search" name="busqueda" id="busqueda" autocomplete="off" autofocus></div> 
           <table class="table" id="materialesDespacho">
             <thead style="background-color:rgba(119, 122, 120,0.5);">
               <th>Nombre</th>

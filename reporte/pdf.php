@@ -133,7 +133,7 @@ $pdf->MultiCell(55, 5, 'Cantidad Utilizada', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $resultadoCantidad['total'], 0, 'L', 0, 1, '', '', true);
 $html.='
 <h4>Materiales de Compra</h4>
-<table id="elementos" border="0.5" >
+<table id="elementos" border="0.5" nobr="true">
 <tr>
     <td width="120px" bgcolor="#4dbac4">BarCode</td>
     <td width="420px" bgcolor="#4dbac4">Descripcion del Material</td>
@@ -147,14 +147,16 @@ ORDER BY nombre asc";
 $resultado=mysqli_query($conexion,$materiales);
 $consultaresultado=mysqli_fetch_all($resultado);
 foreach($consultaresultado as $row){
-    $params = $pdf->serializeTCPDFtagParameters(array($row[0], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
-    $html.='
-    <tr nobr="true">
-    <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
-    <td align="left">'.$row[1].'</td>
-    <td>'.$row[2].'</td>
-    <td>'.$row[3].'</td>
-    </tr>';
+    if($row['2']!=0){
+        $params = $pdf->serializeTCPDFtagParameters(array($row[0], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+        $html.='
+        <tr>
+        <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
+        <td align="left">'.$row[1].'</td>
+        <td>'.$row[2].'</td>
+        <td>'.$row[3].'</td>
+        </tr>';
+    }
 };
 $html.='</table>';
 $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
@@ -172,13 +174,15 @@ if($filas>0){
     </tr>
     <tbody>';
     while ($row=mysqli_fetch_array($resultado)){
-        $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>false, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
-        $html.= '<tr>
-        <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
-        <td align="left">'.$row['nombre'].'</td>
-        <td>'.$row['resultado'].'</td>
-        <td>'.$row['tipo'].'</td>
-        </tr>';
+        if($row['resultado']!=0){
+            $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>false, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+            $html.= '<tr>
+            <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
+            <td align="left">'.$row['nombre'].'</td>
+            <td>'.$row['resultado'].'</td>
+            <td>'.$row['tipo'].'</td>
+            </tr>';
+        }
     }   
     $html.= '</tbody></table>';
 }
@@ -197,14 +201,15 @@ if($filas>0){
     </tr>
     <tbody>';
     while ($row=mysqli_fetch_array($resultado)){
-        $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
-        $html.= '<tr>
-        <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
-        <td align="left">'.$row['nombre'].'</td>
-        <td>'.$row['resultado'].'</td>
-        <td>'.$row['tipo'].'</td>
-        </tr>';
-    
+        if($row['resultado']!=0){
+            $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+            $html.= '<tr>
+            <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
+            <td align="left">'.$row['nombre'].'</td>
+            <td>'.$row['resultado'].'</td>
+            <td>'.$row['tipo'].'</td>
+            </tr>';
+        }
     }
 $html.='</tbody></table>';
 }

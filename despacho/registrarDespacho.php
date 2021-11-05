@@ -7,6 +7,25 @@
     $tipo=$_POST['tipo'];
     $subtipo=$_POST['subtipo'];
     $devObjeto=$_POST['devObjeto'];
+    $contador=0;
+    $pruebaExistencia="SELECT*FROM sop__despacho_db WHERE id_evento_acc=$idEvento and id_material=$codigo";
+    $pruebaConsulta=mysqli_query($conexion,$pruebaExistencia);
+    while($despachos=mysqli_fetch_array($pruebaConsulta)){
+        if($despachos['id_material']==$codigo){
+            $contador=$contador+1;
+        }
+    }
+    if($contador>0){
+        if($_POST['update']==0){
+            if($devObjeto==1){
+                $query = "UPDATE sop__despacho_db SET devolucion=devolucion+1 WHERE id_material=$codigo and id_evento_acc=$idEvento";
+                $consulta=mysqli_query($conexion,$query);
+            }else {
+                $query = "UPDATE sop__despacho_db SET cantidad=cantidad+1 WHERE id_material=$codigo and id_evento_acc=$idEvento";
+                $consulta=mysqli_query($conexion,$query);
+        }
+    }
+    }else{
         if($_POST['update']==1){
             if($devObjeto==1){
                 $sql="SELECT*FROM sop__despacho_db WHERE id_material=$codigo and id_evento_acc=$idEvento";
@@ -54,6 +73,7 @@
                 $consulta=mysqli_query($conexion,$query);
             }
         }
+    }
         $query = "UPDATE sop__evento_acc_db SET id_estado=2 WHERE id_accion=$idEvento";
         $consulta=mysqli_query($conexion,$query);
 ?>
