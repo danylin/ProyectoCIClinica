@@ -11,7 +11,7 @@
         }
     else{
         $usuario=$_POST['usuario'];
-        $sql="SELECT*FROM sop__usuarios_db where dni=$usuario;";
+        $sql="SELECT*FROM sop__usuarios_db where clave='$usuario';";
         $resultado=mysqli_query($conexion,$sql);
         $row=mysqli_fetch_array($resultado);
     }

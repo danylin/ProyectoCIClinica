@@ -1,7 +1,7 @@
 <div class="overlay" id='overlay1'>
     <div class="popup">
         <div id="encabezado_popup">
-            <h3>Registrar Evento</h3>
+            <h3 id='tituloRegistro'>Registrar Evento</h3>
             <a onclick="cerrar()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
         </div>
         <form action="include/registro_evento.php" method="post" id="formEvento">
@@ -92,7 +92,7 @@
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                 ?>
-                <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"]; ?>)'>
+                <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"];?>),""'>
                 <?php
                     echo "<td style='display:none;'>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
@@ -102,7 +102,7 @@
                     echo "<td>". $row['nombre_responsable']."</td>";
                     echo "<td>". $row['descripcion_evento']."</td>";
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-                    echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento'><i class='fas fa-edit'></i></button></div>";
+                    echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento' onclick='editar()'><i class='fas fa-edit'></i></button></div>";
                     echo "</td>";
                     echo "</tr>";
                 }
@@ -111,8 +111,8 @@
         </table>
     </div>
 <script> 
-function redireccion(a,b){
-    window.location="despacho/comprobar.php?estado="+a+"&codigo="+b;
+function redireccion(a,b,c){
+    window.location="despacho/comprobar.php?estado="+a+"&codigo="+b+"&tipo="+c;
 }
 function cerrar(){
     document.getElementById("overlay1").style.visibility = "hidden";
@@ -124,6 +124,8 @@ function cerrar(){
         $('#descr-evento ').val('');
   };
   function mostrar(n){
+    var titulo=document.getElementById('tituloRegistro');
+        titulo.innerText='Nuevo Registro';
       var btnRegistrar=document.getElementById("btnRegistrar");
       var btnEditar=document.getElementById("btnEditar");
       var valorEditar=document.getElementById("verificadorEditar");
@@ -152,7 +154,9 @@ function cerrar(){
             }
         });
       });
-    $('.editarEvento button').on('click',function(){
+    function editar(){
+        var titulo=document.getElementById('tituloRegistro');
+        titulo.innerText='Editar Registro';
         var row=$(this).closest('tr');
         var nombre=$(row).find("td").eq(2).html(),
         apellido=$(row).find("td").eq(3).html(),
@@ -169,7 +173,7 @@ function cerrar(){
         $('#responsable').val(responsable);
         $('#evento option:selected').val(evento);
         $('#descr-evento ').val(descripcion);
-    });
+    };
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
         $('#tabla_contenido tr').filter(function(){

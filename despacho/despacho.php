@@ -21,6 +21,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
       $(document).ready(function() {
+        var valorAnterior;
+        var cantidad;
+        $('#subtipo').on('focus',function(){
+          valorAnterior=this.value;
+        });
           setInterval(function(){ 
             var table = document.getElementById("mensaje");
             var subtipo=document.getElementById("subtipo").value;
@@ -45,6 +50,9 @@
               event.preventDefault();
               var table = document.getElementById("mensaje");
             var subtipo=document.getElementById("subtipo").value;
+            if (subtipo=='Todos'){
+              alert('Elija un subtipo de producto antes de registrarlo');
+            }else{
               for (var i = 0, row; row = table.rows[i]; i++) {
                 var codigo=row.cells[0].innerText;
                 var descripcion=row.cells[1].innerText;
@@ -61,7 +69,8 @@
                 row.cells[5].children[0].value=1
                }
             }
-            alert("Se han guardado los items con éxito");
+            alert('Guardado con Exito');
+            }
             });
         $("#codigo").keyup(function(event) {
           event.preventDefault();
@@ -74,7 +83,8 @@
           event.preventDefault();
           var codigo=$('#codigo').val();
           var devolucion=$('#devolucion').val();
-          var tipoEvento=$('#tipoEvento').val();
+          var tipoEvento=$('#subtipo').val();
+          console.log(tipoEvento)
           $.ajax({
             type:'POST',
             url:'creacionDespacho.php',
@@ -120,14 +130,16 @@
           }
       });
       $('#busqueda').on('keyup',function(){
-        $("#resultadoBusqueda tr").remove(); 
+        var filas;
         var nombre=$('#busqueda').val();
         var devolucion=$('#devolucion').val();
         var tipoEvento=$('#tipoEvento').val();
+        var subtipo=$('#subtipo').val();
+        $("#resultadoBusqueda tr").remove(); 
           $.ajax({
             type:'POST',
             url:'busquedaManual.php',
-            data:{nombre:nombre,devolucion:devolucion,tipoEvento:tipoEvento},
+            data:{nombre:nombre,devolucion:devolucion,tipoEvento:tipoEvento,subtipo:subtipo},
             success: function(data){
                 $('#resultadoBusqueda').prepend(data);
             }
@@ -158,6 +170,24 @@
        
     });
     $('#subtipo').on('change',function(){
+            var table = document.getElementById("mensaje");
+            var subtipo=valorAnterior;
+              for (var i = 0, row; row = table.rows[i]; i++) {
+                var codigo=row.cells[0].innerText;
+                var descripcion=row.cells[1].innerText;
+                var cantidad=row.cells[2].children[0].value;
+                var tipo=row.cells[3].innerText;
+                var update=row.cells[5].children[0].value;
+                var devObjeto=row.cells[6].children[0].value;
+                $.ajax({
+                type:'POST',
+                url:'registrarDespacho.php?evento=<?php echo $evento ?>',
+                data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update},
+               });
+               if(update==0){
+                row.cells[5].children[0].value=1
+               }
+              }
       $("#mensaje tr").remove();
       var subtipo=$(this).val();
           $.ajax({
@@ -172,17 +202,23 @@
       });
     </script>
     <script>
-  function ingresoManual(){
+  function ingresoManual(event){
+    event.preventDefault();
+    cerrar2();
     document.getElementById("overlay1").style.visibility = "visible";
   };
   function cerrar1(){
     document.getElementById("overlay1").style.visibility = "hidden";
   }
   function busquedaManual(){
+    document.getElementById('btnIngresoManual').style.visibility="visible";
     document.getElementById("overlay2").style.visibility = "visible";
   };
   function cerrar2(){
+    document.getElementById('btnIngresoManual').style.visibility="hidden";
     document.getElementById("overlay2").style.visibility = "hidden";
+                document.getElementById('busqueda').value='';
+            $("#resultadoBusqueda tr").remove(); 
   };
   function encuentro(){
     document.getElementById("overlay3").style.visibility = "visible";
@@ -209,14 +245,15 @@ function eliminar(){
     var table = document.getElementById("mensaje");
     var button = document.getElementById('btnEliminar');
     var evento=$('#tituloEvento').find("td").eq(3).html();
-    for (var i = 0, row; row = table.rows[i]; i++) {
-      var codigo=row.cells[0].innerText;
-      var eliminar=row.cells[4].children[0].value;
+    for (var i = table.rows.length-1; i>-1 ; i--) {
+      var codigo=table.rows[i].cells[0].innerText;
+      var eliminar=table.rows[i].cells[4].children[0].value;
+      var devolucion=table.rows[i].cells[6].children[0].value;
       if(eliminar==1){
-      $.ajax({
+        $.ajax({
             type:'POST',
             url:'eliminacionMaterial.php',
-            data:{codigo:codigo,evento:evento},
+            data:{codigo:codigo,evento:evento,devolucion:devolucion},
         });
       table.deleteRow(i);
       }
@@ -269,8 +306,8 @@ function eliminar(){
       </div>
     </form>
     <div class="form-group" id="busquedaCodigo">
-    Subtipo de Producto<select id="subtipo">
-      <option disabled selected>Elija un Subtipo</option>
+    <p>Subtipo de Producto</p> <select id="subtipo">
+      <option value='Todos' selected>Todos los Tipos</option>
       <?php
        if($tipoEvento=="Cirugia"){
         echo "<option value='Material de Anestesia'>Material de Anestesia</option>";
@@ -283,14 +320,13 @@ function eliminar(){
         echo "<option value='Alta postquimioterapia'>Alta postquimioterapia</option>";
       }
       ?>
-      </select>  <br>
-        <label>Codigo del Producto</label>
-        <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" size="10"required autocomplete=off>
-      </div>
+      </select> 
+      <label>Codigo del Producto</label>
+      <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" size="10"required autocomplete=off>
+    </div>
     <div class="form-group">
       <div id="ingresos">
         <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar" style="display:none">
-        <button class="btn btn-info" onclick="ingresoManual()">Ingreso Manual</button>
         <button class="btn btn-info" onclick="busquedaManual()">Búsqueda Manual</button>
       </div>
         <div id='botonesEdicion'>
@@ -357,7 +393,7 @@ function eliminar(){
           </div>
           <p>Nombre del Producto: <br><input type="text" id="nombreManual" name="nombreManual"></p>
           <p>Cantidad <br><input type="number" id="cantidadManual" name="cantidadManual"></p>
-          <button type="submit" form='formManual' onclick="cerrar1()">Registrar</button>
+          <button class="btn btn-success" form='formManual' onclick="cerrar1()">Registrar</button>
         </div>
       </div>
     </form>
@@ -368,15 +404,16 @@ function eliminar(){
             <h3>Busqueda Manual</h3>
             <a onclick="cerrar2()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
-          Nombre del Producto: <input type="search" name="busqueda" id="busqueda">
-          <table class='table table-dark' id="materialesDespacho">
-            <thead>
+          <div>Nombre del Producto: <input type="search" name="busqueda" id="busqueda" autocomplete="off"></div> 
+          <table class="table" id="materialesDespacho">
+            <thead style="background-color:rgba(119, 122, 120,0.5);">
               <th>Nombre</th>
               <th>Cantidad</th>
             </thead>
-            <tbody id="resultadoBusqueda">
+            <tbody id="resultadoBusqueda" style="background-color:white;">
             </tbody>
           </table>
+          <button class="btn btn-success" id='btnIngresoManual' onclick="ingresoManual(event)">Ingreso Manual</button>
         </div>
       </div>
     </form>
@@ -386,7 +423,7 @@ function eliminar(){
             <h3>Ingrese Numero de Encuentro</h3>
             <a onclick="cerrar3()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
-          <div><input type="text" name="encuentro" id="encuentro" required> <br></div>
+          <div><input type="text" name="encuentro" id="encuentro" required placeholder='Numero de Encuentro'> <br></div>
           <div id="botonesEncuentro">
             <button class='btn btn-success' id='llenadoEncuentro1'>Reporte por Subtipo</button>
             <button class='btn btn-success' id='llenadoEncuentro2'>Reporte por Tipo Material</button>

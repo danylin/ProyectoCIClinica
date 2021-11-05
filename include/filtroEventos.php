@@ -13,7 +13,7 @@
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                 ?>
-                <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"]; ?>)'>
+                <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"]; ?>,<?php echo $row["id_evento"]; ?>)'>
                 <?php
                     echo "<td style='display:none;'>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
@@ -25,7 +25,7 @@
                     echo "<td style='display:none;'>". $row['codigo_cierre']."</td>";
                 if ($estado!=3){
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-                    echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento'><i class='fas fa-edit'></i></button></div>";
+                    echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento' onclick='editar()'><i class='fas fa-edit'></i></button></div>";
                     echo "</td>";
                 }
                     echo "</tr>";

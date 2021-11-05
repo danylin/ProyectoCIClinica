@@ -14,7 +14,7 @@ include("include/titulo.php");
         <div class="formulario">
             <h4>Ingrese Contraseña</h4>
             <form action="mostrar.php" method="post">
-              <p class='form' id='dni'><br><input type="text" name="usuario" autocomplete="off" autofocus="autofocus" placeholder='Ingrese Contraseña'></p>
+              <p class='form' id='dni'><br><input type="password" name="usuario" autocomplete="off" autofocus="autofocus" placeholder='Ingrese Contraseña'></p>
               <input class='form' id="boton-ingreso" type="submit" value="Ingresar" onclick="reenviar()">
               <input class='form' id="boton" type="button" value="Ingreso Manual" onclick="location='ingreso_manual.php'">
             </form>

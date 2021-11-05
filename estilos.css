@@ -1,5 +1,5 @@
 *{
-    padding: 0;
+    padding: 3.2px;
     margin: 0px ;
     font-family: 'Roboto Slab', serif;
 }
@@ -161,15 +161,13 @@ text-align: center;
 }
 .filtros{
     text-align: right;
-    padding-left: 35%;
+    padding-left: 31%;
     float:right;
 
 }
 #cajaOpciones{
     display: flex;
 }
-
-
 #overlay1,#overlay2,#overlay3{
     background: rgba(119, 122, 120,0.5);
     position: fixed;
@@ -188,8 +186,14 @@ background-color:rgba(119, 122, 120,0.5);
 color: #FFF;
 }
 #busquedaCodigo{
-    padding-right: 80%;
+    display: flex;
+    height: 38px;
 }
+
+#codigo{
+    width: 200px;
+}
+
 .popup{
     width: 600px;
     text-align: center;
@@ -213,7 +217,7 @@ color: #FFF;
 #encabezado_encuentro{
     display: flex;
     justify-content: space-between;
-    padding-left: 15%;
+    padding-left: 9%;
 }
 
 #reporteEvento h3{
