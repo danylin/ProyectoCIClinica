@@ -7,70 +7,74 @@
     $tipo=$_POST['tipo'];
     $subtipo=$_POST['subtipo'];
     $devObjeto=$_POST['devObjeto'];
-    $contador=0;
-    $pruebaExistencia="SELECT*FROM sop__despacho_db WHERE id_evento_acc=$idEvento and id_material=$codigo";
-    $pruebaConsulta=mysqli_query($conexion,$pruebaExistencia);
-    while($despachos=mysqli_fetch_array($pruebaConsulta)){
-        if($despachos['id_material']==$codigo){
-            $contador=$contador+1;
-        }
-    }
-    if($contador>0){
-        if($_POST['update']==0){
-            if($devObjeto==1){
-                $query = "UPDATE sop__despacho_db SET devolucion=devolucion+1 WHERE id_material=$codigo and id_evento_acc=$idEvento";
-                $consulta=mysqli_query($conexion,$query);
-            }else {
-                $query = "UPDATE sop__despacho_db SET cantidad=cantidad+1 WHERE id_material=$codigo and id_evento_acc=$idEvento";
-                $consulta=mysqli_query($conexion,$query);
-        }
-    }
-    }else{
-        if($_POST['update']==1){
-            if($devObjeto==1){
-                $sql="SELECT*FROM sop__despacho_db WHERE id_material=$codigo and id_evento_acc=$idEvento";
-                $resultado=mysqli_query($conexion,$sql);
-                while($filas=mysqli_fetch_array($resultado)){
-                    if ($filas['id_material']==$codigo){
-                        if($filas['cantidad']<$cantidad){
-                            $query = "UPDATE sop__despacho_db SET devolucion=cantidad WHERE id_material=$codigo and id_evento_acc=$idEvento";
-                            $consulta=mysqli_query($conexion,$query);
-                        }else{
-                            $query = "UPDATE sop__despacho_db SET devolucion=$cantidad WHERE id_material=$codigo and id_evento_acc=$idEvento";
-                            $consulta=mysqli_query($conexion,$query);
-                        }
-                    }
-                }
-            }else {
-                $query = "UPDATE sop__despacho_db SET cantidad=$cantidad WHERE id_material=$codigo and id_evento_acc=$idEvento";
-                $consulta=mysqli_query($conexion,$query);
+    $update=$_POST['update'];
+    $contador;
+    for($i=0;$i<count($codigo);$i++){
+        $pruebaExistencia="SELECT*FROM sop__despacho_db WHERE id_evento_acc=$idEvento and id_material=".$codigo[$i];
+        $pruebaConsulta=mysqli_query($conexion,$pruebaExistencia);
+        while($despachos=mysqli_fetch_array($pruebaConsulta)){
+            if($despachos['id_material']==$codigo[$i]){
+                $contador=$contador+1;
             }
-        } else{
-            if ($devObjeto==1){
-                $sql="SELECT*FROM sop__despacho_db WHERE id_material=$codigo and id_evento_acc=$idEvento";
-                $resultado=mysqli_query($conexion,$sql);
-                while($filas=mysqli_fetch_array($resultado)){
-                    if ($filas['id_material']==$codigo){
-                        if($filas['cantidad']<$cantidad){
-                            $query = "UPDATE sop__despacho_db SET devolucion=cantidad WHERE id_material=$codigo and id_evento_acc=$idEvento";
-                            $consulta=mysqli_query($conexion,$query);
-                        }else{
-                            $query = "UPDATE sop__despacho_db SET devolucion=$cantidad WHERE id_material=$codigo and id_evento_acc=$idEvento";
-                            $consulta=mysqli_query($conexion,$query);
+        }
+        if($contador>0){
+            if($update[$i]==0){
+                if($devObjeto[$i]==1){
+                    $query = "UPDATE sop__despacho_db SET devolucion=IF(cantidad<devolucion+1,cantidad,devolucion+1) WHERE id_material=".$codigo[$i]." and id_evento_acc=$idEvento";
+                    $consulta=mysqli_query($conexion,$query);
+                }else {
+                    $query = "UPDATE sop__despacho_db SET cantidad=cantidad+1 WHERE id_material=".$codigo[$i]." and id_evento_acc=$idEvento";
+                    $consulta=mysqli_query($conexion,$query);
+            }
+        }
+        $contador=0;
+        }else{
+            if($update[$i]==1){
+                if($devObjeto[$i]==1){
+                    $sql="SELECT*FROM sop__despacho_db WHERE id_material=".$codigo[$i]." and id_evento_acc=$idEvento";
+                    $resultado=mysqli_query($conexion,$sql);
+                    while($filas=mysqli_fetch_array($resultado)){
+                        if ($filas['id_material']==$codigo[$i]){
+                            if($filas['cantidad']<$cantidad[$i]){
+                                $query = "UPDATE sop__despacho_db SET devolucion=cantidad WHERE id_material=".$codigo[$i]." and id_evento_acc=$idEvento";
+                                $consulta=mysqli_query($conexion,$query);
+                            }else{
+                                $query = "UPDATE sop__despacho_db SET devolucion=".$cantidad[$i]." WHERE id_material=".$codigo[$i]." and id_evento_acc=$idEvento";
+                                $consulta=mysqli_query($conexion,$query);
+                            }
                         }
                     }
+                }else {
+                    $query = "UPDATE sop__despacho_db SET cantidad=".$cantidad[$i]." WHERE id_material=".$codigo[$i]." and id_evento_acc=$idEvento";
+                    $consulta=mysqli_query($conexion,$query);
                 }
-            }else{
-                if(strlen($codigo)<8){
-                    $codigoNuevoProducto="SELECT DISTINCT *FROM sop__materialsc_db WHERE id='$codigo'";
-                    $consulta=mysqli_query($conexion,$codigoNuevoProducto);
-                    $fila=mysqli_fetch_array($consulta);
-                    $codigo=$fila['id'];
-                    $query = " INSERT INTO sop__despacho_db (id_material,id_evento_acc,cantidad,nombre,tipo,subtipo) VALUES ($codigo,$idEvento,$cantidad,'$nombre','$tipo','$subtipo')";
+            } else{
+                if ($devObjeto[$i]==1){
+                    $sql="SELECT*FROM sop__despacho_db WHERE id_material=".$codigo[$i]." and id_evento_acc=$idEvento";
+                    $resultado=mysqli_query($conexion,$sql);
+                    while($filas=mysqli_fetch_array($resultado)){
+                        if ($filas['id_material']==$codigo[$i]){
+                            if($filas['cantidad']<$cantidad[$i]){
+                                $query = "UPDATE sop__despacho_db SET devolucion=cantidad WHERE id_material=".$codigo[$i]." and id_evento_acc=$idEvento";
+                                $consulta=mysqli_query($conexion,$query);
+                            }else{
+                                $query = "UPDATE sop__despacho_db SET devolucion=".$cantidad[$i]." WHERE id_material=".$codigo[$i]." and id_evento_acc=$idEvento";
+                                $consulta=mysqli_query($conexion,$query);
+                            }
+                        }
+                    }
                 }else{
-                    $query = " INSERT INTO sop__despacho_db (id_material,id_evento_acc,cantidad,nombre,tipo,subtipo) VALUES ($codigo,$idEvento,$cantidad,'$nombre','$tipo','$subtipo')";
+                    if(strlen($codigo[$i])<8){
+                        $codigoNuevoProducto="SELECT DISTINCT *FROM sop__materialsc_db WHERE id='".$codigo[$i]."'";
+                        $consulta=mysqli_query($conexion,$codigoNuevoProducto);
+                        $fila=mysqli_fetch_array($consulta);
+                        $codigo=$fila['id'];
+                        $query = " INSERT INTO sop__despacho_db (id_material,id_evento_acc,cantidad,nombre,tipo,subtipo) VALUES (".$codigo[$i].",$idEvento,".$cantidad[$i].",'".$nombre[$i]."','".$tipo[$i]."','$subtipo')";
+                    }else{
+                        $query = " INSERT INTO sop__despacho_db (id_material,id_evento_acc,cantidad,nombre,tipo,subtipo) VALUES (".$codigo[$i].",$idEvento,".$cantidad[$i].",'".$nombre[$i]."','".$tipo[$i]."','$subtipo')";
+                    }
+                    $consulta=mysqli_query($conexion,$query);
                 }
-                $consulta=mysqli_query($conexion,$query);
             }
         }
     }

@@ -4,8 +4,20 @@
     font-family: 'Roboto Slab', serif;
 }
 
+#usuarioEncabezado{
+    display: flex;
+}
+
+#registroEventosTitulo{
+    padding-left: 23%;
+}
+
+#textoNavegador{
+    font-size: 18px;
+}
+
 section{
-    padding-top: 5px;
+    padding:0px;
 }
 .formulario{
     text-align: center;
@@ -35,6 +47,19 @@ a{
     margin: 20px;
     width: 150px;
     border-radius: 20px;
+}
+
+#botonBusquedaManual{
+    height: 32px;
+    width: 150px;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
+#divBusqueda{
+    padding-top: 0;
+    padding-left: 30px;
 }
 
 th {
@@ -235,7 +260,18 @@ float: left;
 
 #botonesEdicion{
     float: right;
+    padding: 0;
+    padding-left: 11%;
+    margin: 0;
 }
+#botonesEdicion .btn-info{
+    height: 32px;
+    width: 100px;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+
 
 #informacio-general{
     width: 100%;

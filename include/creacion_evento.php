@@ -47,10 +47,30 @@
         </form>
     </div>
 </div> 
+<div class="overlay" id="overlay2">
+        <div class="popup">
+          <div id="encabezado_encuentro">
+            <h3 style="padding-left:32%">Reportes</h3>
+            <a onclick="cerrar2()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
+          </div>
+              <table class="table table-light">
+                  <thead>
+                      <th style="background-color:rgba(119, 122, 120,0.5);">Tipo de Reporte</th>
+                  </thead>
+                  <tbody>
+                      <tr class="fila" onclick="reportes(0)"><td>Reporte por Subtipo</td></tr>
+                      <tr class="fila" onclick="reportes(1)"><td>Reporte por Tipo Material</td></tr>
+                  </tbody>
+              </table>
+        </div>
+      </div>
 <div class="usuarios">
     <div class="container-table">
         <div class="table-title">
-            <h3>Registro de Eventos</h3>
+            <div id="usuarioEncabezado">
+            <p>Usuario: <?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido']?></p>
+            <h3 id="registroEventosTitulo">Registro de Eventos</h3>
+            </div>
             <div id='cajaOpciones'>
                 <button class='btn btn-info' id='nuevoEvento'onclick='mostrar(0)'>Nuevo Evento</button>
                 <div class='filtros'>
@@ -59,7 +79,7 @@
                        <option selected disabled>Status de Evento</option>
                             <option value="1" >Programado</option>
                             <option value="2" selected>En Proceso</option>
-                            <option value="3">Cerrado</option>
+                            <option value="3">Finalizado</option>
                             <option value="4">Suspendido</option>
                         </select>
                     Desde: <input type="date" name="" id="fechaDesde" >
@@ -102,15 +122,33 @@
                     echo "<td>". $row['nombre_responsable']."</td>";
                     echo "<td>". $row['descripcion_evento']."</td>";
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-                    echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento' onclick='editar()'><i class='fas fa-edit'></i></button></div>";
+                    echo "<div class='editarEvento'><button class='btn btn-info' id='editarEvento' onclick='editar(this)'><i class='fas fa-edit'></i></button></div>";
                     echo "</td>";
+                    echo "<td style='display:none;'>". $row['id_evento']."</td>";
                     echo "</tr>";
                 }
                 ?>
             </tbody>
         </table>
     </div>
-<script> 
+<script>
+var codigoEvento;
+var subTipo; 
+  function reporte(a){
+    document.getElementById("overlay2").style.visibility = "visible";
+    codigoEvento=$(a).closest('tr').find("td").eq(0).html();
+    subTipo=$(a).closest('tr').find("td").eq(9).html();
+  };
+  function reportes(n){
+      if (n==0){
+        window.open("reporte/pdf.php?codigo="+codigoEvento);
+      }else{
+        window.open("reporte/pdf_subTipo.php?codigo="+codigoEvento+"&tipoEvento="+subTipo);
+      }
+  }
+  function cerrar2(){
+    document.getElementById("overlay2").style.visibility = "hidden";
+  };
 function redireccion(a,b,c){
     window.location="despacho/comprobar.php?estado="+a+"&codigo="+b+"&tipo="+c;
 }
@@ -143,21 +181,36 @@ function cerrar(){
     document.getElementById("overlay1").style.visibility = "visible";
   };
   $('#filtroEleccion').on('change',function(){
-        $("#tabla_contenido tr td").remove(); 
+    $("#tabla_contenido tr td").remove(); 
         var estado=$('#filtroEleccion').val();
           $.ajax({
             type:'POST',
             url:'include/filtroEventos.php',
             data:{estado:estado},
             success: function(data){
-                $('#tabla_contenido').append(data);
+                $('#tabla_contenido').prepend(data);
+                $("#tabla_eventos tbody tr").each(function() {
+                var from=$('#fechaDesde').val();
+                var to=$('#fechaHasta').val();
+                var row = $(this);
+                var date = row.find("td").eq(1).html();
+                var show = true;
+                if (from && date < from)
+                show = false;
+                if (to && date > to)
+                show = false;
+                if (show)
+                row.show();
+                else
+                row.hide();
+                    }); 
             }
         });
       });
-    function editar(){
+    function editar(id){
         var titulo=document.getElementById('tituloRegistro');
         titulo.innerText='Editar Registro';
-        var row=$(this).closest('tr');
+        var row=$(id).closest('tr');
         var nombre=$(row).find("td").eq(2).html(),
         apellido=$(row).find("td").eq(3).html(),
         evento=$(row).find("td").eq(4).html(),
@@ -245,8 +298,7 @@ function cerrar(){
     else
       row.hide();
   }); 
-  };
-
+    }
 </script>
 <script>
     $('#fechaDesde').on('change',function(){

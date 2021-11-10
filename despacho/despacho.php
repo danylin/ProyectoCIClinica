@@ -29,47 +29,64 @@
           setInterval(function(){ 
             var table = document.getElementById("mensaje");
             var subtipo=document.getElementById("subtipo").value;
+            var codigo=[];
+            var descripcion=[];
+            var cantidad=[];
+            var tipo=[];
+            var update=[];
+            var devObjeto=[];
               for (var i = 0, row; row = table.rows[i]; i++) {
-                var codigo=row.cells[0].innerText;
-                var descripcion=row.cells[1].innerText;
-                var cantidad=row.cells[2].children[0].value;
-                var tipo=row.cells[3].innerText;
-                var update=row.cells[5].children[0].value;
-                var devObjeto=row.cells[6].children[0].value;
+                codigo.push(row.cells[0].innerText);
+                descripcion.push(row.cells[1].innerText);
+                cantidad.push(row.cells[2].children[0].value);
+                tipo.push(row.cells[3].innerText);
+                update.push(row.cells[5].children[0].value);
+                devObjeto.push(row.cells[6].children[0].value);
+               if(update==0){
+                row.cells[5].children[0].value=1
+               }
                 $.ajax({
                 type:'POST',
                 url:'registrarDespacho.php?evento=<?php echo $evento ?>',
                 data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update},
                });
-               if(update==0){
-                row.cells[5].children[0].value=1
-               }
               }
             }, 35000);
             $('#btnGuardado').on('click',function(event){
               event.preventDefault();
-              var table = document.getElementById("mensaje");
+            var table = document.getElementById("mensaje");
             var subtipo=document.getElementById("subtipo").value;
+            var evento=document.getElementById("tipoEvento").value;
+            var codigo=[];
+            var descripcion=[];
+            var cantidad=[];
+            var tipo=[];
+            var update=[];
+            var devObjeto=[];
             if (subtipo=='Todos'){
-              alert('Elija un subtipo de producto antes de registrarlo');
+              if (evento!="Procedimiento Medico" || evento!="Control Logistico"){
+                alert('Elija un subtipo de producto antes de registrarlo');
+              }
             }else{
               for (var i = 0, row; row = table.rows[i]; i++) {
-                var codigo=row.cells[0].innerText;
-                var descripcion=row.cells[1].innerText;
-                var cantidad=row.cells[2].children[0].value;
-                var tipo=row.cells[3].innerText;
-                var update=row.cells[5].children[0].value;
-                var devObjeto=row.cells[6].children[0].value;
-                $.ajax({
-                type:'POST',
-                url:'registrarDespacho.php?evento=<?php echo $evento ?>',
-                data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update},
-               });
-               if(update==0){
+                codigo.push(row.cells[0].innerText);
+                descripcion.push(row.cells[1].innerText);
+                cantidad.push(row.cells[2].children[0].value);
+                tipo.push(row.cells[3].innerText);
+                update.push(row.cells[5].children[0].value);
+                devObjeto.push(row.cells[6].children[0].value);
+               if(row.cells[5].children[0].value==0){
                 row.cells[5].children[0].value=1
                }
             }
-            alert('Guardado con Exito');
+            $.ajax({
+                type:'POST',
+                url:'registrarDespacho.php?evento=<?php echo $evento ?>',
+                data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update,evento:evento},
+                success: function(data){
+                  alert('Guardado con Exito');
+                }
+               });
             }
             });
         $("#codigo").keyup(function(event) {
@@ -84,11 +101,11 @@
           var codigo=$('#codigo').val();
           var devolucion=$('#devolucion').val();
           var tipoEvento=$('#subtipo').val();
-          console.log(tipoEvento)
+          var evento=document.getElementById("tipoEvento").value;
           $.ajax({
             type:'POST',
             url:'creacionDespacho.php',
-            data:{codigo:codigo,devolucion:devolucion,tipoEvento:tipoEvento},
+            data:{codigo:codigo,devolucion:devolucion,tipoEvento:tipoEvento,evento:evento},
             success: function(data){
                 $('#mensaje').prepend(data);
                 $('#formMaterial')[0].reset();
@@ -100,11 +117,12 @@
           var nombre=$('#nombreManual').val();
           var cantidad=$('#cantidadManual').val();
           var devolucion=$('#devolucion').val();
-          var tipoEvento=$('#tipoEvento').val();
+          var tipoEvento=$('#subtipo').val();
+          var evento=document.getElementById("tipoEvento").value;
           $.ajax({
             type:'POST',
             url:'creacionDespacho.php',
-            data:{nombre:nombre,cantidad:cantidad,devolucion:devolucion,tipoEvento:tipoEvento},
+            data:{nombre:nombre,cantidad:cantidad,devolucion:devolucion,tipoEvento:tipoEvento,evento:evento},
             success: function(data){
                 $('#mensaje').prepend(data);
                 $('#formManual')[0].reset();
@@ -145,48 +163,39 @@
             }
         });
       });
-      $('#llenadoEncuentro2').on('click',function(){
-        var row=$('#except .botonReporte button').closest('tr');
-        var id=$(row).find("td").eq(3).html();
-        var encuentro=$('#encuentro').val();
-        window.open("../reporte/pdf.php?codigo="+id+"&encuentro="+encuentro,'_blank');
-        if($_SESSION['tipousuario']==1){
-          window.location="../usuario1.php";
-        }else{
-          window.location="../usuario2.php";
-        }
-    });
     $('#llenadoEncuentro1').on('click',function(){
+      if(confirm("Está a punto de cerrar el evento. Despues de ello no podrá modificarlo.¿Está seguro de cerrar el evento?")){
         var row=$('#except .botonReporte button').closest('tr');
         var id=$(row).find("td").eq(3).html();
         var encuentro=$('#encuentro').val();
-        var tipoEvento=$('#tipoEvento').val();
-        window.open("../reporte/pdf_subTipo.php?codigo="+id+"&encuentro="+encuentro+"&tipoEvento="+tipoEvento,'_blank');
-        if(<?php echo $_SESSION['tipousuario']?>==1){
-          window.location="../usuario1.php";
-        }else{
-          window.location="../usuario2.php";
-        }
+        window.location="tipoReporte.php?codigo="+id+"&encuentro="+encuentro;
+      }
     });
     $('#subtipo').on('change',function(){
             var table = document.getElementById("mensaje");
             var subtipo=valorAnterior;
+            var codigo=[];
+            var descripcion=[];
+            var cantidad=[];
+            var tipo=[];
+            var update=[];
+            var devObjeto=[];
               for (var i = 0, row; row = table.rows[i]; i++) {
-                var codigo=row.cells[0].innerText;
-                var descripcion=row.cells[1].innerText;
-                var cantidad=row.cells[2].children[0].value;
-                var tipo=row.cells[3].innerText;
-                var update=row.cells[5].children[0].value;
-                var devObjeto=row.cells[6].children[0].value;
-                $.ajax({
+                codigo.push(row.cells[0].innerText);
+                descripcion.push(row.cells[1].innerText);
+                cantidad.push(row.cells[2].children[0].value);
+                tipo.push(row.cells[3].innerText);
+                update.push(row.cells[5].children[0].value);
+                devObjeto.push(row.cells[6].children[0].value);
+                if(row.cells[5].children[0].value==0){
+                row.cells[5].children[0].value=1
+               }
+              }
+              $.ajax({
                 type:'POST',
                 url:'registrarDespacho.php?evento=<?php echo $evento ?>',
                 data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update},
                });
-               if(update==0){
-                row.cells[5].children[0].value=1
-               }
-              }
       $("#mensaje tr").remove();
       var subtipo=$(this).val();
           $.ajax({
@@ -264,8 +273,8 @@ function eliminar(){
   </head>
 <body>
     <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" width="75px">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height:80px;">
+          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" width="85px">
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <?php include("../include/barraNavegacion.php")?>
@@ -283,6 +292,7 @@ function eliminar(){
             <th>Médico Tratante</th>
             <th>Evento</th>
             <th>¿Devolución?</th>
+            <th>Cerrar Evento</th>
           </thead>
           <?php
           $sql="SELECT id_accion,CONCAT(nombre_paciente,' ',apellido_paciente) nombre_completo ,nombre_responsable,a.nombre FROM sop__evento_acc_db 
@@ -298,7 +308,7 @@ function eliminar(){
             echo "<td style='display:none;'>".$row['id_accion']."</td>";
             echo "<td><button type='button' class='btn btn-success' id='btnDevolucion'>Activar</button></td>";
             echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-            echo "<div class='botonReporte'><button class='btn btn-success' id='reporte' onclick='encuentro();'><i class='fas fa-file-alt'></i></button></div>";
+            echo "<div class='botonReporte'><button class='btn btn-success' id='reporte' onclick='encuentro();'>Cerrar </button></div>";
             echo "</tr>";
           ?>
         </table>
@@ -322,16 +332,17 @@ function eliminar(){
       </select> 
       <label>Codigo del Producto</label>
       <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" size="10"required autocomplete=off>
-    </div>
-    <div class="form-group">
-      <div id="ingresos">
-        <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar" style="display:none">
-        <button class="btn btn-info" onclick="busquedaManual()">Búsqueda Manual</button>
-      </div>
-        <div id='botonesEdicion'>
+       <div id="divBusqueda"><button class="btn btn-info" onclick="busquedaManual()" id="botonBusquedaManual">Búsqueda Manual</button> </div>
+       <div id='botonesEdicion'>
         <button type="submit" id='btnGuardado' form="registro_Despacho" class="btn btn-info">Guardar</button>
         <button class="btn btn-info" id="btnEliminar" onclick='eliminar()' disabled>Eliminar</button>
         </div>
+      </div>
+    <div class="form-group">
+      <div id="ingresos">
+        <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar" style="display:none">
+      </div>
+
     </div>
     
     <form action="registrarDespacho.php?codigo=<?php echo $evento ?>" method="POST" id="registro_Despacho">
@@ -422,10 +433,9 @@ function eliminar(){
             <h3>Ingrese Numero de Encuentro</h3>
             <a onclick="cerrar3()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
-          <div><input type="text" name="encuentro" id="encuentro" required placeholder='Numero de Encuentro'> <br></div>
+          <div><input type="text" name="encuentro" id="encuentro" placeholder='Numero de Encuentro' autocomplete="off" required> <br></div>
           <div id="botonesEncuentro">
-            <button class='btn btn-success' id='llenadoEncuentro1'>Reporte por Subtipo</button>
-            <button class='btn btn-success' id='llenadoEncuentro2'>Reporte por Tipo Material</button>
+            <button class='btn btn-danger' id='llenadoEncuentro1'>Cerrar Evento</button>
         </div>
         </div>
       </div>

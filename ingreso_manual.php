@@ -8,7 +8,7 @@ include("include/titulo.php");
 <body>
 <header>
       <nav>
-          <li id="imagen"><img src="img/logotipo_auna.png" alt="logotipo auna" width="75px"></li>
+         <img src="img/logotipo_auna.png" alt="logotipo auna" width="85px">
       </nav>
     </header>
     <section>

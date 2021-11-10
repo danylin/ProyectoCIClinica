@@ -4,11 +4,10 @@ include("../include/bd_usuario.php");
 require_once("../TCPDF/tcpdf.php");
             $nroEvento=$_GET['codigo'];
             $eventoAccion=$_GET['tipoEvento'];
-            if (isset($_GET['encuentro'])){
-                $nroEncuentro=$_GET['encuentro'];
-                $encuentro="UPDATE sop__evento_acc_db SET codigo_cierre=$nroEncuentro,id_estado=3 WHERE id_accion=$nroEvento";
-                $resultado=mysqli_query($conexion,$encuentro);
-            }
+            $sqlEvento="SELECT*FROM sop__eventos_db WHERE id_evento=$eventoAccion";
+            $consulta=mysqli_query($conexion,$sqlEvento);
+            $row=mysqli_fetch_array($consulta);
+            $eventoAccion=$row['nombre'];
             $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
             FROM sop__evento_acc_db a 
             INNER JOIN sop__eventos_db b ON
@@ -29,25 +28,19 @@ class MYPDF extends TCPDF {
             $nroEvento=$_GET['codigo'];
             $conexion= mysqli_connect("localhost","root","","proyectocl");
             $sedeUsuario=$_SESSION['id_sede'];
-            $sedeNombre="SELECT sede FROM sede__db_area WHERE id=$sedeUsuario";
+            $sedeNombre="SELECT*FROM sede__db_area WHERE id=$sedeUsuario";
             $resultadoSede=mysqli_query($conexion,$sedeNombre);
             $sede=mysqli_fetch_array($resultadoSede);
-            $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
-            FROM sop__evento_acc_db a 
-            INNER JOIN sop__eventos_db b ON
-            a.id_evento=b.id_evento
-            WHERE a.id_accion=$nroEvento;";
-            $resultado=mysqli_query($conexion,$sql);
-            $row=mysqli_fetch_array($resultado);
                     // Logo
                     $image_file = '../img/logotipo_auna.jpg';
-                    $texto="Reporte de Consumo de Farmacia: ".$row['nombre'];
+                    $texto="Reporte de Consumo de Farmacia";
                     $this->Image($image_file,180, 0, 20, '', 'JPG', '', 'R', false, 300, '', false, false, 0, false, false, false);
                     // Set font
                     $this->SetFont('helvetica', 'B', 12);
                     // Title
-                    $this->Cell(0, 0, $texto, 0, 1, 'L', 0, '', 0);
                     $this->Cell(0, 0, $sede['sede'], 0, 1, 'L', 0, '', 0);
+                    $this->Cell(0, 0, $texto, 0, 1, 'L', 0, '', 0);
+                    
                 }
             
                 // Page footer
@@ -121,12 +114,10 @@ h4{
 $pdf->MultiCell(55, 5, 'Nro de Encuentro', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $row['codigo_cierre'], 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $pdf->write1DBarcode($row['codigo_cierre'], 'C39', '', '', 55, 9, 0.4, array('position'=>'', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>false, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''), 0, 'C', 0, 1, '', '', true);
-$pdf->MultiCell(55, 5, 'Fecha', 0, 'L', 0, 0, '', '', true);
+$pdf->MultiCell(55, 5, 'Fecha de Cierre', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $row['fecha_programacion'], 0, 'L', 0, 1, '', '', true);
 $pdf->MultiCell(55, 5, 'Paciente', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $row['paciente'] , 0, 'L', 0, 1, '', '', true);
-$pdf->MultiCell(55, 5, 'Procedimiento', 0, 'L', 0, 0, '', '', true);
-$pdf->MultiCell(55, 5, $row['nombre'] , 0, 'L', 0, 1, '', '', true);
 $pdf->MultiCell(55, 5, 'Médico Tratante', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $row['nombre_responsable'], 0, 'L', 0, 1, '', '', true);
 $pdf->MultiCell(55, 5, 'Número de Items', 0, 'L', 0, 0, '', '', true);
@@ -149,7 +140,7 @@ if($eventoAccion=='Cirugia'){
         </tr>';
         while ($row=mysqli_fetch_array($resultado)){
             if($row['resultado']!=0){
-                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
                 $html.= '<tr>
                 <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
                 <td align="left">'.$row['nombre'].'</td>
@@ -175,7 +166,7 @@ if($eventoAccion=='Cirugia'){
         </tr>';
         while ($row=mysqli_fetch_array($resultado)){
             if($row['resultado']!=0){
-                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
                 $html.= '<tr>
                 <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
                 <td align="left">'.$row['nombre'].'</td>
@@ -201,7 +192,7 @@ if($eventoAccion=='Cirugia'){
         </tr>';
         while ($row=mysqli_fetch_array($resultado)){
             if($row['resultado']!=0){
-                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
                 $html.= '<tr>
                 <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
                 <td align="left">'.$row['nombre'].'</td>
@@ -227,7 +218,7 @@ if($eventoAccion=='Cirugia'){
         </tr>';
         while ($row=mysqli_fetch_array($resultado)){
             if($row['resultado']!=0){
-                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
                 $html.= '<tr>
                 <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
                 <td align="left">'.$row['nombre'].'</td>
@@ -254,7 +245,7 @@ if($eventoAccion=='Cirugia'){
         </tr>';
         while ($row=mysqli_fetch_array($resultado)){
             if($row['resultado']!=0){
-                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
                 $html.= '<tr>
                 <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
                 <td align="left">'.$row['nombre'].'</td>
@@ -280,7 +271,7 @@ if($eventoAccion=='Cirugia'){
         </tr>';
         while ($row=mysqli_fetch_array($resultado)){
             if($row['resultado']!=0){
-                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
                 $html.= '<tr>
                 <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
                 <td align="left">'.$row['nombre'].'</td>
@@ -306,7 +297,7 @@ if($eventoAccion=='Cirugia'){
         </tr>';
         while ($row=mysqli_fetch_array($resultado)){
             if($row['resultado']!=0){
-                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), 'N'));
+                $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
                 $html.= '<tr>
                 <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
                 <td align="left">'.$row['nombre'].'</td>
