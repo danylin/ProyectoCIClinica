@@ -1,12 +1,12 @@
-<div class="overlay" id='overlay1'>
+<div class="overlay" id='overlay1' >
     <div class="popup">
         <div id="encabezado_popup">
             <h3 id='tituloRegistro'>Registrar Evento</h3>
             <a onclick="cerrar()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
         </div>
         <form action="include/registro_evento.php" method="post" id="formEvento">
-            <div class="container-flex">
-                <div class="row">
+            <div class="container-flex" >
+                <div class="row" >
                 <div class="col-sm-6"><p>Nombre del Paciente <br> <input type="text" name="nombre" id="nombre" autocomplete="off" required></p></div>
                 <div class="col-sm-6"><p>Apellidos del Paciente <br> <input type="text" name="apellido" id="apellido" autocomplete="off" required></p></div>  
                 <?php
@@ -58,8 +58,8 @@
                       <th style="background-color:rgba(119, 122, 120,0.5);">Tipo de Reporte</th>
                   </thead>
                   <tbody>
-                      <tr class="fila" onclick="reportes(0)"><td>Reporte por Subtipo</td></tr>
-                      <tr class="fila" onclick="reportes(1)"><td>Reporte por Tipo Material</td></tr>
+                      <tr class="fila" onclick="reportes(0)"><td>De Movimiento General</td></tr>
+                      <tr class="fila" onclick="reportes(1)"><td>De Movimiento por SubEvento</td></tr>
                   </tbody>
               </table>
         </div>
@@ -68,10 +68,10 @@
     <div class="container-table">
         <div class="table-title">
             <div id="usuarioEncabezado">
-            <p>Usuario: <?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido']?></p>
+            <p><b>Usuario: <?php echo $_SESSION['nombre'] . " " . $_SESSION['apellido']?></b></p>
             <h3 id="registroEventosTitulo">Registro de Eventos</h3>
             </div>
-            <div id='cajaOpciones'>
+            <div id='cajaOpciones' >
                 <button class='btn btn-info' id='nuevoEvento'onclick='mostrar(0)'>Nuevo Evento</button>
                 <div class='filtros'>
                     <div id='input_buscar'>
@@ -280,7 +280,7 @@ function cerrar(){
         mes='0'+mes 
     document.getElementById('form-fecha').min=year+"-"+mes+"-"+dia;
     document.getElementById('fechaDesde').value=year+"-"+mes+"-"+dia;
-    document.getElementById('fechaHasta').value=year+"-"+mes+"-"+dia;
+    document.getElementById('fechaHasta').value=year+"-"+mes+"-"+(dia+2);
     $("#tabla_contenido tr").each(function() {
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();

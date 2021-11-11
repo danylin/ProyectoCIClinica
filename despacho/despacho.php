@@ -6,6 +6,9 @@
   include("../include/bd_usuario.php");
   $idSesion=$_SESSION['id'];
   $evento=$_GET['codigo'];
+  $sql="SELECT*FROM sede__db_area WHERE id=".$_SESSION['id_sede'];
+  $consulta=mysqli_query($conexion,$sql);
+  $row=mysqli_fetch_array($consulta);
   ?>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,28 +32,29 @@
           setInterval(function(){ 
             var table = document.getElementById("mensaje");
             var subtipo=document.getElementById("subtipo").value;
+            var evento=document.getElementById("tipoEvento").value;
             var codigo=[];
             var descripcion=[];
             var cantidad=[];
             var tipo=[];
             var update=[];
             var devObjeto=[];
-              for (var i = 0, row; row = table.rows[i]; i++) {
+            for (var i = 0, row; row = table.rows[i]; i++) {
                 codigo.push(row.cells[0].innerText);
                 descripcion.push(row.cells[1].innerText);
                 cantidad.push(row.cells[2].children[0].value);
                 tipo.push(row.cells[3].innerText);
                 update.push(row.cells[5].children[0].value);
                 devObjeto.push(row.cells[6].children[0].value);
-               if(update==0){
-                row.cells[5].children[0].value=1
+               if(row.cells[5].children[0].value==0){
+                row.cells[5].children[0].value=1;
                }
-                $.ajax({
+            }
+            $.ajax({
                 type:'POST',
                 url:'registrarDespacho.php?evento=<?php echo $evento ?>',
-                data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update},
+                data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update,evento:evento},
                });
-              }
             }, 35000);
             $('#btnGuardado').on('click',function(event){
               event.preventDefault();
@@ -146,6 +150,7 @@
             $('#btnDevolucion').html('Activar');
             $('#btnDevolucion').attr("class","btn btn-success")
           }
+          document.getElementById("codigo").focus();
       });
       $('#busqueda').on('keyup',function(){
         var filas;
@@ -206,6 +211,7 @@
                 $('#mensaje').append(data);
             }
         });
+        document.getElementById("codigo").focus();
     });
       });
     </script>
@@ -217,6 +223,7 @@
   };
   function cerrar1(){
     document.getElementById("overlay1").style.visibility = "hidden";
+    document.getElementById("codigo").focus();
   }
   function busquedaManual(){
     document.getElementById('btnIngresoManual').style.visibility="visible";
@@ -227,6 +234,7 @@
     document.getElementById("overlay2").style.visibility = "hidden";
                 document.getElementById('busqueda').value='';
             $("#resultadoBusqueda tr").remove(); 
+            document.getElementById("codigo").focus();
   };
   function encuentro(){
     document.getElementById("overlay3").style.visibility = "visible";
@@ -234,6 +242,7 @@
   };
   function cerrar3(){
     document.getElementById("overlay3").style.visibility = "hidden";
+    document.getElementById("codigo").focus();
   };
 </script>
 <script>
@@ -267,14 +276,15 @@ function eliminar(){
       }
     }
     button.disabled = "disabled";
+    document.getElementById("codigo").focus();
   }
 };
 </script>
   </head>
 <body>
     <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height:80px;">
-          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" width="85px">
+    <nav class="navbar navbar-expand-lg" style="height:80px;">
+          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" width="85px"><b><?php echo $row['sede'] ?></b> 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <?php include("../include/barraNavegacion.php")?>
@@ -315,7 +325,7 @@ function eliminar(){
       </div>
     </form>
     <div class="form-group" id="busquedaCodigo">
-    <p>Subtipo de Producto</p> <select id="subtipo">
+    <p>SubEvento</p> <select id="subtipo">
       <option value='Todos' selected>Todos los Tipos</option>
       <?php
        if($tipoEvento=="Cirugia"){
@@ -334,8 +344,8 @@ function eliminar(){
       <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" size="10"required autocomplete=off>
        <div id="divBusqueda"><button class="btn btn-info" onclick="busquedaManual()" id="botonBusquedaManual">Búsqueda Manual</button> </div>
        <div id='botonesEdicion'>
-        <button type="submit" id='btnGuardado' form="registro_Despacho" class="btn btn-info">Guardar</button>
         <button class="btn btn-info" id="btnEliminar" onclick='eliminar()' disabled>Eliminar</button>
+        <button type="submit" id='btnGuardado' form="registro_Despacho" class="btn btn-info">Guardar</button>
         </div>
       </div>
     <div class="form-group">
@@ -401,8 +411,8 @@ function eliminar(){
             <h3>Ingreso Manual</h3>
             <a onclick="cerrar1()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
-          <p>Nombre del Producto: <br><input type="text" id="nombreManual" name="nombreManual"></p>
-          <p>Cantidad <br><input type="number" id="cantidadManual" name="cantidadManual"></p>
+          <p>Nombre del Producto:<br><input type="text" id="nombreManual" name="nombreManual"></p>
+          <p>Cantidad<br><input type="number" id="cantidadManual" name="cantidadManual"></p>
           <button class="btn btn-success" form='formManual' onclick="cerrar1()">Registrar</button>
         </div>
       </div>
@@ -417,8 +427,8 @@ function eliminar(){
           <div>Nombre del Producto: <input type="search" name="busqueda" id="busqueda" autocomplete="off" autofocus></div> 
           <table class="table" id="materialesDespacho">
             <thead style="background-color:rgba(119, 122, 120,0.5);">
-              <th>Nombre</th>
-              <th>Cantidad</th>
+              <th>Codigo</th>
+              <th>Descripción del Material</th>
             </thead>
             <tbody id="resultadoBusqueda" style="background-color:white;">
             </tbody>

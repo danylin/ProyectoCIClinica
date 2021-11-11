@@ -11,8 +11,8 @@ $row=mysqli_fetch_array($consulta);
 <link rel="stylesheet" href="../estilos.css">
 <body>
   <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height:80px;">
-          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" width="85px"><?php echo $row['sede'] ?>
+      <nav class="navbar navbar-expand-lg" style="height:80px;">
+          <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" width="85px"><b><?php echo $row['sede'] ?></b> 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item active"><a class="nav-link" href="../usuario2.php" id="textoNavegador">Eventos <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>
@@ -23,10 +23,12 @@ $row=mysqli_fetch_array($consulta);
       </nav>
   </header>
       <section>
+        <div id="usuarioEncabezado">
         <div class='btn btn-info' onclick='location="Registro_Usuario.php"'> Nuevo Usuario <i class="fas fa-plus"></i></div>
+        <h3 style="padding-left:30%;">Usuarios Actuales</h3>
+        </div>
         <div class="usuarios-actuales">
-          <h3>Usuarios Actuales</h3>
-          <table class="table" id="tablaUsuarios">
+          <table class="table navbar-light bg-light" id="tablaUsuarios">
             <thead>
               <th scope="col">DNI</th>
               <th scope="col">Usuario</th>

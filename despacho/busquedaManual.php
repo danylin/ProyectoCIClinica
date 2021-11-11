@@ -11,7 +11,7 @@ while($fila=mysqli_fetch_array($consulta)){
     echo "<td id='except'>";
     echo $fila['codigo'];
     echo "</td>";
-    echo "<td>".$fila['descripcion']."</td>";
+    echo "<td style='text-align:left'>".$fila['descripcion']."</td>";
     echo "</tr>";
 }
 ?>

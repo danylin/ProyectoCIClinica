@@ -20,22 +20,29 @@ class MYPDF extends TCPDF {
 
      //Page header
         public function Header() {
-            session_start();
             $nroEvento=$_GET['codigo'];
-            $conexion= mysqli_connect("localhost","root","","proyectocl");
+            include("../include/bd_usuario.php");
             $sedeUsuario=$_SESSION['id_sede'];
             $sedeNombre="SELECT sede FROM sede__db_area WHERE id=$sedeUsuario";
             $resultadoSede=mysqli_query($conexion,$sedeNombre);
             $sede=mysqli_fetch_array($resultadoSede);
+            $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
+            FROM sop__evento_acc_db a 
+            INNER JOIN sop__eventos_db b ON
+            a.id_evento=b.id_evento
+            WHERE a.id_accion=$nroEvento;";
+            $resultado=mysqli_query($conexion,$sql);
+            $row=mysqli_fetch_array($resultado);
                     // Logo
                     $image_file = '../img/logotipo_auna.jpg';
-                    $texto="Reporte de Consumo de Farmacia";
+                    $texto="Reporte de Movimiento de Materiales de Farmacia";
                     $this->Image($image_file,180, 0, 20, '', 'JPG', '', 'R', false, 300, '', false, false, 0, false, false, false);
                     // Set font
                     $this->SetFont('helvetica', 'B', 12);
                     // Title
                     $this->Cell(0, 0, $sede['sede'], 0, 1, 'L', 0, '', 0);
                     $this->Cell(0, 0, $texto, 0, 1, 'L', 0, '', 0);
+                    $this->Cell(0, 0, $row['nombre'], 0, 1, 'L', 0, '', 0);
                 }
             
                 // Page footer
@@ -105,7 +112,7 @@ h4{
     margin:0;
 }
 </style>';
-$pdf->MultiCell(55, 5, 'Nro de Encuentro', 0, 'L', 0, 0, '', '', true);
+$pdf->MultiCell(55, 5, 'Nro de Encuentro/Cierre', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $row['codigo_cierre'], 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $pdf->write1DBarcode($row['codigo_cierre'], 'C39', '', '', 55, 9, 0.4, array('position'=>'', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>false, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''), 0, 'L', 0, 1, '', '', true);
 $pdf->MultiCell(55, 5, 'Fecha de Cierre', 0, 'L', 0, 0, '', '', true);
@@ -122,10 +129,10 @@ $html.='
 <h4>Materiales de Compra</h4>
 <table id="elementos" border="0.5" nobr="true">
 <tr>
-    <td width="120px" bgcolor="#4dbac4">BarCode</td>
-    <td width="420px" bgcolor="#4dbac4">Descripcion del Material</td>
-    <td width="75px" bgcolor="#4dbac4">Cantidad</td>
-    <td width="45px" bgcolor="#4dbac4">Tipo</td>
+    <td width="120px" bgcolor="#ABABAB">CodSAP</td>
+    <td width="420px" bgcolor="#ABABAB">Descripcion del Material</td>
+    <td width="75px" bgcolor="#ABABAB">Cantidad</td>
+    <td width="45px" bgcolor="#ABABAB">Tipo</td>
 </tr>   ';
 $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
 FROM sop__despacho_db
@@ -158,10 +165,10 @@ if($filas>0){
             if($contar==0){
                 $html.= '<h4>Materiales Tipo I</h4><table id="elementos" border="0.5" nobr="true">
                 <tr>
-                <td width="120px" bgcolor="#4dbac4">BarCode</td>
-                <td width="420px" bgcolor="#4dbac4">Descripcion del Material</td>
-                <td width="75px" bgcolor="#4dbac4">Cantidad</td>
-                <td width="45px" bgcolor="#4dbac4">Tipo</td>
+                <td width="120px" bgcolor="#ABABAB">CodSAP</td>
+                <td width="420px" bgcolor="#ABABAB">Descripcion del Material</td>
+                <td width="75px" bgcolor="#ABABAB">Cantidad</td>
+                <td width="45px" bgcolor="#ABABAB">Tipo</td>
                 </tr>
                 <tbody>';
                 $contar=1;
@@ -189,10 +196,10 @@ if($filas>0){
             if ($contar==0){
                 $html.= '<h4>Materiales Tipo K</h4><table border="0.5" nobr="true">
                 <tr>
-                <td width="120px" bgcolor="#4dbac4">BarCode</td>
-                <td width="420px" bgcolor="#4dbac4">Descripcion del Material</td>
-                <td width="75px" bgcolor="#4dbac4">Cantidad</td>
-                <td width="45px" bgcolor="#4dbac4">Tipo</td>
+                <td width="120px" bgcolor="#ABABAB">CodSAP</td>
+                <td width="420px" bgcolor="#ABABAB">Descripcion del Material</td>
+                <td width="75px" bgcolor="#ABABAB">Cantidad</td>
+                <td width="45px" bgcolor="#ABABAB">Tipo</td>
                 </tr>
                 <tbody>';
                 $contar=1;

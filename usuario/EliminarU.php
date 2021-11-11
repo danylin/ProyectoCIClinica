@@ -1,4 +1,6 @@
-<?php
+<script>
+    if(confirm("¿Desea eliminar este usuario?")){
+    <?php
     include ('../include/bd_usuario.php');
     $dni=$_GET['dni'];
     $valor=$_POST['tipo'];
@@ -12,4 +14,6 @@
             header('location:Usuarios.php');
         }
     }
-?>
+    ?>
+    }
+</script>

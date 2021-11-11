@@ -2,7 +2,9 @@
     padding: 3.2px;
     margin: 0px ;
     font-family: 'Roboto Slab', serif;
+    
 }
+
 
 #usuarioEncabezado{
     display: flex;
@@ -23,10 +25,11 @@ section{
     text-align: center;
     background-color: #34c4d0;
     border: 2px solid black;
-    margin: 20px 20%;
+    margin: 80px 37%;
 }
 a{
     cursor: pointer;
+   color: inherit; 
 }
 
 .table {
@@ -192,9 +195,11 @@ text-align: center;
 }
 #cajaOpciones{
     display: flex;
+    
 }
 #overlay1,#overlay2,#overlay3{
     background: rgba(119, 122, 120,0.5);
+    color:black;
     position: fixed;
     top: 0;
     left: 0;
@@ -256,12 +261,13 @@ float: left;
 
 #ingresos{
 float: left;
+
 }
 
 #botonesEdicion{
     float: right;
     padding: 0;
-    padding-left: 11%;
+    padding-left: 18%;
     margin: 0;
 }
 #botonesEdicion .btn-info{
@@ -271,7 +277,6 @@ float: left;
     margin: 0;
     padding: 0;
 }
-
 
 #informacio-general{
     width: 100%;

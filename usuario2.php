@@ -12,8 +12,8 @@
   </head>
 <body>
     <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light" style="height:80px;">
-          <img class="navbar-brand" src="img/logotipo_auna.png" alt="logotipo auna" width="85px"><?php echo $row['sede'] ?>
+      <nav class="navbar navbar-expand-lg" style="height:80px;">
+          <img class="navbar-brand" src="img/logotipo_auna.png" alt="logotipo auna" width="85px"><b><?php echo $row['sede'] ?></b> 
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item active" id="textoNavegador"><a class="nav-link" href="usuario2.php"  id="textoNavegador">Eventos <i class="fa fa-plus-square" aria-hidden="true"></i></a></li>

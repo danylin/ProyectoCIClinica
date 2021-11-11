@@ -62,10 +62,13 @@
                                 $row=mysqli_fetch_array($resultado);
                             }else{
                                 if(strlen($codigo)!=8){
-                                    $sql="SELECT codigo,descripcion FROM material__db WHERE gtin=$codigo";
-                                    $resultado=mysqli_query($conexion,$sql);
-                                    $row=mysqli_fetch_array($resultado);
-                                    $tipo='';
+                                    if(strlen($codigo)>16){
+                                        $codigo=substr($codigo,0,16);
+                                        $sql="SELECT codigo,descripcion FROM material__db WHERE gtin=$codigo";
+                                        $resultado=mysqli_query($conexion,$sql);
+                                        $row=mysqli_fetch_array($resultado);
+                                        $tipo='';
+                                    }
                                 }
                                 else{
                                     $sql="SELECT codigo,descripcion FROM material__db WHERE codigo=$codigo";

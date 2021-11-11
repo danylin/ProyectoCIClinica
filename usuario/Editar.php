@@ -9,7 +9,7 @@ error_reporting(0);
 <link rel="stylesheet" href="../estilos.css">
 <body>
     <header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg ">
           <img class="navbar-brand" src="../img/logotipo_auna.png" alt="logotipo auna" >
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
