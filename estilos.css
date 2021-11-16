@@ -197,7 +197,7 @@ text-align: center;
     display: flex;
     
 }
-#overlay1,#overlay2,#overlay3{
+#overlay1,#overlay2,#overlay3,#overlay4{
     background: rgba(119, 122, 120,0.5);
     color:black;
     position: fixed;

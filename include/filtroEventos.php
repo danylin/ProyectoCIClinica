@@ -21,7 +21,7 @@
                     <tr class='filaFinalizada'>
                 <?php
                 }
-                    echo "<td style='display:none;'>". $row['id_accion']."</td>";
+                    echo "<td>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['nombre_paciente']."</td>";
                     echo "<td>". $row['apellido_paciente']."</td>";

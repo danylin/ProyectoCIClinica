@@ -28,7 +28,10 @@
                             echo "<td> <input type='number' min=1 max=50 value=$cantidadManual name='cantidad_Material[]'></td>";
                             echo "<td>".$tipo."<input type='hidden' value=".$tipo." name='tipo[]'></td>";
                             echo "<td><input type='checkbox' id='chkEliminar' name='chk1' value=1 onchange='isChecked(this);'></td>";
-                            echo "<td><input type='hidden' id='devolucionItem' value='1'</td>";
+                            echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='1'</td>";
+                            echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
+                            echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>>GTIN</button></div>";
+                            echo "</td>";
                             echo "</tr>";    
                         } else{
                             echo "<tr><td> $codigo <input type='hidden' name='hidden_codigo[]' id='codigo' class='codigo' value='00000000'></td>";
@@ -37,7 +40,10 @@
                             echo "<td><p></p><input type='hidden' value='' name='tipo[]'></td>";
                             echo "<td><input type='checkbox' id='chkEliminar' name='chk1' value=1 onchange='isChecked(this)'></td>";
                             echo "<td><input type='hidden' id='update' value='0'</td>";
-                            echo "<td><input type='hidden' id='devolucionItem' value='0'</td>";
+                            echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'</td>";
+                            echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
+                            echo "<div class='mostratGTIN'><button id='mostratGTINonclick='GTIN(this)'>GTIN</button></div>";
+                            echo "</td>";
                             echo "</tr>";
                         }
                         
@@ -93,7 +99,10 @@
                                     echo "<td>".$tipo."<input type='hidden' value=".$tipo." name='tipo[]'></td>";
                                     echo "<td><input type='checkbox' id='chkEliminar' name='chk1' value=0 onchange='isChecked(this)'></td>";
                                     echo "<td><input type='hidden' id='update' value='0'</td>";
-                                    echo "<td><input type='hidden' id='devolucionItem' value='1'</td>";
+                                    echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='1'</td>";
+                                    echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
+                                    echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+                                    echo "</td>";
                                     echo "</tr>";
                                 }else{
                                     echo "<tr><td>". $row['codigo']. "<input type='hidden' name='hidden_codigo[]' id='codigo' class='codigo' value='". $row['codigo']."'></td>";
@@ -102,7 +111,10 @@
                                     echo "<td>".$tipo."<input type='hidden' name='tipo[]' value=".$tipo." ></td>";
                                     echo "<td><input type='checkbox' id='chkEliminar' name='chk1' value=0 onchange='isChecked(this)'></td>";
                                     echo "<td><input type='hidden' id='update' value='0'</td>";
-                                    echo "<td><input type='hidden' id='devolucionItem' value='0'</td>";
+                                    echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'</td>";
+                                    echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
+                                    echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+                                    echo "</td>";
                                     echo "</tr>";   
                                 }
                             }else {

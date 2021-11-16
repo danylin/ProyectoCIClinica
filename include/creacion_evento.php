@@ -91,6 +91,7 @@
         </div>
         <table class="table table-light" id='tabla_eventos'>
             <thead>
+                <th scope="col" onclick="sortTable(0)">Id Evento</th>
                 <th scope="col" onclick="sortTable(1)">Fecha de Programacion</th>
                 <th scope="col" onclick="sortTable(2)">Nombre del Paciente</th>
                 <th scope="col" onclick="sortTable(3)">Apellidos del Paciente</th>
@@ -114,7 +115,7 @@
                 ?>
                 <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"];?>),""'>
                 <?php
-                    echo "<td style='display:none;'>". $row['id_accion']."</td>";
+                    echo "<td>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['nombre_paciente']."</td>";
                     echo "<td>". $row['apellido_paciente']."</td>";
