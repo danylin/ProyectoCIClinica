@@ -1,9 +1,6 @@
 $(document).ready(function() {
     var valorAnterior;
     var cantidad;
-    $('#subtipo').on('focus',function(){
-      valorAnterior=this.value;
-    });
     $('#gtin').on('click',function(event){
       event.preventDefault();
     });
@@ -153,42 +150,5 @@ $('#llenadoEncuentro1').on('click',function(){
     var encuentro=$('#encuentro').val();
     window.location="tipoReporte.php?codigo="+id+"&encuentro="+encuentro;
   }
-});
-$('#subtipo').on('change',function(){
-        var table = document.getElementById("mensaje");
-        var subtipo=valorAnterior;
-        var codigo=[];
-        var descripcion=[];
-        var cantidad=[];
-        var tipo=[];
-        var update=[];
-        var devObjeto=[];
-          for (var i = 0, row; row = table.rows[i]; i++) {
-            codigo.push(row.cells[0].innerText);
-            descripcion.push(row.cells[1].innerText);
-            cantidad.push(row.cells[2].children[0].value);
-            tipo.push(row.cells[3].innerText);
-            update.push(row.cells[5].children[0].value);
-            devObjeto.push(row.cells[6].children[0].value);
-            if(row.cells[5].children[0].value==0){
-            row.cells[5].children[0].value=1
-           }
-          }
-          $.ajax({
-            type:'POST',
-            url:'registrarDespacho.php?evento=<?php echo $evento ?>',
-            data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update},
-           });
-  $("#mensaje tr").remove();
-  var subtipo=$(this).val();
-      $.ajax({
-        type:'POST',
-        url:'filtroDespacho.php?evento=<?php echo  $evento ?>',
-        data:{subtipo:subtipo},
-        success: function(data){
-            $('#mensaje').append(data);
-        }
-    });
-    document.getElementById("codigo").focus();
 });
   });
