@@ -23,7 +23,47 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-      $(document).ready(function() {
+ 
+    </script>
+    <script>
+      var codigoGTIN;
+      function GTIN(fila){
+      document.getElementById("overlay4").style.visibility = "visible";
+      var table = document.getElementById("mensaje");
+      var row=$(fila).closest('tr');
+      codigoGTIN=$(row).find("td").eq(0).html();
+      $.ajax({
+              type:'POST',
+              url:'consultagtin.php',
+              data:{codigo:codigoGTIN},
+              success: function(data){
+                data=JSON.parse(data);
+                $('.popup #codigogtin').val(data['gtin']);
+                $('.popup #codigocrf').val(data['crf']);
+              }
+          });  
+      }
+    $(document).ready(function() {
+      $('#llenadoGTIN').on("click",function(e){
+      e.preventDefault();
+      var codigoG=$('#codigogtin').val();
+      var crf=$('#codigocrf').val();
+      console.log(codigoG);
+      console.log(crf);
+      console.log(codigoGTIN);
+      if(confirm("¿Está seguro de modificar estos campos?")){
+        $.ajax({
+        type:'POST',
+        url:'modificargtin.php',
+        data:{codigoG:codigoG,crf:crf,codigoGTIN:codigoGTIN},
+        success: function(data){
+          alert('Guardado con Exito');
+          document.getElementById("overlay4").style.visibility = "hidden";
+          document.getElementById("codigo").focus();
+        }
+       });
+      };
+      });
     var valorAnterior;
     var cantidad;
     $('#gtin').on('click',function(event){
@@ -89,6 +129,7 @@
             data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update,evento:evento},
             success: function(data){
               alert('Guardado con Exito');
+              document.getElementById("codigo").focus();
             }
            });
         }
@@ -113,6 +154,7 @@
         success: function(data){
             $('#mensaje').prepend(data);
             $('#formMaterial')[0].reset();
+            document.getElementById("codigo").focus();
         }
     });
     });
@@ -122,14 +164,17 @@
       var cantidad=$('#cantidadManual').val();
       var devolucion=$('#devolucion').val();
       var tipoEvento=$('#subtipo').val();
+      var codgtin=$('#gtin').val();
+      var crf=$('#crf').val();
       var evento=document.getElementById("tipoEvento").value;
       $.ajax({
         type:'POST',
         url:'creacionDespacho.php',
-        data:{nombre:nombre,cantidad:cantidad,devolucion:devolucion,tipoEvento:tipoEvento,evento:evento},
+        data:{nombre:nombre,cantidad:cantidad,devolucion:devolucion,tipoEvento:tipoEvento,evento:evento,codgtin:codgtin,crf:crf},
         success: function(data){
             $('#mensaje').prepend(data);
             $('#formManual')[0].reset();
+            document.getElementById("codigo").focus();
         }
     });
     });
@@ -219,6 +264,7 @@ $('#subtipo').on('focus',function(){
   });
     </script>
     <script>
+      
       window.addEventListener("keydown",function(event){
       if(event.key=="F7"){
         if(<?php echo $_SESSION['tipousuario']?>==1){
@@ -262,39 +308,6 @@ $('#subtipo').on('focus',function(){
     document.getElementById("overlay4").style.visibility = "hidden";
     document.getElementById("codigo").focus();
   };
-  var codigoGTIN;
-    function GTIN(fila){
-      document.getElementById("overlay4").style.visibility = "visible";
-      var table = document.getElementById("mensaje");
-      var row=$(fila).closest('tr');
-      codigoGTIN=$(row).find("td").eq(0).html();
-      $.ajax({
-              type:'POST',
-              url:'consultagtin.php',
-              data:{codigo:codigoGTIN},
-              success: function(data){
-                data=JSON.parse(data);
-                  document.getElementById("gtin").value=data['gtin'];
-                  document.getElementById("crf").value=data['crf'];
-              }
-          });
-    };
-    function grabarGTIN(){
-      var codigoG=document.getElementById("gtin").value;
-      var crf=document.getElementById("crf").value;
-      if(confirm("¿Está seguro de modificar estos campos?")){
-        $.ajax({
-        type:'POST',
-        url:'modificargtin.php',
-        data:{gtin:codigoG,crf:crf,codigoGTIN:codigoGTIN},
-        success: function(data){
-          alert('Guardado con Exito');
-          document.getElementById("overlay4").style.visibility = "hidden";
-          document.getElementById("codigo").focus();
-        }
-       });
-      }
-    }
 </script>
 <script>
 var timer = null;
@@ -396,12 +409,16 @@ function eliminar(){
        if($tipoEvento=="Cirugia"){
         echo "<option value='Material de Anestesia'>Material de Anestesia</option>";
         echo "<option value='Medicación de Anestesia'>Medicación de Anestesia</option>";
-        echo "<option value='Protocolo'>Protocolo</option>";
-        echo "<option value='Adicionales' selected>Adicionales</option>";
+        echo "<option value='Protocolo' selected>Protocolo</option>";
+        echo "<option value='Adicionales' >Adicionales</option>";
       } elseif($tipoEvento=="Quimioterapia"){
         echo "<option value='Hidratación prequimioterapia'>Hidratación prequimioterapia</option>";
         echo "<option value='Protocolo' selected>Protocolo</option>";
         echo "<option value='Alta postquimioterapia'>Alta postquimioterapia</option>";
+      }elseif($tipoEvento=="Control Logistico"){
+        echo "<option value='Inventario'>Inventario</option>";
+        echo "<option value='Entrega'>Entrega</option>";
+        echo "<option value='Devolucion'>Devolucion</option>";
       }
       ?>
       </select> 
@@ -433,9 +450,8 @@ function eliminar(){
         </thead>
         <tbody id="mensaje">
           <?php
-          $sqlMateriales="SELECT*FROM sop__despacho_db Where id_evento_acc=$evento order by nombre asc ;";
+          $sqlMateriales="SELECT*FROM sop__despacho_db Where id_evento_acc=$evento  order by nombre asc ;";
           $consultaMateriales=mysqli_query($conexion,$sqlMateriales);
-          
           while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
             if($filaConsulta['devolucion']==0){
               echo "<tr>";
@@ -447,7 +463,7 @@ function eliminar(){
               echo "<td><input type='hidden' id='update' value='1'></td>";
               echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'></td>";
               echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-              echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+              echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
               echo "</td>";
               echo "</tr>";
             }else{
@@ -460,7 +476,7 @@ function eliminar(){
               echo "<td><input type='hidden' id='update' value='1'></td>";
               echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'></td>";
               echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-              echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+              echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
               echo "</td>";
               echo "</tr>";
               echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'>";
@@ -472,7 +488,7 @@ function eliminar(){
               echo "<td><input type='hidden' id='update' value='1'></td>";
               echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='1'></td>";
               echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-              echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+              echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
               echo "</td>";
               echo "</tr>";
             }
@@ -534,10 +550,10 @@ function eliminar(){
             <h3 style="padding-left:30%">GTIN/CRF</h3>
             <a onclick="cerrar4()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
-          <div><input type="text" id="gtin" placeholder='GTIN' autocomplete="off"><br></div>
-          <div><input type="text" id="crf" placeholder='CRF' autocomplete="off"> <br></div>
+          <div><input type="text" id="codigogtin" placeholder='GTIN' autocomplete="off"><br></div>
+          <div><input type="text" id="codigocrf" placeholder='CRF' autocomplete="off"> <br></div>
           <div id="botonesEncuentro">
-            <button class='btn btn-danger' id='llenadoEncuentro1' onclick="grabarGTIN()">Grabar GTIN/CRF</button>
+            <button class='btn btn-danger' id='llenadoGTIN'>Guardar</button>
         </div>
         </div>
       </div>

@@ -142,7 +142,7 @@ $resultado=mysqli_query($conexion,$materiales);
 $consultaresultado=mysqli_fetch_all($resultado);
 foreach($consultaresultado as $row){
     if($row['2']!=0){
-        $params = $pdf->serializeTCPDFtagParameters(array($row[0], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
+        $params = $pdf->serializeTCPDFtagParameters(array($row[0], 'C128', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
         $html.='
         <tr>
         <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
@@ -173,7 +173,7 @@ if($filas>0){
                 <tbody>';
                 $contar=1;
             }
-            $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>false, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
+            $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C128', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>false, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
             $html.= '<tr>
             <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
             <td align="left">'.$row['nombre'].'</td>
@@ -204,7 +204,7 @@ if($filas>0){
                 <tbody>';
                 $contar=1;
             }
-            $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C39', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
+            $params = $pdf->serializeTCPDFtagParameters(array($row['id_material'], 'C128', '', '', 32, 12, 0.4, array('position'=>'S', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>true, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''));
             $html.= '<tr>
             <td><tcpdf method="write1DBarcode" params="'.$params.'" /></td>
             <td align="left">'.$row['nombre'].'</td>

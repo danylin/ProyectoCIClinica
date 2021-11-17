@@ -16,25 +16,29 @@
                         $nombreManual=$_POST['nombre'];
                         $cantidadManual=$_POST['cantidad'];
                         $tipo='';
-                        $nuevoProducto="INSERT INTO sop__materialsc_db(nombre) values('$nombreManual')";
+                        $gtin=$_POST['codgtin'];
+                        $crf=$_POST['crf'];
+                        $nuevoProducto="INSERT INTO sop__materialsc_db(nombre,gtin,crf) values('$nombreManual','$gtin','$crf')";
                         $consulta=mysqli_query($conexion,$nuevoProducto);
+                        $query="UPDATE sop__materialsc_db SET id_sc=CONCAT('SC_',id) WHERE nombre='$nombreManual'";
+                        $consulta=mysqli_query($conexion,$query);
                         $codigoNuevoProducto="SELECT DISTINCT *FROM sop__materialsc_db WHERE nombre='$nombreManual'";
                         $consulta=mysqli_query($conexion,$codigoNuevoProducto);
                         $fila=mysqli_fetch_array($consulta);
-                        $codigo=$fila['id'];
+                        $codigo=$fila['id_sc'];
                         if($devolucion==1){
-                            echo "<tr style='background-color: rgba(241, 91, 91, 0.3);><td> $codigo <input type='hidden' name='hidden_codigo[]' id='codigo' class='codigo' value='00000000'></td>";
+                            echo "<tr style='background-color: rgba(241, 91, 91, 0.3);><td>$codigo</td>";
                             echo "<td style='text-align:left'>$nombreManual <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='$nombreManual'</td>";
                             echo "<td> <input type='number' min=1 max=50 value=$cantidadManual name='cantidad_Material[]'></td>";
                             echo "<td>".$tipo."<input type='hidden' value=".$tipo." name='tipo[]'></td>";
                             echo "<td><input type='checkbox' id='chkEliminar' name='chk1' value=1 onchange='isChecked(this);'></td>";
                             echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='1'</td>";
                             echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-                            echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>>GTIN</button></div>";
+                            echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
                             echo "</td>";
                             echo "</tr>";    
                         } else{
-                            echo "<tr><td> $codigo <input type='hidden' name='hidden_codigo[]' id='codigo' class='codigo' value='00000000'></td>";
+                            echo "<tr><td>$codigo</td>";
                             echo "<td style='text-align:left'>$nombreManual <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='$nombreManual'</td>";
                             echo "<td><input type='number' min=1 max=50 value=$cantidadManual name='cantidad_Material[]'></td>";
                             echo "<td><p></p><input type='hidden' value='' name='tipo[]'></td>";
@@ -42,7 +46,7 @@
                             echo "<td><input type='hidden' id='update' value='0'</td>";
                             echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'</td>";
                             echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-                            echo "<div class='mostratGTIN'><button id='mostratGTINonclick='GTIN(this)'>GTIN</button></div>";
+                            echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -74,6 +78,11 @@
                                         $resultado=mysqli_query($conexion,$sql);
                                         $row=mysqli_fetch_array($resultado);
                                         $tipo='';
+                                    }else {
+                                    $sql="SELECT codigo,descripcion FROM material__db WHERE gtin=$codigo";
+                                    $resultado=mysqli_query($conexion,$sql);
+                                    $row=mysqli_fetch_array($resultado);
+                                    $tipo='';
                                     }
                                 }
                                 else{
@@ -93,7 +102,7 @@
                             }
                             if(isset($row)){
                                 if ($devolucion==1){
-                                    echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'><td>". $row['codigo']. "<input type='hidden' name='hidden_codigo[]' id='codigo' class='codigo' value='". $row['codigo']."'></td>";
+                                    echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'><td>". $row['codigo']. "</td>";
                                     echo "<td style='text-align:left'>". $row['descripcion']." <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='". $row['descripcion']."'></td>";
                                     echo "<td> <input type='number' min=1 max=50 value=1 name='cantidad_Material[]'></td>";
                                     echo "<td>".$tipo."<input type='hidden' value=".$tipo." name='tipo[]'></td>";
@@ -101,11 +110,11 @@
                                     echo "<td><input type='hidden' id='update' value='0'</td>";
                                     echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='1'</td>";
                                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-                                    echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+                                    echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
                                     echo "</td>";
                                     echo "</tr>";
                                 }else{
-                                    echo "<tr><td>". $row['codigo']. "<input type='hidden' name='hidden_codigo[]' id='codigo' class='codigo' value='". $row['codigo']."'></td>";
+                                    echo "<tr><td>". $row['codigo']."</td>";
                                     echo "<td style='text-align:left'>". $row['descripcion']." <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='". $row['descripcion']."'></td>";
                                     echo "<td> <input type='number' min=1 max=50 value=1 name='cantidad_Material[]'></td>"; 
                                     echo "<td>".$tipo."<input type='hidden' name='tipo[]' value=".$tipo." ></td>";
@@ -113,7 +122,7 @@
                                     echo "<td><input type='hidden' id='update' value='0'</td>";
                                     echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'</td>";
                                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-                                    echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+                                    echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
                                     echo "</td>";
                                     echo "</tr>";   
                                 }

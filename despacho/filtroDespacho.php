@@ -20,7 +20,7 @@ while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
         echo "<td><input type='hidden' id='update' value='1'></td>";
         echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'></td>";
         echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-        echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+        echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
         echo "</td>";
         echo "</tr>";
       }else{
@@ -33,7 +33,7 @@ while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
         echo "<td><input type='hidden' id='update' value='1'></td>";
         echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='0'></td>";
         echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-        echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+        echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
         echo "</td>";
         echo "</tr>";
         echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'>";
@@ -45,7 +45,7 @@ while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
         echo "<td><input type='hidden' id='update' value='1'></td>";
         echo "<td style='display:none'><input type='hidden' id='devolucionItem' value='1'></td>";
         echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
-        echo "<div class='mostratGTIN'><button id='mostratGTIN' onclick='GTIN(this)'>GTIN</button></div>";
+        echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
         echo "</tr>";
       }
 }
