@@ -23,9 +23,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
- 
-    </script>
-    <script>
       var codigoGTIN;
       function GTIN(fila){
       document.getElementById("overlay4").style.visibility = "visible";
@@ -197,9 +194,9 @@
       }
       document.getElementById("codigo").focus();
   });
-  $('#busqueda').on('keyup',function(){
+  $('#busquedaInput').on('keyup',function(){
     var filas;
-    var nombre=$('#busqueda').val();
+    var nombre=$('#busquedaInput').val();
     var devolucion=$('#devolucion').val();
     var tipoEvento=$('#tipoEvento').val();
     var subtipo=$('#subtipo').val();
@@ -256,59 +253,13 @@ $('#subtipo').on('focus',function(){
                   url:'filtroDespacho.php?evento=<?php echo  $evento ?>',
                   data:{subtipo:subtipo},
                   success: function(data){
-                      $('#mensaje').append(data);
+                    $('#mensaje').append(data);
                   }
               });
               document.getElementById("codigo").focus();
           });
   });
     </script>
-    <script>
-      
-      window.addEventListener("keydown",function(event){
-      if(event.key=="F7"){
-        if(<?php echo $_SESSION['tipousuario']?>==1){
-          window.location="../usuario1.php";
-        }else{
-          window.location="../usuario2.php";
-        }
-      }
-    });
- 
-  function ingresoManual(event){
-    event.preventDefault();
-    cerrar2();
-    document.getElementById("overlay1").style.visibility = "visible";
-  };
-  function cerrar1(){
-    document.getElementById("overlay1").style.visibility = "hidden";
-    document.getElementById("codigo").focus();
-  }
-  function busquedaManual(){
-    document.getElementById('btnIngresoManual').style.visibility="visible";
-    document.getElementById("overlay2").style.visibility = "visible";
-    document.getElementById("busqueda").focus();
-  };
-  function cerrar2(){
-    document.getElementById('btnIngresoManual').style.visibility="hidden";
-    document.getElementById("overlay2").style.visibility = "hidden";
-                document.getElementById('busqueda').value='';
-            $("#resultadoBusqueda tr").remove(); 
-            document.getElementById("codigo").focus();
-  };
-  function encuentro(){
-    document.getElementById("overlay3").style.visibility = "visible";
-
-  };
-  function cerrar3(){
-    document.getElementById("overlay3").style.visibility = "hidden";
-    document.getElementById("codigo").focus();
-  };
-  function cerrar4(){
-    document.getElementById("overlay4").style.visibility = "hidden";
-    document.getElementById("codigo").focus();
-  };
-</script>
 <script>
 var timer = null;
 function goAway() {
@@ -450,7 +401,25 @@ function eliminar(){
         </thead>
         <tbody id="mensaje">
           <?php
-          $sqlMateriales="SELECT*FROM sop__despacho_db Where id_evento_acc=$evento  order by nombre asc ;";
+          switch($tipoEvento){
+            case "Cirugia":
+              $subT="Protocolo";
+              break;
+            case "Quimioterapia":
+              $subT="Protocolo";
+              break;
+            case "Control Logistico":
+              $subT="";
+              break;
+            case "Procedimiento Medico":
+              $subT="";
+              break;
+          }
+          if($subT!=""){
+            $sqlMateriales="SELECT*FROM sop__despacho_db Where id_evento_acc=$evento and subtipo='$subT' order by nombre asc ;";
+          }else{
+            $sqlMateriales="SELECT*FROM sop__despacho_db Where id_evento_acc=$evento  order by nombre asc ;";
+          }
           $consultaMateriales=mysqli_query($conexion,$sqlMateriales);
           while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
             if($filaConsulta['devolucion']==0){
@@ -519,7 +488,7 @@ function eliminar(){
             <h3>Busqueda Manual</h3>
             <a onclick="cerrar2()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
-          <div>Nombre del Producto: <input type="search" name="busqueda" id="busqueda" autocomplete="off"></div> 
+          <div>Nombre del Producto: <input type="search" name="busqueda" id="busquedaInput" autocomplete="off"></div> 
           <table class="table" id="materialesDespacho">
             <thead style="background-color:rgba(119, 122, 120,0.5);">
               <th>Codigo</th>
@@ -558,6 +527,51 @@ function eliminar(){
         </div>
       </div>
     </section>
+    <script>
+      window.addEventListener("keydown",function(event){
+      if(event.key=="F7"){
+        if(<?php echo $_SESSION['tipousuario']?>==1){
+          window.location="../usuario1.php";
+        }else{
+          window.location="../usuario2.php";
+        }
+      }
+    });
+ 
+  function ingresoManual(event){
+    event.preventDefault();
+    cerrar2();
+    document.getElementById("overlay1").style.visibility = "visible";
+  };
+  function cerrar1(){
+    document.getElementById("overlay1").style.visibility = "hidden";
+    document.getElementById("codigo").focus();
+  }
+  function busquedaManual(){
+    document.getElementById('btnIngresoManual').style.visibility="visible";
+    document.getElementById("overlay2").style.visibility = "visible";
+    document.getElementById("busquedaInput").focus();
+  };
+  function cerrar2(){
+    document.getElementById('btnIngresoManual').style.visibility="hidden";
+    document.getElementById("overlay2").style.visibility = "hidden";
+                document.getElementById('busquedaInput').value='';
+            $("#resultadoBusqueda tr").remove(); 
+            document.getElementById("codigo").focus();
+  };
+  function encuentro(){
+    document.getElementById("overlay3").style.visibility = "visible";
+
+  };
+  function cerrar3(){
+    document.getElementById("overlay3").style.visibility = "hidden";
+    document.getElementById("codigo").focus();
+  };
+  function cerrar4(){
+    document.getElementById("overlay4").style.visibility = "hidden";
+    document.getElementById("codigo").focus();
+  };
+</script>
 </body>
 </html>
 

@@ -134,9 +134,10 @@ $html.='
     <td width="75px" bgcolor="#ABABAB">Cantidad</td>
     <td width="45px" bgcolor="#ABABAB">Tipo</td>
 </tr>   ';
-$materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
+$materiales="SELECT id_material,nombre,SUM(cantidad-devolucion) resultado,tipo,subtipo
 FROM sop__despacho_db
 WHERE id_evento_acc=$nroEvento and tipo=''
+GROUP BY nombre
 ORDER BY nombre asc";
 $resultado=mysqli_query($conexion,$materiales);
 $consultaresultado=mysqli_fetch_all($resultado);
@@ -153,9 +154,11 @@ foreach($consultaresultado as $row){
     }
 };
 $html.='</table>';
-$materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
+$materiales="SELECT id_material,nombre,SUM(cantidad-devolucion) resultado,tipo,subtipo
 FROM sop__despacho_db
-WHERE id_evento_acc=$nroEvento and tipo='I'";
+WHERE id_evento_acc=$nroEvento and tipo='I'
+GROUP BY nombre
+ORDER BY nombre asc";
 $resultado=mysqli_query($conexion,$materiales);
 $filas=mysqli_num_rows($resultado);
 if($filas>0){
@@ -184,9 +187,11 @@ if($filas>0){
     }   
     $html.= '</tbody></table>';
 }
-$materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
+$materiales="SELECT id_material,nombre,SUM(cantidad-devolucion) resultado,tipo,subtipo
 FROM sop__despacho_db
-WHERE id_evento_acc=$nroEvento and tipo='K'";
+WHERE id_evento_acc=$nroEvento and tipo='K'
+GROUP BY nombre
+ORDER BY nombre asc";
 $resultado=mysqli_query($conexion,$materiales);
 $filas=mysqli_num_rows($resultado);
 if($filas>0){

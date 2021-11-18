@@ -31,7 +31,7 @@ while($fila=mysqli_fetch_array($consulta)){
                     $('#mensaje').prepend('<tr><td>'+id+'</td><td style="text-align:left">'+descripcion+'<input type="hidden" name="hidden_nombre[]" id="nombre" class="nombre" value="'+descripcion+'"></td><td><input type="number" min=1 max=50 value=1 name="cantidad_Material[]"></td><td>'+tipo+'<input type="hidden" value='+tipo+' name="tipo[]"></td><td><input type="checkbox" name="chk1" id="chkEliminar" value=0 onchange="isChecked(this)"></td><td style="display:none"><input type="hidden" id="update" value="0"></td><td><input type="hidden" id="devolucionItem" value="0"</td><td onclick="event.cancelBubble=true; return false;" id="except"><div class="mostrarGTIN"><button id="mostrarGTIN" onclick="GTIN(this)">GTIN</button></div></td></tr>');
             }
             }
-            document.getElementById('busqueda').value='';
+            document.getElementById('busquedaInput').value='';
             $("#resultadoBusqueda tr").remove(); 
             cerrar2();
         }; 
