@@ -1,7 +1,7 @@
 <div class="overlay" id='overlay1' >
     <div class="popup">
         <div id="encabezado_popup">
-            <h3 id='tituloRegistro'>Registrar Evento</h3>
+            <h3 id='tituloRegistro'>Datos del Evento</h3>
             <a onclick="cerrar()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
         </div>
         <form action="include/registro_evento.php" method="post" id="formEvento">
@@ -96,6 +96,7 @@
                 <th scope="col" onclick="sortTable(2)">Nombre del Paciente</th>
                 <th scope="col" onclick="sortTable(3)">Apellidos del Paciente</th>
                 <th scope="col" onclick="sortTable(4)">Estado</th>
+                <th style="display:none" scope="col" onclick="sortTable(4)">Estado</th>
                 <th scope="col" onclick="sortTable(5)">Médico Tratante</th>
                 <th scope="col" onclick="sortTable(6)">Descripción</th>
             </thead>
@@ -120,6 +121,7 @@
                     echo "<td>". $row['nombre_paciente']."</td>";
                     echo "<td>". $row['apellido_paciente']."</td>";
                     echo "<td>". $row['estado']."</td>";
+                    echo "<td style='display:none'>". $row['id_evento']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
                     echo "<td>". $row['descripcion_evento']."</td>";
                     echo "<td onclick='event.cancelBubble=true; return false;' id='except'>";
@@ -159,12 +161,10 @@ function cerrar(){
         $('#apellido').val('');
         $('#form-fecha').val('');
         $('#responsable').val('');
-        $('#evento option:selected').val('');
+        $('#evento').val(1).change();
         $('#descr-evento ').val('');
   };
   function mostrar(n){
-    var titulo=document.getElementById('tituloRegistro');
-        titulo.innerText='Nuevo Registro';
       var btnRegistrar=document.getElementById("btnRegistrar");
       var btnEditar=document.getElementById("btnEditar");
       var valorEditar=document.getElementById("verificadorEditar");
@@ -172,12 +172,10 @@ function cerrar(){
         btnRegistrar.style.display='none';
         btnEditar.style.display='block'
         valorEditar.value=1;
-        console.log(valorEditar.value);
     }else{
         btnRegistrar.style.display='block';
         btnEditar.style.display='none'
         valorEditar.value=0;
-        console.log(valorEditar.value);
     }
     document.getElementById("overlay1").style.visibility = "visible";
   };
@@ -209,23 +207,21 @@ function cerrar(){
         });
       });
     function editar(id){
-        var titulo=document.getElementById('tituloRegistro');
-        titulo.innerText='Editar Registro';
         var row=$(id).closest('tr');
         var nombre=$(row).find("td").eq(2).html(),
         apellido=$(row).find("td").eq(3).html(),
-        evento=$(row).find("td").eq(4).html(),
+        evento=$(row).find("td").eq(5).html(),
         fecha=$(row).find("td").eq(1).html(),
         id=$(row).find("td").eq(0).html(),
-        responsable=$(row).find("td").eq(5).html();
-        descripcion=$(row).find("td").eq(6).html();
+        responsable=$(row).find("td").eq(6).html();
+        descripcion=$(row).find("td").eq(7).html();
         mostrar(1);
         $('#id_accion').val(id);
         $('#nombre').val(nombre);
         $('#apellido').val(apellido);
         $('#form-fecha').val(fecha);
         $('#responsable').val(responsable);
-        $('#evento option:selected').val(evento);
+        $('#evento').val(evento).change();
         $('#descr-evento ').val(descripcion);
     };
     $('#busqueda').on('keyup',function(){

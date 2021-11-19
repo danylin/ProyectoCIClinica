@@ -26,6 +26,7 @@
                     echo "<td>". $row['nombre_paciente']."</td>";
                     echo "<td>". $row['apellido_paciente']."</td>";
                     echo "<td>". $row['estado']."</td>";
+                    echo "<td style='display:none'>". $row['id_evento']."</td>";
                     echo "<td>". $row['nombre_responsable']."</td>";
                     echo "<td>". $row['descripcion_evento']."</td>";
                     echo "<td style='display:none;'>". $row['codigo_cierre']."</td>";
