@@ -37,6 +37,7 @@
                 data=JSON.parse(data);
                 $('.popup #codigogtin').val(data['gtin']);
                 $('.popup #codigocrf').val(data['crf']);
+                $('#codigoNombreEncabezado').text(data['CodNombre'])
               }
           });  
       }
@@ -66,33 +67,6 @@
     $('#gtin').on('click',function(event){
       event.preventDefault();
     });
-      setInterval(function(){ 
-        var table = document.getElementById("mensaje");
-        var subtipo=document.getElementById("subtipo").value;
-        var evento=document.getElementById("tipoEvento").value;
-        var codigo=[];
-        var descripcion=[];
-        var cantidad=[];
-        var tipo=[];
-        var update=[];
-        var devObjeto=[];
-        for (var i = 0, row; row = table.rows[i]; i++) {
-            codigo.push(row.cells[0].innerText);
-            descripcion.push(row.cells[1].innerText);
-            cantidad.push(row.cells[2].children[0].value);
-            tipo.push(row.cells[3].innerText);
-            update.push(row.cells[5].children[0].value);
-            devObjeto.push(row.cells[6].children[0].value);
-           if(row.cells[5].children[0].value==0){
-            row.cells[5].children[0].value=1;
-           }
-        }
-        $.ajax({
-            type:'POST',
-            url:'registrarDespacho.php?evento=<?php echo $evento ?>',
-            data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update,evento:evento},
-           });
-        }, 35000);
         $('#btnGuardado').on('click',function(event){
           event.preventDefault();
         var table = document.getElementById("mensaje");
@@ -138,6 +112,11 @@
           $('#codigo').val("");
       }
   });
+  $(document).keydown(function(e) {
+    if(e.which == 71 && e.altKey) {
+      $("#btnGuardado").trigger("click");
+    }
+});
     $('#formMaterial').submit(function(event) {
       event.preventDefault();
       var codigo=$('#codigo').val();
@@ -215,6 +194,7 @@ $('#llenadoEncuentro1').on('click',function(){
     var row=$('#except .botonReporte button').closest('tr');
     var id=$(row).find("td").eq(3).html();
     var encuentro=$('#encuentro').val();
+    $("#btnGuardado").trigger("click");
     window.location="tipoReporte.php?codigo="+id+"&encuentro="+encuentro;
   }
 });
@@ -261,20 +241,6 @@ $('#subtipo').on('focus',function(){
   });
     </script>
 <script>
-var timer = null;
-function goAway() {
-  clearTimeout(timer);
-    timer = setTimeout(function() {
-      if(<?php echo $_SESSION['tipousuario']?>==1){
-          window.location = '../usuario1.php';
-      }else{
-        window.location = '../usuario2.php';
-      }
-    },100000);
-};
-
-window.addEventListener('mousemove', goAway, true);
-goAway(); 
  function isChecked(checkbox) {
     var button = document.getElementById('btnEliminar');
     checkbox.value=1;
@@ -515,8 +481,11 @@ function eliminar(){
       </div>
       <div class="overlay" id="overlay4">
         <div class="popup">
-          <div id="encabezado_encuentro">
-            <h3 style="padding-left:30%">GTIN/CRF</h3>
+          <div id="encabezado_encuentro" style="padding:auto">
+            <div style="text-align:center">
+            <h4 id="codigoNombreEncabezado">
+            </h4>
+            </div>
             <a onclick="cerrar4()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
           </div>
           <div><input type="text" id="codigogtin" placeholder='GTIN' autocomplete="off"><br></div>
@@ -530,6 +499,7 @@ function eliminar(){
     <script>
       window.addEventListener("keydown",function(event){
       if(event.key=="F7"){
+        $("#btnGuardado").trigger("click");
         if(<?php echo $_SESSION['tipousuario']?>==1){
           window.location="../usuario1.php";
         }else{
