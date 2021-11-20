@@ -115,8 +115,10 @@ h4{
 $pdf->MultiCell(55, 5, 'Nro de Encuentro/Cierre', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $row['codigo_cierre'], 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $pdf->write1DBarcode($row['codigo_cierre'], 'C39', '', '', 55, 9, 0.4, array('position'=>'', 'border'=>false, 'padding'=>2, 'fgcolor'=>array(0,0,0), 'bgcolor'=>false, 'text'=>false, 'font'=>'helvetica', 'fontsize'=>8, 'stretchtext'=>4), ''), 0, 'L', 0, 1, '', '', true);
-$pdf->MultiCell(55, 5, 'Fecha de Cierre', 0, 'L', 0, 0, '', '', true);
+$pdf->MultiCell(55, 5, 'Fecha de Programacion', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $row['fecha_programacion'], 0, 'L', 0, 1, '', '', true);
+$pdf->MultiCell(55, 5, 'Fecha de Cierre', 0, 'L', 0, 0, '', '', true);
+$pdf->MultiCell(55, 5, $row['fecha_cierre'], 0, 'L', 0, 1, '', '', true);
 $pdf->MultiCell(55, 5, 'Paciente', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $row['paciente'] , 0, 'L', 0, 1, '', '', true);
 $pdf->MultiCell(55, 5, 'Médico Tratante', 0, 'L', 0, 0, '', '', true);

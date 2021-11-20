@@ -34,7 +34,8 @@
                     echo "</select> </p> </div>";
                 ?>
                     <div class="col-sm-6"><p>Fecha Programada <br> <input type="date" name="fecha" id="form-fecha" required></p></div> 
-                    <div class="col-sm-12"><p>Médico Tratante <br> <input type="text" name="responsable" id="responsable" required autocomplete='off'></p></div> 
+                    <div class="col-sm-6"><p>Médico Tratante <br> <input type="text" name="responsable" id="responsable" required autocomplete='off'></p></div> 
+                    <div class="col-sm-6"><p>Hora <br> <input type="time" name="hora" id="hora" autocomplete='off'></p></div> 
                     <div class="col-sm-12"><p>Descripcion del Evento <br> <textarea name="descripcion" id="descr-evento" cols="30" rows="3" required></textarea></p></div>      
                 </div>
                 <div id='botonesGuardado'>
@@ -91,26 +92,29 @@
         </div>
         <table class="table table-light" id='tabla_eventos'>
             <thead>
-                <th scope="col" onclick="sortTable(0)">Id Evento</th>
-                <th scope="col" onclick="sortTable(1)">Fecha de Programacion</th>
-                <th scope="col" onclick="sortTable(2)">Nombre del Paciente</th>
-                <th scope="col" onclick="sortTable(3)">Apellidos del Paciente</th>
-                <th scope="col" onclick="sortTable(4)">Estado</th>
+                <th style="display:none" scope="col" onclick="sortTable(0)">N° Fila</th>
+                <th scope="col" onclick="sortTable(1)">Id Evento</th>
+                <th scope="col" onclick="sortTable(2)">Fecha de Programacion</th>
+                <th scope="col" onclick="sortTable(3)">Hora</th>
+                <th scope="col" onclick="sortTable(4)">Nombre del Paciente</th>
+                <th scope="col" onclick="sortTable(5)">Apellidos del Paciente</th>
+                <th scope="col" onclick="sortTable(6)">Estado</th>
                 <th style="display:none" scope="col" onclick="sortTable(4)">Estado</th>
-                <th scope="col" onclick="sortTable(5)">Médico Tratante</th>
-                <th scope="col" onclick="sortTable(6)">Descripción</th>
+                <th scope="col" onclick="sortTable(8)">Médico Tratante</th>
+                <th scope="col" onclick="sortTable(9)">Descripción</th>
+                
             </thead>
             <tbody id='tabla_contenido'>
                 <?php
                 $id=$_SESSION['id_sede'];
                 include("bd_usuario.php");
-                $sql="SELECT a.id_accion,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
+                $sql="SELECT a.id_accion,TIME_FORMAT(a.hora,'%H:%i') hora,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
                 FROM sop__evento_acc_db a
                 INNER JOIN sop__estados_db b on b.id_estado=a.id_estado
                 INNER JOIN sop__usuarios_db on a.dni_usuario =sop__usuarios_db.dni 
                 INNER JOIN sede__db_area on sede__db_area.id=sop__usuarios_db.id_sede 
                 WHERE sede__db_area.id=$id and a.id_estado=2
-                ORDER BY a.fecha_programacion desc;";
+                ORDER BY a.fecha_programacion,hora,a.apellido_paciente asc;";
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                 ?>
@@ -118,6 +122,7 @@
                 <?php
                     echo "<td>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
+                    echo "<td>". $row['hora']."</td>";
                     echo "<td>". $row['nombre_paciente']."</td>";
                     echo "<td>". $row['apellido_paciente']."</td>";
                     echo "<td>". $row['estado']."</td>";
@@ -208,13 +213,14 @@ function cerrar(){
       });
     function editar(id){
         var row=$(id).closest('tr');
-        var nombre=$(row).find("td").eq(2).html(),
-        apellido=$(row).find("td").eq(3).html(),
-        evento=$(row).find("td").eq(5).html(),
+        var nombre=$(row).find("td").eq(3).html(),
+        apellido=$(row).find("td").eq(4).html(),
+        evento=$(row).find("td").eq(6).html(),
         fecha=$(row).find("td").eq(1).html(),
         id=$(row).find("td").eq(0).html(),
-        responsable=$(row).find("td").eq(6).html();
-        descripcion=$(row).find("td").eq(7).html();
+        responsable=$(row).find("td").eq(7).html();
+        descripcion=$(row).find("td").eq(8).html();
+        hora=$(row).find("td").eq(2).html();
         mostrar(1);
         $('#id_accion').val(id);
         $('#nombre').val(nombre);
@@ -223,6 +229,7 @@ function cerrar(){
         $('#responsable').val(responsable);
         $('#evento').val(evento).change();
         $('#descr-evento ').val(descripcion);
+        $('#hora').val(hora);
     };
     $('#busqueda').on('keyup',function(){
         var valor=$(this).val().toLowerCase();
