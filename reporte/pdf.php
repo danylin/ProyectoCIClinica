@@ -3,7 +3,7 @@ session_start();
 include("../include/bd_usuario.php");
 require_once("../TCPDF/tcpdf.php");
             $nroEvento=$_GET['codigo'];
-            $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
+            $sql="SELECT a.fecha_cierre,a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
             FROM sop__evento_acc_db a 
             INNER JOIN sop__eventos_db b ON
             a.id_evento=b.id_evento

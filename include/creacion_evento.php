@@ -92,7 +92,7 @@
         </div>
         <table class="table table-light" id='tabla_eventos'>
             <thead>
-                <th style="display:none" scope="col" onclick="sortTable(0)">N° Fila</th>
+                <th scope="col" onclick="sortTable(0)">N° Fila</th>
                 <th scope="col" onclick="sortTable(1)">Id Evento</th>
                 <th scope="col" onclick="sortTable(2)">Fecha de Programacion</th>
                 <th scope="col" onclick="sortTable(3)">Hora</th>
@@ -120,6 +120,7 @@
                 ?>
                 <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"];?>),""'>
                 <?php
+                    echo "<td></td>";
                     echo "<td>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['hora']."</td>";
@@ -142,6 +143,12 @@
 <script>
 var codigoEvento;
 var subTipo; 
+  function nroFila(){
+    var table = document.getElementById("tabla_contenido");
+    for (var i = 0, row; row = table.rows[i]; i++) {
+    row.cells[0].innerText=1;
+    }
+  }
   function reporte(a){
     document.getElementById("overlay2").style.visibility = "visible";
     codigoEvento=$(a).closest('tr').find("td").eq(0).html();
@@ -197,7 +204,7 @@ function cerrar(){
                 var from=$('#fechaDesde').val();
                 var to=$('#fechaHasta').val();
                 var row = $(this);
-                var date = row.find("td").eq(1).html();
+                var date = row.find("td").eq(2).html();
                 var show = true;
                 if (from && date < from)
                 show = false;
@@ -210,17 +217,18 @@ function cerrar(){
                     }); 
             }
         });
+        nroFila();
       });
     function editar(id){
         var row=$(id).closest('tr');
-        var nombre=$(row).find("td").eq(3).html(),
-        apellido=$(row).find("td").eq(4).html(),
-        evento=$(row).find("td").eq(6).html(),
-        fecha=$(row).find("td").eq(1).html(),
-        id=$(row).find("td").eq(0).html(),
-        responsable=$(row).find("td").eq(7).html();
-        descripcion=$(row).find("td").eq(8).html();
-        hora=$(row).find("td").eq(2).html();
+        var nombre=$(row).find("td").eq(4).html(),
+        apellido=$(row).find("td").eq(5).html(),
+        evento=$(row).find("td").eq(7).html(),
+        fecha=$(row).find("td").eq(2).html(),
+        id=$(row).find("td").eq(1).html(),
+        responsable=$(row).find("td").eq(8).html();
+        descripcion=$(row).find("td").eq(9).html();
+        hora=$(row).find("td").eq(3).html();
         mostrar(1);
         $('#id_accion').val(id);
         $('#nombre').val(nombre);
@@ -289,7 +297,7 @@ function cerrar(){
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
     var row = $(this);
-    var date = row.find("td").eq(1).html();
+    var date = row.find("td").eq(2).html();
     var show = true;
     if (from && date < from)
       show = false;
@@ -302,6 +310,7 @@ function cerrar(){
     else
       row.hide();
   }); 
+  nroFila();
     }
 </script>
 <script>
@@ -310,7 +319,7 @@ function cerrar(){
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
     var row = $(this);
-    var date = row.find("td").eq(1).html();
+    var date = row.find("td").eq(2).html();
     var show = true;
     if (from && date < from)
       show = false;
@@ -323,13 +332,14 @@ function cerrar(){
     else
       row.hide();
   });
+  nroFila();
     })
     $('#fechaHasta').on('change',function(){
         $("#tabla_contenido tr").each(function() {
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
     var row = $(this);
-    var date = row.find("td").eq(1).html();
+    var date = row.find("td").eq(2).html();
     var show = true;
     if (from && date < from)
       show = false;
@@ -342,5 +352,6 @@ function cerrar(){
     else
       row.hide();
   });
+  nroFila();
     })
 </script>

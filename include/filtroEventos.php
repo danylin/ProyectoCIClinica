@@ -3,7 +3,7 @@
                 session_start();
                 $id=$_SESSION['id_sede'];
                 $estado=$_POST['estado'];
-                $sql="SELECT a.id_accion,TIME_FORMAT(a.hora,'%H:%i') hora,a.codigo_cierre,a.hora,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
+                $sql="SELECT a.id_accion,TIME_FORMAT('a.hora','%H:%i') hora,a.codigo_cierre,a.hora,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
                 FROM sop__evento_acc_db a
                 INNER JOIN sop__estados_db b on b.id_estado=a.id_estado
                 INNER JOIN sop__usuarios_db on a.dni_usuario =sop__usuarios_db.dni 
@@ -21,6 +21,7 @@
                     <tr class='filaFinalizada'>
                 <?php
                 }
+                    echo "<td></td>";
                     echo "<td>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['hora']."</td>";

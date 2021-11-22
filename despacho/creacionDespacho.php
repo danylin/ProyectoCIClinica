@@ -32,7 +32,7 @@
                             $fila=mysqli_fetch_array($consulta);
                             $codigo=$fila['id_sc'];
                             if($devolucion==1){
-                                echo "<tr style='background-color: rgba(241, 91, 91, 0.3);><td>$codigo</td>";
+                                echo "<tr class='nuevaEntradaD' style='background-color: rgba(241, 91, 91, 0.3);><td>$codigo</td>";
                                 echo "<td style='text-align:left'>$nombreManual <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='$nombreManual'</td>";
                                 echo "<td> <input type='number' min=1 max=50 value=$cantidadManual name='cantidad_Material[]'></td>";
                                 echo "<td>".$tipo."<input type='hidden' value=".$tipo." name='tipo[]'></td>";
@@ -43,7 +43,7 @@
                                 echo "</td>";
                                 echo "</tr>";    
                             } else{
-                                echo "<tr><td>$codigo</td>";
+                                echo "<tr class='nuevaEntrada'><td>$codigo</td>";
                                 echo "<td style='text-align:left'>$nombreManual <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='$nombreManual'</td>";
                                 echo "<td><input type='number' min=1 max=50 value=$cantidadManual name='cantidad_Material[]'></td>";
                                 echo "<td><p></p><input type='hidden' value='' name='tipo[]'></td>";
@@ -107,7 +107,7 @@
                                 }
                                 if(isset($row)){
                                     if ($devolucion==1){
-                                        echo "<tr style='background-color: rgba(241, 91, 91, 0.3);'><td>". $row['codigo']. "</td>";
+                                        echo "<tr class='nuevaEntradaD' style='background-color: rgba(241, 91, 91, 0.3);'><td>". $row['codigo']. "</td>";
                                         echo "<td style='text-align:left'>". $row['descripcion']." <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='". $row['descripcion']."'></td>";
                                         echo "<td> <input type='number' min=1 max=50 value=1 name='cantidad_Material[]'></td>";
                                         echo "<td>".$tipo."<input type='hidden' value=".$tipo." name='tipo[]'></td>";
@@ -119,7 +119,7 @@
                                         echo "</td>";
                                         echo "</tr>";
                                     }else{
-                                        echo "<tr><td>". $row['codigo']."</td>";
+                                        echo "<tr class='nuevaEntrada'><td>". $row['codigo']."</td>";
                                         echo "<td style='text-align:left'>". $row['descripcion']." <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='". $row['descripcion']."'></td>";
                                         echo "<td> <input type='number' min=1 max=50 value=1 name='cantidad_Material[]'></td>"; 
                                         echo "<td>".$tipo."<input type='hidden' name='tipo[]' value=".$tipo." ></td>";

@@ -4,11 +4,7 @@ include("../include/bd_usuario.php");
 require_once("../TCPDF/tcpdf.php");
             $nroEvento=$_GET['codigo'];
             $eventoAccion=$_GET['tipoEvento'];
-            $sqlEvento="SELECT*FROM sop__eventos_db WHERE id_evento=$eventoAccion";
-            $consulta=mysqli_query($conexion,$sqlEvento);
-            $row=mysqli_fetch_array($consulta);
-            $eventoAccion=$row['nombre'];
-            $sql="SELECT a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
+            $sql="SELECT a.fecha_cierre,a.fecha_programacion,a.codigo_cierre, CONCAT(a.nombre_paciente,' ',a.apellido_paciente) paciente,b.nombre,a.nombre_responsable
             FROM sop__evento_acc_db a 
             INNER JOIN sop__eventos_db b ON
             a.id_evento=b.id_evento
@@ -134,7 +130,7 @@ $pdf->MultiCell(55, 5, 'Número de Items', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $totalItems['total'], 0, 'L', 0, 1, '', '', true);
 $pdf->MultiCell(55, 5, 'Cantidad Utilizada', 0, 'L', 0, 0, '', '', true);
 $pdf->MultiCell(55, 5, $resultadoCantidad['total'], 0, 'L', 0, 1, '', '', true);
-if($eventoAccion=='Cirugia'){
+if($row['nombre']=='Cirugia'){
     $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
     FROM sop__despacho_db
     WHERE id_evento_acc=$nroEvento and subtipo='Material de Anestesia'";
@@ -239,7 +235,7 @@ if($eventoAccion=='Cirugia'){
         }
         $html.='</table>';
     }
-}elseif($eventoAccion=='Quimioterapia'){
+}elseif($row['nombre']=='Quimioterapia'){
     $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
     FROM sop__despacho_db
     WHERE id_evento_acc=$nroEvento and subtipo='Hidratación prequimioterapia'";
@@ -318,7 +314,7 @@ if($eventoAccion=='Cirugia'){
         }
         $html.='</table>';
     }
-}elseif($eventoAccion=='Control Logistico'){
+}elseif($row['nombre']=='Control Logistico'){
     $materiales="SELECT id_material,nombre,(cantidad-devolucion) resultado,tipo,subtipo
     FROM sop__despacho_db
     WHERE id_evento_acc=$nroEvento and subtipo='Inventario'";

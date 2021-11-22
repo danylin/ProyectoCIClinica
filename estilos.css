@@ -27,7 +27,16 @@ section{
     border: 2px solid black;
     margin: 80px 37%;
 }
-a{
+a:link{
+    cursor: pointer;
+   color: inherit; 
+}
+
+a:active{
+    cursor: pointer;
+   color: red; 
+}
+a:visited{
     cursor: pointer;
    color: inherit; 
 }
@@ -187,6 +196,50 @@ text-align: center;
            background-color: rgba(255,0,0,1)
     }
 }
+@-webkit-keyframes invalid {
+    0%   {background-color:inherit;}
+    50%  {background-color:skyblue;}
+    100% {background-color:inherit; }
+  }
+  @-moz-keyframes invalid {
+    0%   {background-color:inherit;}
+    50%  {background-color:skyblue;}
+    100% {background-color:inherit; }
+  }
+  @-o-keyframes invalid {
+    0%   {background-color:inherit;}
+    50%  {background-color:skyblue;}
+    100% {background-color:inherit; }
+  }
+  @keyframes invalid {
+    0%   {background-color:inherit;}
+    50%  {background-color:skyblue;}
+    100% {background-color:inherit; }
+  }
+  .nuevaEntrada{
+    animation-name: invalid;
+    animation-duration: 1s;
+}
+@-webkit-keyframes invalidD {
+    0%   {background-color:rgba(241, 91, 91, 0.5);}
+    100%  {background-color:rgba(241, 91, 91, 0.3);}
+  }
+  @-moz-keyframes invalidD {
+    0%   {background-color:rgba(241, 91, 91, 0.5);}
+    100%  {background-color:rgba(241, 91, 91, 0.3);}
+  }
+  @-o-keyframes invalidD {
+    0%   {background-color:rgba(241, 91, 91, 0.5);}
+    100%  {background-color:rgba(241, 91, 91, 0.3);}
+  }
+  @keyframes invalidD {
+    0%   {background-color:rgba(241, 91, 91, 0.5);}
+    100%  {background-color:rgba(241, 91, 91, 0.3);}
+  }
+.nuevaEntradaD{
+    animation-name: invalidD;
+    animation-duration: 2s;
+}
 .filtros{
     text-align: right;
     padding-left: 31%;
@@ -265,10 +318,8 @@ float: left;
 }
 
 #botonesEdicion{
-    float: right;
-    padding: 0;
-    padding-left: 18%;
-    margin: 0;
+    margin-left:auto;
+    margin-right:0;
 }
 #botonesEdicion .btn-info{
     height: 32px;
