@@ -21,7 +21,7 @@
                     <tr class='filaFinalizada'>
                 <?php
                 }
-                    echo "<td></td>";
+                    echo "<td class='numeroFila'></td>";
                     echo "<td>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['hora']."</td>";
@@ -44,4 +44,5 @@
                     echo "<td style='display:none;'>". $row['id_evento']."</td>";
                     echo "</tr>";
                 }
-                ?>
+                    
+?>

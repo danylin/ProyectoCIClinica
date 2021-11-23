@@ -120,7 +120,7 @@
                 ?>
                 <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"];?>),""'>
                 <?php
-                    echo "<td></td>";
+                    echo "<td class='numeroFila'></td>";
                     echo "<td>". $row['id_accion']."</td>";
                     echo "<td>". $row['fecha_programacion']."</td>";
                     echo "<td>". $row['hora']."</td>";
@@ -142,13 +142,8 @@
     </div>
 <script>
 var codigoEvento;
-var subTipo; 
-  function nroFila(){
-    var table = document.getElementById("tabla_contenido");
-    for (var i = 0, row; row = table.rows[i]; i++) {
-    row.cells[0].innerText=1;
-    }
-  }
+var subTipo;
+
   function reporte(a){
     document.getElementById("overlay2").style.visibility = "visible";
     codigoEvento=$(a).closest('tr').find("td").eq(0).html();
@@ -176,6 +171,46 @@ function cerrar(){
         $('#evento').val(1).change();
         $('#descr-evento ').val('');
   };
+  $(document).keydown(function(e) {
+    var btnApretado
+    event.preventDefault();
+    switch(e.key){
+      case '1':
+        btnApretado=1;
+        break;
+      case '2':
+        btnApretado=2;
+        break;
+      case '3':
+        btnApretado=3;
+        break;
+      case '4':
+        btnApretado=4;
+        break;
+      case '5':
+        btnApretado=5;
+        break;
+      case '6':
+        btnApretado=6;
+        break;
+      case '7':
+        btnApretado=7;
+        break;
+      case '8':
+        btnApretado=8;
+        break;
+      case '9':
+        btnApretado=9;
+        break;
+      }
+      $("#tabla_eventos tbody tr").each(function(){
+        $(this).find("td").css("background-color", "inherit");
+          if(btnApretado==$(this).find(".numeroFila").html()){
+          $(this).find("td").css("background-color", "skyblue");
+          $(this).trigger("click");
+          }
+        });
+});
   function mostrar(n){
       var btnRegistrar=document.getElementById("btnRegistrar");
       var btnEditar=document.getElementById("btnEditar");
@@ -199,6 +234,7 @@ function cerrar(){
             url:'include/filtroEventos.php',
             data:{estado:estado},
             success: function(data){
+              var contador=1
                 $('#tabla_contenido').prepend(data);
                 $("#tabla_eventos tbody tr").each(function() {
                 var from=$('#fechaDesde').val();
@@ -210,14 +246,17 @@ function cerrar(){
                 show = false;
                 if (to && date > to)
                 show = false;
-                if (show)
+                if (show){
                 row.show();
-                else
-                row.hide();
-                    }); 
+                $(this).find(".numeroFila").html(contador);
+                contador++;
+                }
+                else{
+                  row.hide();
+                }
+              }); 
             }
         });
-        nroFila();
       });
     function editar(id){
         var row=$(id).closest('tr');
@@ -282,6 +321,7 @@ function cerrar(){
     }
     }
     window.onload = function(){
+      var contador=1
     var fecha = new Date(); //Fecha actual
     var mes = fecha.getMonth()+1; //obteniendo mes
     var dia = fecha.getDate(); //obteniendo dia
@@ -305,16 +345,21 @@ function cerrar(){
     if (to && date > to)
       show = false;
 
-    if (show)
+    if (show){
       row.show();
-    else
+      $(this).find(".numeroFila").html(contador);
+      contador++;
+      console.log(contador)
+    }
+    else{
       row.hide();
+    }     
   }); 
-  nroFila();
     }
 </script>
 <script>
     $('#fechaDesde').on('change',function(){
+      var contador=1
         $("#tabla_contenido tr").each(function() {
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
@@ -327,15 +372,20 @@ function cerrar(){
     if (to && date > to)
       show = false;
 
-    if (show)
+      if (show){
       row.show();
-    else
+      $(this).find(".numeroFila").html(contador);
+      contador++;
+    }
+    else{
       row.hide();
+    }     
   });
-  nroFila();
     })
     $('#fechaHasta').on('change',function(){
+      var contador=1
         $("#tabla_contenido tr").each(function() {
+ 
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
     var row = $(this);
@@ -347,11 +397,14 @@ function cerrar(){
     if (to && date > to)
       show = false;
 
-    if (show)
+      if (show){
       row.show();
-    else
+      $(this).find(".numeroFila").html(contador);
+      contador++;
+    }
+    else{
       row.hide();
+    }     
   });
-  nroFila();
     })
 </script>
