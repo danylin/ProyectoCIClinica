@@ -8,6 +8,7 @@
             if($_POST['codigo']=="."){
                 echo '<script language="javascript">';
                 echo 'busquedaManual();';
+                echo 'document.getElementById("codigo").focus();';
                 echo '</script>';
             }else{
                 if ($evento!="Procedimiento Medico" || $evento="Control Logistico"){

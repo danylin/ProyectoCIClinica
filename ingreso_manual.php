@@ -12,6 +12,7 @@ include("include/titulo.php");
       </nav>
     </header>
     <section>
+      <!-- El presente apartado permitira al usuario ingresar con una contraseña proporcionada por el encargado -->
         <div class="formulario">
             <h4>Iniciar Sesion</h2>
             <form action="mostrar.php"method="post">

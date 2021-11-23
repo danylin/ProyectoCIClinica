@@ -1,9 +1,13 @@
+<!-- El apartado de creacion_evento.php abarca dos divs importantes 
+El overlay (el cual se repetira en varias ocasiones con el fin de no repetir los estilos css) sera activado
+con un boton el cual habilitara el formulario de creacion de eventos-->
 <div class="overlay" id='overlay1' >
     <div class="popup">
         <div id="encabezado_popup">
             <h3 id='tituloRegistro'>Datos del Evento</h3>
             <a onclick="cerrar()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
         </div>
+  <!-- El formulario formEvento habilitara al usuario tanto el registro como la edicion de datos del evento seleccionado -->
         <form action="include/registro_evento.php" method="post" id="formEvento">
             <div class="container-flex" >
                 <div class="row" >
@@ -18,6 +22,9 @@
                     $row2=mysqli_fetch_array($resultado2);
                     echo "<div class='col-sm-6'> <p> Evento <br> <select name='evento' id='evento' required>";
                     while($row=mysqli_fetch_array($resultado)){
+                        /*Se verifica que eventos estan asociados al usuario en row2,
+                        en el caso de row se obtendran los nombres de los eventos en la tabla sop__eventos_db
+                        */
                         if ($row2['Evento1']==1 and $row['id_evento']==1) {
                             echo "<option value=".$row['id_evento'].">". $row['nombre'] ."</option>";
                         }
@@ -48,6 +55,8 @@
         </form>
     </div>
 </div> 
+<!-- El overlay2 cumple las misma caracteristicas del overlay anterior, en este caso se dara al usuario la eleccion de reportes
+para los eventos marcados como finalizados (id_estado=3) -->
 <div class="overlay" id="overlay2">
         <div class="popup">
           <div id="encabezado_encuentro">
@@ -66,6 +75,8 @@
         </div>
       </div>
 <div class="usuarios">
+<!-- El presente div mostrara cada evento subdividido por su status:
+Programados, en proceso, finalizados y suspendidos. -->
     <div class="container-table">
         <div class="table-title">
             <div id="usuarioEncabezado">
@@ -99,13 +110,18 @@
                 <th scope="col" onclick="sortTable(4)">Nombre del Paciente</th>
                 <th scope="col" onclick="sortTable(5)">Apellidos del Paciente</th>
                 <th scope="col" onclick="sortTable(6)">Estado</th>
-                <th style="display:none" scope="col" onclick="sortTable(4)">Estado</th>
+                <th style="display:none" scope="col" onclick="sortTable(4)"></th>
                 <th scope="col" onclick="sortTable(8)">Médico Tratante</th>
                 <th scope="col" onclick="sortTable(9)">Descripción</th>
                 
             </thead>
             <tbody id='tabla_contenido'>
                 <?php
+                /*
+                El tbody se definirá con la conjuncion de multiples bases de datos con el fin de llenarlos apartados de:
+                Nro de fila, id del Evento, la fecha de programacion, la hora de programacion, el nombre y apellidos del paciente,
+                el estado actual del evento y finalmente el medico tratante y una breve descripcion del evento
+                */
                 $id=$_SESSION['id_sede'];
                 include("bd_usuario.php");
                 $sql="SELECT a.id_accion,TIME_FORMAT(a.hora,'%H:%i') hora,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
@@ -143,10 +159,9 @@
 <script>
 var codigoEvento;
 var subTipo;
-
   function reporte(a){
     document.getElementById("overlay2").style.visibility = "visible";
-    codigoEvento=$(a).closest('tr').find("td").eq(0).html();
+    codigoEvento=$(a).closest('tr').find("td").eq(1).html();
     subTipo=$(a).closest('tr').find("td").eq(9).html();
   };
   function reportes(n){
@@ -359,8 +374,8 @@ function cerrar(){
 </script>
 <script>
     $('#fechaDesde').on('change',function(){
-      var contador=1
-        $("#tabla_contenido tr").each(function() {
+    var contador=1
+    $("#tabla_contenido tr").each(function() {
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
     var row = $(this);
@@ -384,8 +399,7 @@ function cerrar(){
     })
     $('#fechaHasta').on('change',function(){
       var contador=1
-        $("#tabla_contenido tr").each(function() {
- 
+    $("#tabla_contenido tr").each(function() {
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
     var row = $(this);

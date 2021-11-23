@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <!-- La presente pagina mostrara al usuario de tipo 2 y 3 los eventos disponibles en su respectiva clinica -->
   <?php
     include("include/titulo.php");
     include("include/bd_usuario.php");
