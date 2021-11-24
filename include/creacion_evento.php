@@ -73,7 +73,24 @@ para los eventos marcados como finalizados (id_estado=3) -->
                   </tbody>
               </table>
         </div>
-      </div>
+  </div>
+<div class="overlay" id="overlay3">
+  <div class="popup">
+    <div id="encabezado_encuentro">
+      <h3 style="padding-left:5%">Extraccion de Información</h3>
+      <a onclick="cerrar3()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
+    </div>
+    <div id="informacion">
+      <select id="tipoEventoExtraccion">
+        <option value="Cirugia">Cirugia</option>
+        <option value="Quimioterapia">Quimioterapia</option>
+        <option value="Procedimiento Medico">Procedimiento Medico</option>
+        <option value="Control Logistico">Control Logistico</option>
+      </select>
+      <button class="btn btn-danger" id="extraerInformacion">Extraer</button>
+    </div>
+  </div>
+</div>
 <div class="usuarios">
 <!-- El presente div mostrara cada evento subdividido por su status:
 Programados, en proceso, finalizados y suspendidos. -->
@@ -86,17 +103,18 @@ Programados, en proceso, finalizados y suspendidos. -->
             <div id='cajaOpciones' >
                 <button class='btn btn-info' id='nuevoEvento'onclick='mostrar(0)'>Nuevo Evento</button>
                 <div class='filtros'>
-                    <div id='input_buscar'>
-                       Status de Evento: <select name="filtroEleccion" id="filtroEleccion">
-                       <option selected disabled>Status de Evento</option>
-                            <option value="1" >Programado</option>
-                            <option value="2" selected>En Proceso</option>
-                            <option value="3">Finalizado</option>
-                            <option value="4">Suspendido</option>
-                        </select>
-                    Desde: <input type="date" name="" id="fechaDesde" >
-                    Hasta:<input type="date" name="" id="fechaHasta">
-                    </div>
+                      <div id='input_buscar'>
+                        Status de Evento: <select name="filtroEleccion" id="filtroEleccion">
+                        <option selected disabled>Status de Evento</option>
+                              <option value="1" >Programado</option>
+                              <option value="2" selected>En Proceso</option>
+                              <option value="3">Finalizado</option>
+                              <option value="4">Suspendido</option>
+                          </select>
+                      Desde: <input type="date" name="" id="fechaDesde" >
+                      Hasta:<input type="date" name="" id="fechaHasta">
+                      <button class="btn btn-info" onclick="mostrarExtraccion()">A</button>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -110,7 +128,7 @@ Programados, en proceso, finalizados y suspendidos. -->
                 <th scope="col" onclick="sortTable(4)">Nombre del Paciente</th>
                 <th scope="col" onclick="sortTable(5)">Apellidos del Paciente</th>
                 <th scope="col" onclick="sortTable(6)">Estado</th>
-                <th style="display:none" scope="col" onclick="sortTable(4)"></th>
+                <th style="display:none" scope="col"></th>
                 <th scope="col" onclick="sortTable(8)">Médico Tratante</th>
                 <th scope="col" onclick="sortTable(9)">Descripción</th>
                 
@@ -157,6 +175,16 @@ Programados, en proceso, finalizados y suspendidos. -->
         </table>
     </div>
 <script>
+  $('extraerInformacion').on("click",function(){
+    var tipoEvento=$('tipoEventoExtraccion').val();
+    $.ajax({
+      type:'POST',
+      url:'extraccionInformacion.php',
+      data:{tipoEvento:tipoEvento},
+    });
+  });
+</script>
+<script>
 var codigoEvento;
 var subTipo;
   function reporte(a){
@@ -171,6 +199,12 @@ var subTipo;
         window.open("reporte/pdf_subTipo.php?codigo="+codigoEvento+"&tipoEvento="+subTipo);
       }
   }
+  function mostrarExtraccion(){
+    document.getElementById("overlay3").style.visibility = "visible";
+  }
+    function cerrar3(){
+    document.getElementById("overlay3").style.visibility = "hidden";
+  };
   function cerrar2(){
     document.getElementById("overlay2").style.visibility = "hidden";
   };
@@ -187,7 +221,7 @@ function cerrar(){
         $('#descr-evento ').val('');
   };
   $(document).keydown(function(e) {
-    var btnApretado
+    var btnApretado=0
     event.preventDefault();
     switch(e.key){
       case '1':
@@ -218,14 +252,17 @@ function cerrar(){
         btnApretado=9;
         break;
       }
+      console.log(btnApretado)
       $("#tabla_eventos tbody tr").each(function(){
         $(this).find("td").css("background-color", "inherit");
-          if(btnApretado==$(this).find(".numeroFila").html()){
-          $(this).find("td").css("background-color", "skyblue");
-          $(this).trigger("click");
+          if(btnApretado!=0){
+            if(btnApretado==$(this).find(".numeroFila").html()){
+              $(this).find("td").css("background-color", "skyblue");
+              $(this).trigger("click");
+            }
           }
         });
-});
+      });
   function mostrar(n){
       var btnRegistrar=document.getElementById("btnRegistrar");
       var btnEditar=document.getElementById("btnEditar");
@@ -321,7 +358,7 @@ function cerrar(){
             shouldSwitch = true;
             break;
             }
-        }
+         } 
         }
     if (shouldSwitch) {
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
@@ -336,7 +373,7 @@ function cerrar(){
     }
     }
     window.onload = function(){
-      var contador=1
+    var contador=1
     var fecha = new Date(); //Fecha actual
     var mes = fecha.getMonth()+1; //obteniendo mes
     var dia = fecha.getDate(); //obteniendo dia
@@ -356,10 +393,8 @@ function cerrar(){
     var show = true;
     if (from && date < from)
       show = false;
-    
     if (to && date > to)
       show = false;
-
     if (show){
       row.show();
       $(this).find(".numeroFila").html(contador);
@@ -369,7 +404,7 @@ function cerrar(){
     else{
       row.hide();
     }     
-  }); 
+      }); 
     }
 </script>
 <script>

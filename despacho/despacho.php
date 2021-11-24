@@ -361,7 +361,7 @@ function eliminar(){
           <th style='text-align:left;width:450px'>Descripcion</th>
           <th>Cantidad</th>
           <th>Tipo</th>
-          <th> <input type='hidden' id='devolucion' value='' name='devolucion'> </th>
+          <th><input type='hidden' id='devolucion' value='' name='devolucion'></th>
           <th></th>
           <th>GTIN/CRF</th>
         </thead>
