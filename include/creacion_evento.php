@@ -173,7 +173,6 @@ function cerrar(){
   };
   $(document).keydown(function(e) {
     var btnApretado
-    event.preventDefault();
     switch(e.key){
       case '1':
         btnApretado=1;
