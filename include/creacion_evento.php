@@ -1,9 +1,13 @@
+<!-- El apartado de creacion_evento.php abarca dos divs importantes 
+El overlay (el cual se repetira en varias ocasiones con el fin de no repetir los estilos css) sera activado
+con un boton el cual habilitara el formulario de creacion de eventos-->
 <div class="overlay" id='overlay1' >
     <div class="popup">
         <div id="encabezado_popup">
             <h3 id='tituloRegistro'>Datos del Evento</h3>
             <a onclick="cerrar()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
         </div>
+  <!-- El formulario formEvento habilitara al usuario tanto el registro como la edicion de datos del evento seleccionado -->
         <form action="include/registro_evento.php" method="post" id="formEvento">
             <div class="container-flex" >
                 <div class="row" >
@@ -18,6 +22,9 @@
                     $row2=mysqli_fetch_array($resultado2);
                     echo "<div class='col-sm-6'> <p> Evento <br> <select name='evento' id='evento' required>";
                     while($row=mysqli_fetch_array($resultado)){
+                        /*Se verifica que eventos estan asociados al usuario en row2,
+                        en el caso de row se obtendran los nombres de los eventos en la tabla sop__eventos_db
+                        */
                         if ($row2['Evento1']==1 and $row['id_evento']==1) {
                             echo "<option value=".$row['id_evento'].">". $row['nombre'] ."</option>";
                         }
@@ -48,6 +55,8 @@
         </form>
     </div>
 </div> 
+<!-- El overlay2 cumple las misma caracteristicas del overlay anterior, en este caso se dara al usuario la eleccion de reportes
+para los eventos marcados como finalizados (id_estado=3) -->
 <div class="overlay" id="overlay2">
         <div class="popup">
           <div id="encabezado_encuentro">
@@ -64,8 +73,27 @@
                   </tbody>
               </table>
         </div>
-      </div>
+  </div>
+<div class="overlay" id="overlay3">
+  <div class="popup">
+    <div id="encabezado_encuentro">
+      <h3 style="padding-left:5%">Extraccion de Información</h3>
+      <a onclick="cerrar3()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
+    </div>
+    <div id="informacion">
+      <select id="tipoEventoExtraccion">
+        <option value="Cirugia">Cirugia</option>
+        <option value="Quimioterapia">Quimioterapia</option>
+        <option value="Procedimiento Medico">Procedimiento Medico</option>
+        <option value="Control Logistico">Control Logistico</option>
+      </select>
+      <button class="btn btn-danger" id="extraerInformacion">Extraer</button>
+    </div>
+  </div>
+</div>
 <div class="usuarios">
+<!-- El presente div mostrara cada evento subdividido por su status:
+Programados, en proceso, finalizados y suspendidos. -->
     <div class="container-table">
         <div class="table-title">
             <div id="usuarioEncabezado">
@@ -75,17 +103,18 @@
             <div id='cajaOpciones' >
                 <button class='btn btn-info' id='nuevoEvento'onclick='mostrar(0)'>Nuevo Evento</button>
                 <div class='filtros'>
-                    <div id='input_buscar'>
-                       Status de Evento: <select name="filtroEleccion" id="filtroEleccion">
-                       <option selected disabled>Status de Evento</option>
-                            <option value="1" >Programado</option>
-                            <option value="2" selected>En Proceso</option>
-                            <option value="3">Finalizado</option>
-                            <option value="4">Suspendido</option>
-                        </select>
-                    Desde: <input type="date" name="" id="fechaDesde" >
-                    Hasta:<input type="date" name="" id="fechaHasta">
-                    </div>
+                      <div id='input_buscar'>
+                        Status de Evento: <select name="filtroEleccion" id="filtroEleccion">
+                        <option selected disabled>Status de Evento</option>
+                              <option value="1" >Programado</option>
+                              <option value="2" selected>En Proceso</option>
+                              <option value="3">Finalizado</option>
+                              <option value="4">Suspendido</option>
+                          </select>
+                      Desde: <input type="date" name="" id="fechaDesde" >
+                      Hasta:<input type="date" name="" id="fechaHasta">
+                      <button class="btn btn-info" onclick="mostrarExtraccion()">A</button>
+                      </div>
                     </div>
                 </div>
             </div>
@@ -99,13 +128,18 @@
                 <th scope="col" onclick="sortTable(4)">Nombre del Paciente</th>
                 <th scope="col" onclick="sortTable(5)">Apellidos del Paciente</th>
                 <th scope="col" onclick="sortTable(6)">Estado</th>
-                <th style="display:none" scope="col" onclick="sortTable(4)">Estado</th>
+                <th style="display:none" scope="col"></th>
                 <th scope="col" onclick="sortTable(8)">Médico Tratante</th>
                 <th scope="col" onclick="sortTable(9)">Descripción</th>
                 
             </thead>
             <tbody id='tabla_contenido'>
                 <?php
+                /*
+                El tbody se definirá con la conjuncion de multiples bases de datos con el fin de llenarlos apartados de:
+                Nro de fila, id del Evento, la fecha de programacion, la hora de programacion, el nombre y apellidos del paciente,
+                el estado actual del evento y finalmente el medico tratante y una breve descripcion del evento
+                */
                 $id=$_SESSION['id_sede'];
                 include("bd_usuario.php");
                 $sql="SELECT a.id_accion,TIME_FORMAT(a.hora,'%H:%i') hora,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
@@ -141,12 +175,21 @@
         </table>
     </div>
 <script>
+  $('extraerInformacion').on("click",function(){
+    var tipoEvento=$('tipoEventoExtraccion').val();
+    $.ajax({
+      type:'POST',
+      url:'extraccionInformacion.php',
+      data:{tipoEvento:tipoEvento},
+    });
+  });
+</script>
+<script>
 var codigoEvento;
 var subTipo;
-
   function reporte(a){
     document.getElementById("overlay2").style.visibility = "visible";
-    codigoEvento=$(a).closest('tr').find("td").eq(0).html();
+    codigoEvento=$(a).closest('tr').find("td").eq(1).html();
     subTipo=$(a).closest('tr').find("td").eq(9).html();
   };
   function reportes(n){
@@ -156,6 +199,12 @@ var subTipo;
         window.open("reporte/pdf_subTipo.php?codigo="+codigoEvento+"&tipoEvento="+subTipo);
       }
   }
+  function mostrarExtraccion(){
+    document.getElementById("overlay3").style.visibility = "visible";
+  }
+    function cerrar3(){
+    document.getElementById("overlay3").style.visibility = "hidden";
+  };
   function cerrar2(){
     document.getElementById("overlay2").style.visibility = "hidden";
   };
@@ -172,7 +221,12 @@ function cerrar(){
         $('#descr-evento ').val('');
   };
   $(document).keydown(function(e) {
+<<<<<<< HEAD
     var btnApretado
+=======
+    var btnApretado=0
+    event.preventDefault();
+>>>>>>> f58b9a98465e79e22ffbbe8300c192a512554d61
     switch(e.key){
       case '1':
         btnApretado=1;
@@ -202,14 +256,17 @@ function cerrar(){
         btnApretado=9;
         break;
       }
+      console.log(btnApretado)
       $("#tabla_eventos tbody tr").each(function(){
         $(this).find("td").css("background-color", "inherit");
-          if(btnApretado==$(this).find(".numeroFila").html()){
-          $(this).find("td").css("background-color", "skyblue");
-          $(this).trigger("click");
+          if(btnApretado!=0){
+            if(btnApretado==$(this).find(".numeroFila").html()){
+              $(this).find("td").css("background-color", "skyblue");
+              $(this).trigger("click");
+            }
           }
         });
-});
+      });
   function mostrar(n){
       var btnRegistrar=document.getElementById("btnRegistrar");
       var btnEditar=document.getElementById("btnEditar");
@@ -305,7 +362,7 @@ function cerrar(){
             shouldSwitch = true;
             break;
             }
-        }
+         } 
         }
     if (shouldSwitch) {
       rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
@@ -320,7 +377,7 @@ function cerrar(){
     }
     }
     window.onload = function(){
-      var contador=1
+    var contador=1
     var fecha = new Date(); //Fecha actual
     var mes = fecha.getMonth()+1; //obteniendo mes
     var dia = fecha.getDate(); //obteniendo dia
@@ -340,10 +397,8 @@ function cerrar(){
     var show = true;
     if (from && date < from)
       show = false;
-    
     if (to && date > to)
       show = false;
-
     if (show){
       row.show();
       $(this).find(".numeroFila").html(contador);
@@ -353,13 +408,13 @@ function cerrar(){
     else{
       row.hide();
     }     
-  }); 
+      }); 
     }
 </script>
 <script>
     $('#fechaDesde').on('change',function(){
-      var contador=1
-        $("#tabla_contenido tr").each(function() {
+    var contador=1
+    $("#tabla_contenido tr").each(function() {
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
     var row = $(this);
@@ -383,8 +438,7 @@ function cerrar(){
     })
     $('#fechaHasta').on('change',function(){
       var contador=1
-        $("#tabla_contenido tr").each(function() {
- 
+    $("#tabla_contenido tr").each(function() {
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
     var row = $(this);

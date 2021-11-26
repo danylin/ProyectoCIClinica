@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+     <!-- La presente pagina mostrara al usuario de tipo 1 los eventos disponibles en su respectiva clinica -->
     <?php
     include("include/titulo.php");
     session_start();
