@@ -221,12 +221,8 @@ function cerrar(){
         $('#descr-evento ').val('');
   };
   $(document).keydown(function(e) {
-<<<<<<< HEAD
     var btnApretado
-=======
     var btnApretado=0
-    event.preventDefault();
->>>>>>> f58b9a98465e79e22ffbbe8300c192a512554d61
     switch(e.key){
       case '1':
         btnApretado=1;
