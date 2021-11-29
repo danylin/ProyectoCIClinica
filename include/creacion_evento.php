@@ -226,6 +226,7 @@ function cerrar(){
 /* La presente funcion tiene como objetivo relacionar los botones numericos
 con los eventos mostrados en pantalla. ADVERTENCIA. SOLO ESTA DISPONIBLE LOS NUMEROS DESDE EL 1 HASTA EL 9*/
   $(document).keydown(function(e) {
+    var btnApretado
     var btnApretado=0
     switch(e.key){
       case '1':
