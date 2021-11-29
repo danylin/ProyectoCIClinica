@@ -1,4 +1,5 @@
 <?php
+//La presente pagina modificara los valores proporcionados al formulario GTIN/CRF
 include("../include/bd_usuario.php");
 $crf=$_POST['crf'];
 $gtin=$_POST['codigoG'];

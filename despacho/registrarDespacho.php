@@ -1,4 +1,5 @@
 <?php
+// El presente apartado 
     include("../include/bd_usuario.php");
     $idEvento=$_GET['evento'];
     $codigo=$_POST['codigo'];
@@ -8,18 +9,18 @@
     $subtipo=$_POST['subtipo'];
     $devObjeto=$_POST['devObjeto'];
     $update=$_POST['update'];
-    $contador;
+    $contador; //Esta variable permitira saber si el material se repite mas de una vez
     for($i=0;$i<count($codigo);$i++){
         $pruebaExistencia="SELECT*FROM sop__despacho_db WHERE subtipo='$subtipo' and id_evento_acc=$idEvento and id_material='".$codigo[$i]."'";
         $pruebaConsulta=mysqli_query($conexion,$pruebaExistencia);
         while($despachos=mysqli_fetch_array($pruebaConsulta)){
             if($despachos['id_material']==$codigo[$i]){
-                $contador=$contador+1;
+                $contador=$contador+1; //Esto permitira leer el array y si existe actualmente un material dentro de sop__despacho_db 
             }
         }
-        if($contador>0){
-            if($update[$i]==0){
-                if($devObjeto[$i]==1){
+        if($contador>0){ //Este condicional verificara si existe dicho elemento dentro de la base de datos
+            if($update[$i]==0){ //El valor de update permitira actualizar el valor de devolucion o cantidad
+                if($devObjeto[$i]==1){ //Determinara si es devolucion o entrega
                     $query = "UPDATE sop__despacho_db SET devolucion=IF(cantidad<devolucion+1,cantidad,devolucion+1) WHERE subtipo='$subtipo' and id_material='".$codigo[$i]."' and id_evento_acc=$idEvento";
                     $consulta=mysqli_query($conexion,$query);
                 }else {
@@ -28,7 +29,7 @@
             }
         }
         $contador=0;
-        }else{
+        }else{ //Si no es un valor existente dentro de la base de datos se procedera de la siguiente manera
             if($update[$i]==1){
                 if($devObjeto[$i]==1){
                     $sql="SELECT*FROM sop__despacho_db WHERE subtipo='$subtipo' and id_material='".$codigo[$i]."' and id_evento_acc=$idEvento";
