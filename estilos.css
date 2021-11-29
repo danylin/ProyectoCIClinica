@@ -5,7 +5,9 @@
     
 }
 
-
+td{
+    vertical-align: middle;
+}
 #usuarioEncabezado{
     display: flex;
 }

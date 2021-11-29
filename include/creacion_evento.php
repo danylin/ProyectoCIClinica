@@ -1,5 +1,5 @@
 <!-- El apartado de creacion_evento.php abarca dos divs importantes 
-El overlay (el cual se repetira en varias ocasiones con el fin de no repetir los estilos css) sera activado
+El overlay (el cual se repetira en varias ocasiones con el fin de utilizar un unico estilo css) sera activado
 con un boton el cual habilitara el formulario de creacion de eventos-->
 <div class="overlay" id='overlay1' >
     <div class="popup">
@@ -22,8 +22,8 @@ con un boton el cual habilitara el formulario de creacion de eventos-->
                     $row2=mysqli_fetch_array($resultado2);
                     echo "<div class='col-sm-6'> <p> Evento <br> <select name='evento' id='evento' required>";
                     while($row=mysqli_fetch_array($resultado)){
-                        /*Se verifica que eventos estan asociados al usuario en row2,
-                        en el caso de row se obtendran los nombres de los eventos en la tabla sop__eventos_db
+                        /*Se verifica que eventos estan asociados al usuario en la variable "row2",
+                        en el caso de la variable "row" se obtendran los nombres de los eventos en la tabla sop__eventos_db
                         */
                         if ($row2['Evento1']==1 and $row['id_evento']==1) {
                             echo "<option value=".$row['id_evento'].">". $row['nombre'] ."</option>";
@@ -185,6 +185,7 @@ Programados, en proceso, finalizados y suspendidos. -->
   });
 </script>
 <script>
+ //Las siguienes funciones permiten la visualizacion del apartado de eleccion de reportes asi como mostrar un pdf correspondiente a la eleccion del usuario
 var codigoEvento;
 var subTipo;
   function reporte(a){
@@ -199,6 +200,7 @@ var subTipo;
         window.open("reporte/pdf_subTipo.php?codigo="+codigoEvento+"&tipoEvento="+subTipo);
       }
   }
+   // Las siguientes funciones modifican la visibilidad de los formularios de Extraccion y de Registro de Eventos
   function mostrarExtraccion(){
     document.getElementById("overlay3").style.visibility = "visible";
   }
@@ -211,6 +213,7 @@ var subTipo;
 function redireccion(a,b,c){
     window.location="despacho/comprobar.php?estado="+a+"&codigo="+b+"&tipo="+c;
 }
+// La presente funcion a la vez que cierra el formulario de registro de eventos elimina los valores contenidos en ellos.
 function cerrar(){
     document.getElementById("overlay1").style.visibility = "hidden";
         $('#nombre').val('');
@@ -220,9 +223,10 @@ function cerrar(){
         $('#evento').val(1).change();
         $('#descr-evento ').val('');
   };
+/* La presente funcion tiene como objetivo relacionar los botones numericos
+con los eventos mostrados en pantalla. ADVERTENCIA. SOLO ESTA DISPONIBLE LOS NUMEROS DESDE EL 1 HASTA EL 9*/
   $(document).keydown(function(e) {
     var btnApretado=0
-    event.preventDefault();
     switch(e.key){
       case '1':
         btnApretado=1;
@@ -263,6 +267,9 @@ function cerrar(){
           }
         });
       });
+/* La funcion mostrar ocultará y mostrará los botones correspondiente a editar y registrar.
+Esto se verifica con la variable "valorEditar" que sera enviada mediante un click en los botones
+referenciados en las variables btnRegistrar y btnEditar*/
   function mostrar(n){
       var btnRegistrar=document.getElementById("btnRegistrar");
       var btnEditar=document.getElementById("btnEditar");
@@ -278,8 +285,10 @@ function cerrar(){
     }
     document.getElementById("overlay1").style.visibility = "visible";
   };
+/* En el evento de cambio en las fechas de filtrado se utilizara la siguiente funcion
+que compara los valores de la fecha programada en conjunto con los filtros antes mencionados */ 
   $('#filtroEleccion').on('change',function(){
-    $("#tabla_contenido tr td").remove(); 
+    $("#tabla_contenido tr").remove(); 
         var estado=$('#filtroEleccion').val();
           $.ajax({
             type:'POST',
@@ -289,27 +298,33 @@ function cerrar(){
               var contador=1
                 $('#tabla_contenido').prepend(data);
                 $("#tabla_eventos tbody tr").each(function() {
-                var from=$('#fechaDesde').val();
-                var to=$('#fechaHasta').val();
+                var from=$('#fechaDesde').val(); // Variable Date Desde
+                var to=$('#fechaHasta').val(); // Variable Date Hasta
                 var row = $(this);
                 var date = row.find("td").eq(2).html();
                 var show = true;
                 if (from && date < from)
                 show = false;
                 if (to && date > to)
-                show = false;
+                show = false; /*Se realiza una validacion en caso que no cumpla con las condiciones estipuladas es decir,
+                que las variables from y to contengan algun valor y que la variable date obtenida de la columna 3 de los eventos
+                sea mayor o menor segun la comparacion*/
                 if (show){
                 row.show();
                 $(this).find(".numeroFila").html(contador);
                 contador++;
                 }
                 else{
-                  row.hide();
+                  row.hide(); /*Finalmente se verifica el valor booleano de la variable show para mostrar o ocultar la fila correspondiente
+                  ademas se agrega el valor de un contador para enumerar la fila, esto con el fin de al presionar el numero correspodiente se acceda
+                  de manera rapida a dicho evento*/
                 }
               }); 
             }
         });
       });
+    /*La funcion editar se activara llenando los campos con los datos 
+    del evento seleecionado.*/
     function editar(id){
         var row=$(id).closest('tr');
         var nombre=$(row).find("td").eq(4).html(),
@@ -320,7 +335,7 @@ function cerrar(){
         responsable=$(row).find("td").eq(8).html();
         descripcion=$(row).find("td").eq(9).html();
         hora=$(row).find("td").eq(3).html();
-        mostrar(1);
+        mostrar(1); //Esta funcion se encuentra en la linea de codigo 273
         $('#id_accion').val(id);
         $('#nombre').val(nombre);
         $('#apellido').val(apellido);
@@ -330,12 +345,6 @@ function cerrar(){
         $('#descr-evento ').val(descripcion);
         $('#hora').val(hora);
     };
-    $('#busqueda').on('keyup',function(){
-        var valor=$(this).val().toLowerCase();
-        $('#tabla_contenido tr').filter(function(){
-            $(this).toggle($(this).text().toLowerCase().indexOf(valor)>-1);
-        });
-    });
     function sortTable(n) {
     var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
     table = document.getElementById("tabla_eventos");
@@ -373,18 +382,29 @@ function cerrar(){
     }
     }
     window.onload = function(){
+    // Al iniciar la ventana se cargara la fecha actual asi como la fecha dos dias despues. 
     var contador=1
-    var fecha = new Date(); //Fecha actual
-    var mes = fecha.getMonth()+1; //obteniendo mes
-    var dia = fecha.getDate(); //obteniendo dia
-    var year = fecha.getFullYear(); //obteniendo año
+    var fechaDesde = new Date(); //Fecha actual
+    var fechaHasta= fechaDesde;
+    var mes = fechaDesde.getMonth()+1; //obteniendo mes del valor Desde
+    var dia = fechaDesde.getDate(); //obteniendo dia del valor Desde
+    var year = fechaDesde.getFullYear(); //obteniendo año del valor Desde
+    fechaHasta.setDate(fechaHasta.getDate()+2);
+    var mesH = fechaHasta.getMonth()+1; //obteniendo mes del valor Hasta
+    var diaH = fechaHasta.getDate(); //obteniendo dia del valor Hasta
+    var yearH = fechaHasta.getFullYear(); //obteniendo año del valor Hasta
     if(dia<10)
         dia='0'+dia; 
     if(mes<10)
-        mes='0'+mes 
-    document.getElementById('form-fecha').min=year+"-"+mes+"-"+dia;
+        mes='0'+mes;
+    if(diaH<10)
+        diaH='0'+diaH; 
+    if(mesH<10)
+        mesH='0'+mesH  
+    document.getElementById('form-fecha').min=year+"-"+mes+"-"+dia;// Dentro del formulario de registro y edicion se restringe la fecha minima a la actual
     document.getElementById('fechaDesde').value=year+"-"+mes+"-"+dia;
-    document.getElementById('fechaHasta').value=year+"-"+mes+"-"+(dia+2);
+    document.getElementById('fechaHasta').value=yearH+"-"+mesH+"-"+diaH;
+
     $("#tabla_contenido tr").each(function() {
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();
@@ -445,7 +465,6 @@ function cerrar(){
     
     if (to && date > to)
       show = false;
-
       if (show){
       row.show();
       $(this).find(".numeroFila").html(contador);

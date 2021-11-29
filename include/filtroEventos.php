@@ -1,4 +1,5 @@
 <?php
+// El presente archivo tiene por objetivo filtrar los eventos segun el estado en que se encuentren es de decir: Programado, En Proceso, Cerrado o Suspendido
                 include("bd_usuario.php");
                 session_start();
                 $id=$_SESSION['id_sede'];

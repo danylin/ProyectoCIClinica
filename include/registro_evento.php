@@ -1,9 +1,10 @@
 <?php
+/*Mediante el formulario registro y edicion se envia los datos necesarios para el llenado de la base de datos sop__evento_acc.*/
     session_start();
     include("bd_usuario.php");
     $usuario=$_SESSION['id'];
     $id_accion=$_POST['id_accion'];
-    $verificador=$_POST['verificadorEditar'];
+    $verificador=$_POST['verificadorEditar']; //La presente variable permite verificar si los datos enviados son para la modificacion o para el registro de eventos.
     $paciente=$_POST['nombre'];
     $pacienteApellido=$_POST['apellido'];
     $descripcion=$_POST['descripcion'];

@@ -46,7 +46,7 @@ $row=mysqli_fetch_array($consulta);
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
                     echo "<tr>";
-                    echo "<th scope='row'>". $row['dni']."</th>";
+                    echo "<td scope='row'>". $row['dni']."</td>";
                     echo "<td>". $row['usuario']."</td>";
                     echo "<td>". $row['nombre']."</td>";
                     echo "<td>". $row['apellido']."</td>";
