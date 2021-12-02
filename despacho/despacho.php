@@ -91,14 +91,21 @@
             update.push(row.cells[5].children[0].value);
             devObjeto.push(row.cells[6].children[0].value);
            if(row.cells[5].children[0].value==0){
-            row.cells[5].children[0].value=1
+            row.cells[5].children[0].value=2
            }
         }
+        console.log(codigo);
+        console.log(descripcion);
+        console.log(cantidad);
+        console.log(update);
+        console.log(tipo);
+        console.log(devObjeto);
         $.ajax({
             type:'POST',
             url:'registrarDespacho.php?evento=<?php echo $evento ?>',
             data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update,evento:evento},
             success: function(data){
+              $('#mensaje').prepend(data);
               alert('Guardado con Exito');
               document.getElementById("codigo").focus();
             }
@@ -218,9 +225,15 @@ $('#subtipo').on('focus',function(){
             update.push(row.cells[5].children[0].value);
             devObjeto.push(row.cells[6].children[0].value);
             if(row.cells[5].children[0].value==0){
-            row.cells[5].children[0].value=1
+            row.cells[5].children[0].value=2
            }
           }
+          console.log(codigo);
+        console.log(descripcion);
+        console.log(cantidad);
+        console.log(update);
+        console.log(tipo);
+        console.log(devObjeto);
           $.ajax({
             type:'POST',
             url:'registrarDespacho.php?evento=<?php echo $evento ?>',
