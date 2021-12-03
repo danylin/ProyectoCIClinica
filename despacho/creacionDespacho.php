@@ -9,19 +9,19 @@
         $devolucion=$_POST['devolucion'];
         $tipoEvento=$_POST['tipoEvento'];
         $evento=$_POST['evento'];
+        $codEvento=$_GET['codEvento'];
             if($_POST['codigo']=="."){
                 echo '<script language="javascript">';
                 echo 'busquedaManual();';
                 echo 'document.getElementById("codigo").focus();';
                 echo '</script>'; //Esto es un atajo para aperturar rapidamente la busqueda manual
             }else{
-                if ($evento!="Procedimiento Medico" || $evento="Control Logistico"){
                     if($tipoEvento=="Todos"){
                         echo '<script language="javascript">';
                         echo 'alert("Elija un subtipo antes de ingresar el codigo")';
                         echo '</script>'; //El sistema no dejara ingresar nuevos productos a menos que se eliga algun tipo de evento diferente a Todos
                     }
-                    else {
+                    else {    
                         if(isset($_POST['nombre'])){
                             //Al verificarse que existe algun valor enviado en nombre, el sistema reconocera un nuevo producto el cual sera registrado a la base de datos de sop__despacho_db y sop_materialsc_db
                             $nombreManual=$_POST['nombre'];
@@ -113,8 +113,15 @@
                                         
                                     }
                                 }
+                                $queryExistencia="SELECT*FROM sop__despacho_db WHERE id_material='".$row['codigo']."' and id_evento_acc=$codEvento and subtipo='$tipoEvento'"; 
+                                $consultaSQL=mysqli_query($conexion,$queryExistencia);
                                 if(isset($row)){
                                     if ($devolucion==1){
+                                        if (mysqli_fetch_array($consultaSQL)===null){
+                                            echo '<script language="javascript">';
+                                            echo 'alert("No se puede ingresar esta devolucion. Verifique el subtipo y si ha ingresado el material correspondiente (Asegurese de guardar y actualizar la pagina para tener la base de datos actualizada")';
+                                            echo '</script>'; //El sistema no dejara ingresar nuevos productos a menos que se eliga algun tipo de evento diferente a Todos
+                                        }else{
                                         //De manera similar al apartado de creacion de un nuevo material se registrara la fila con los siguientes datos y se diferenciara si es devolucion no mediante un background-color de tono rojizo
                                         echo "<tr class='nuevaEntradaD' style='background-color: rgba(241, 91, 91, 0.3);'><td>". $row['codigo']. "</td>";
                                         echo "<td style='text-align:left'>". $row['descripcion']." <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='". $row['descripcion']."'></td>";
@@ -127,6 +134,7 @@
                                         echo "<div class='mostrarGTIN'><button id='mostrarGTIN' onclick='GTIN(this)'>GTIN</button></div>";
                                         echo "</td>";
                                         echo "</tr>";
+                                        }
                                     }else{
                                         echo "<tr class='nuevaEntrada'><td>". $row['codigo']."</td>";
                                         echo "<td style='text-align:left'>". $row['descripcion']." <input type='hidden' name='hidden_nombre[]' id='nombre' class='nombre' value='". $row['descripcion']."'></td>";
@@ -149,5 +157,5 @@
                             }    
                     }
                 }    
-            }
+            
     ?>

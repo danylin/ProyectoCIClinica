@@ -17,7 +17,6 @@ $resultado=mysqli_query($conexion,$sql);
   $data.=$row['age'].",";
   $data.=$row['country']."\n";
  }
-
  echo $data;
  exit();
 ?>

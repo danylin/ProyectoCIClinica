@@ -165,7 +165,7 @@ if($row['nombre']=='Cirugia'){
     if($filas>0){
         $html.= '<h4>Medicacion de Anestesia</h4><table id="elementos" border="0.5" nobr="true">
         <tr>
-        <td width="120px" bgcolor="#ABABAB">BarCode</td>
+        <td width="120px" bgcolor="#ABABAB">CodSAP</td>
         <td width="420px" bgcolor="#ABABAB">Descripcion del Material</td>
         <td width="75px" bgcolor="#ABABAB">Cantidad</td>
         <td width="45px" bgcolor="#ABABAB">Tipo</td>

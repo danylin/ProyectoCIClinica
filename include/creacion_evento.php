@@ -113,7 +113,7 @@ Programados, en proceso, finalizados y suspendidos. -->
                           </select>
                       Desde: <input type="date" name="" id="fechaDesde" >
                       Hasta:<input type="date" name="" id="fechaHasta">
-                      <button class="btn btn-info" onclick="mostrarExtraccion()">A</button>
+                      <button style="display:none" class="btn btn-info" onclick="mostrarExtraccion()"></button>
                       </div>
                     </div>
                 </div>

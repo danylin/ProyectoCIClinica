@@ -31,7 +31,7 @@
                     $query = "UPDATE sop__despacho_db SET cantidad=cantidad+1 WHERE subtipo='$subtipo' and id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
                     $consulta=mysqli_query($conexion,$query);
                 }
-            }elseif(($update[$i]==1)){
+            }elseif($update[$i]==1){
                 $consulta="SELECT*FROM sop__despacho_db  WHERE subtipo='$subtipo' and id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
                 $consultaq=mysqli_query($conexion,$consulta);
                 $fila=mysqli_fetch_array($consultaq);

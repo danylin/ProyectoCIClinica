@@ -94,12 +94,6 @@
             row.cells[5].children[0].value=2
            }
         }
-        console.log(codigo);
-        console.log(descripcion);
-        console.log(cantidad);
-        console.log(update);
-        console.log(tipo);
-        console.log(devObjeto);
         $.ajax({
             type:'POST',
             url:'registrarDespacho.php?evento=<?php echo $evento ?>',
@@ -132,7 +126,7 @@
       var evento=document.getElementById("tipoEvento").value;
       $.ajax({
         type:'POST',
-        url:'creacionDespacho.php',
+        url:'creacionDespacho.php?codEvento=<?php echo $evento ?>',
         data:{codigo:codigo,devolucion:devolucion,tipoEvento:tipoEvento,evento:evento},
         success: function(data){
             $('#mensaje').prepend(data);
@@ -228,12 +222,6 @@ $('#subtipo').on('focus',function(){
             row.cells[5].children[0].value=2
            }
           }
-          console.log(codigo);
-        console.log(descripcion);
-        console.log(cantidad);
-        console.log(update);
-        console.log(tipo);
-        console.log(devObjeto);
           $.ajax({
             type:'POST',
             url:'registrarDespacho.php?evento=<?php echo $evento ?>',
@@ -254,15 +242,24 @@ $('#subtipo').on('focus',function(){
   });
     </script>
 <script>
+  var cuenta=0;
  function isChecked(checkbox) {
     var button = document.getElementById('btnEliminar');
     checkbox.value=1;
     if (checkbox.checked === true) {
         button.disabled = "";
         checkbox.value=1;
-    } else {
-        button.disabled = "disabled";
-        checkbox.value=0;
+        cuenta=cuenta+1;
+    }else {
+        if(cuenta<2){
+          button.disabled = "disabled";
+          checkbox.value=0;
+          cuenta=0;
+        }else{
+          checkbox.value=0;
+          cuenta=cuenta-1;
+          console.log(cuenta);
+        }
     }
 }
 function eliminar(){
@@ -280,7 +277,12 @@ function eliminar(){
             url:'eliminacionMaterial.php',
             data:{codigo:codigo,evento:evento,devolucion:devolucion},
         });
-      table.deleteRow(i);
+        if(devolucion==0){
+          table.deleteRow(i);
+          table.deleteRow(i);
+        }else{
+          table.deleteRow(i);
+        }
       }
     }
     button.disabled = "disabled";
