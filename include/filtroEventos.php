@@ -3,6 +3,7 @@
                 include("bd_usuario.php");
                 session_start();
                 $id=$_SESSION['id_sede'];
+                $tipoUsuario=$_SESSION['tipousuario'];
                 $estado=$_POST['estado'];
                 $sql="SELECT a.id_accion,TIME_FORMAT(a.hora,'%H:%i') horaF,a.codigo_cierre,a.hora,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
                 FROM sop__evento_acc_db a
@@ -17,8 +18,12 @@
                 ?>
                     <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"]; ?>,<?php echo $row["id_evento"]; ?>)'>
                 <?php
+                }elseif($tipoUsuario==3 && $estado==3){
+                ?>
+                    <tr class='fila' onclick='reabrir(<?php echo $row["id_accion"]; ?>)'>
+                <?php
                 }else{
-                    ?>
+                ?>
                     <tr class='filaFinalizada'>
                 <?php
                 }

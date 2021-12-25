@@ -24,7 +24,7 @@ while($fila=mysqli_fetch_array($consulta)){
             var tipo='';
             var tipoEvento='<?php echo $tipoEvento ?>';
             var subtipo='<?php echo $subtipo ?>';
-            if(subtipo=="Todos"){
+            if(subtipo=="Todos" && tipoEvento!="Procedimiento Medico"){
                 alert("Elija un subtipo antes de ingresar el codigo")
             }else{
     // Dentro de la siguiente condicional se deteminara si se esta ejecutando una devolucion o no.

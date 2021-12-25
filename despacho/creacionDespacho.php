@@ -16,7 +16,7 @@
                 echo 'document.getElementById("codigo").focus();';
                 echo '</script>'; //Esto es un atajo para aperturar rapidamente la busqueda manual
             }else{
-                    if($tipoEvento=="Todos"){
+                    if($tipoEvento=="Todos" && $evento!="Procedimiento Medico"){
                         echo '<script language="javascript">';
                         echo 'alert("Elija un subtipo antes de ingresar el codigo")';
                         echo '</script>'; //El sistema no dejara ingresar nuevos productos a menos que se eliga algun tipo de evento diferente a Todos

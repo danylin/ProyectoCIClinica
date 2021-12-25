@@ -244,14 +244,7 @@ text-align: center;
     animation-duration: 2s;
 }
 .filtros{
-    text-align: right;
-    padding-left: 31%;
-    float:right;
-
-}
-#cajaOpciones{
-    display: flex;
-    
+    float: right;
 }
 #overlay1,#overlay2,#overlay3,#overlay4{
     background: rgba(119, 122, 120,0.5);

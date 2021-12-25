@@ -81,13 +81,44 @@ para los eventos marcados como finalizados (id_estado=3) -->
       <a onclick="cerrar3()" id="cerrar_Popup"><i class="fas fa-times"></i></a>
     </div>
     <div id="informacion">
-      <select id="tipoEventoExtraccion">
-        <option value="Cirugia">Cirugia</option>
-        <option value="Quimioterapia">Quimioterapia</option>
-        <option value="Procedimiento Medico">Procedimiento Medico</option>
-        <option value="Control Logistico">Control Logistico</option>
-      </select>
-      <button class="btn btn-danger" id="extraerInformacion">Extraer</button>
+      <form id="extraerInformacion" action="include/extraerInformacion.php" method="post">
+        <div class="mb-3">
+        Tipo de Evento: <select name="tipoEvento" id="tipoEventoExtraccion">
+          <option value="0">Todos los Eventos</option>
+          <option value="2">Cirugia</option>
+          <option value="1">Quimioterapia</option>
+          <option value="3">Procedimiento Medico</option>
+          <option value="4">Control Logistico</option>
+        </select>
+        </div>
+        <div class="mb-3">
+          Desde: <input type="date" name="fechaDesde" id="fechaDesdeEx">
+        </div>
+        <div class="mb-3">Hasta: <input type="date" name="fechaHasta" id="fechaHastaEx"></div>
+        <div class="mb-3">
+        <input type="checkbox" id="chkSede">
+          <?php
+          include("bd_usuario.php");
+          $sql="SELECT*FROM sede__db_area WHERE id in (1,2,3,4,5,6,7,17,18,21,24);";
+          $resultado=mysqli_query($conexion,$sql);
+          echo "Sede: <select name='sede' id='sedeEx' disabled>";
+          echo "<option value=0> Todas las Sedes </option>";
+          while($row=mysqli_fetch_array($resultado)){
+          echo "<option value=".$row['id']." >". $row['sede'] ."</option>";
+          }
+          echo "</select>";
+          ?>
+        </div>
+        <div class="mb-3">
+          <input type="checkbox" id="chkUsuario">
+          Usuario: <input type="input" name="usuarioEx" id="usuarioEx" disabled>
+        </div>
+        <div class="mb-3">
+          <input type="checkbox" id="chkMaterialEx">
+          CodigoMaterial: <input type="input" name="materialEx" id="materialEx" disabled>
+        </div>
+        <button class="btn btn-danger" form='extraerInformacion' type="submit">Extraer</button>
+      </form>
     </div>
   </div>
 </div>
@@ -101,9 +132,10 @@ Programados, en proceso, finalizados y suspendidos. -->
             <h3 id="registroEventosTitulo">Registro de Eventos</h3>
             </div>
             <div id='cajaOpciones' >
+              <div id="evento">
                 <button class='btn btn-info' id='nuevoEvento'onclick='mostrar(0)'>Nuevo Evento</button>
+              </div>
                 <div class='filtros'>
-                      <div id='input_buscar'>
                         Status de Evento: <select name="filtroEleccion" id="filtroEleccion">
                         <option selected disabled>Status de Evento</option>
                               <option value="1" >Programado</option>
@@ -113,9 +145,7 @@ Programados, en proceso, finalizados y suspendidos. -->
                           </select>
                       Desde: <input type="date" name="" id="fechaDesde" >
                       Hasta:<input type="date" name="" id="fechaHasta">
-                      <button style="display:none" class="btn btn-info" onclick="mostrarExtraccion()"></button>
-                      </div>
-                    </div>
+                      <button class="btn btn-info" onclick="mostrarExtraccion()">Extraer Informacion</button>
                 </div>
             </div>
         </div>
@@ -136,12 +166,11 @@ Programados, en proceso, finalizados y suspendidos. -->
             <tbody id='tabla_contenido'>
                 <?php
                 /*
-                El tbody se definirá con la conjuncion de multiples bases de datos con el fin de llenarlos apartados de:
+                El tbody se definirá con la conjuncion de multiples bases de datos con el fin de llenar los apartados de:
                 Nro de fila, id del Evento, la fecha de programacion, la hora de programacion, el nombre y apellidos del paciente,
                 el estado actual del evento y finalmente el medico tratante y una breve descripcion del evento
                 */
                 $id=$_SESSION['id_sede'];
-                include("bd_usuario.php");
                 $sql="SELECT a.id_accion,TIME_FORMAT(a.hora,'%H:%i') hora,a.codigo_cierre,a.id_estado,a.nombre_responsable,a.id_evento,a.descripcion_evento, a.fecha,a.nombre_paciente,a.apellido_paciente,a.fecha_programacion,b.estado,sop__usuarios_db.usuario
                 FROM sop__evento_acc_db a
                 INNER JOIN sop__estados_db b on b.id_estado=a.id_estado
@@ -174,16 +203,6 @@ Programados, en proceso, finalizados y suspendidos. -->
             </tbody>
         </table>
     </div>
-<script>
-  $('extraerInformacion').on("click",function(){
-    var tipoEvento=$('tipoEventoExtraccion').val();
-    $.ajax({
-      type:'POST',
-      url:'extraccionInformacion.php',
-      data:{tipoEvento:tipoEvento},
-    });
-  });
-</script>
 <script>
  //Las siguienes funciones permiten la visualizacion del apartado de eleccion de reportes asi como mostrar un pdf correspondiente a la eleccion del usuario
 var codigoEvento;
@@ -223,6 +242,18 @@ function cerrar(){
         $('#evento').val(1).change();
         $('#descr-evento ').val('');
   };
+function reabrir(idEvento){
+if(confirm("¿Desea reabrir este evento?")){
+  $.ajax({
+            type:'POST',
+            url:'include/reabrir.php',
+            data:{idEvento:idEvento},
+            success: function(data){
+              document.location.reload(true);
+            }
+        });
+  }
+}
 /* La presente funcion tiene como objetivo relacionar los botones numericos
 con los eventos mostrados en pantalla. ADVERTENCIA. SOLO ESTA DISPONIBLE LOS NUMEROS DESDE EL 1 HASTA EL 9*/
   $(document).keydown(function(e) {
@@ -257,7 +288,6 @@ con los eventos mostrados en pantalla. ADVERTENCIA. SOLO ESTA DISPONIBLE LOS NUM
         btnApretado=9;
         break;
       }
-      console.log(btnApretado)
       $("#tabla_eventos tbody tr").each(function(){
         $(this).find("td").css("background-color", "inherit");
           if(btnApretado!=0){
@@ -286,6 +316,7 @@ referenciados en las variables btnRegistrar y btnEditar*/
     }
     document.getElementById("overlay1").style.visibility = "visible";
   };
+
 /* En el evento de cambio en las fechas de filtrado se utilizara la siguiente funcion
 que compara los valores de la fecha programada en conjunto con los filtros antes mencionados */ 
   $('#filtroEleccion').on('change',function(){
@@ -383,6 +414,27 @@ que compara los valores de la fecha programada en conjunto con los filtros antes
     }
     }
     window.onload = function(){
+      $('#chkMaterialEx').change(function() {
+        if(this.checked) {
+          $('#materialEx').prop('disabled',false);
+        }else{
+          $('#materialEx').prop('disabled',true);
+        }    
+      });
+      $('#chkSede').change(function() {
+        if(this.checked) {
+          $('#sedeEx').prop('disabled',false);
+        }else{
+          $('#sedeEx').prop('disabled',true);
+        }    
+      });
+      $('#chkUsuario').change(function() {
+        if(this.checked) {
+          $('#usuarioEx').prop('disabled',false);
+        }else{
+          $('#usuarioEx').prop('disabled',true);
+        }    
+      });
     // Al iniciar la ventana se cargara la fecha actual asi como la fecha dos dias despues. 
     var contador=1
     var fechaDesde = new Date(); //Fecha actual
@@ -405,7 +457,8 @@ que compara los valores de la fecha programada en conjunto con los filtros antes
     document.getElementById('form-fecha').min=year+"-"+mes+"-"+dia;// Dentro del formulario de registro y edicion se restringe la fecha minima a la actual
     document.getElementById('fechaDesde').value=year+"-"+mes+"-"+dia;
     document.getElementById('fechaHasta').value=yearH+"-"+mesH+"-"+diaH;
-
+    document.getElementById('fechaDesdeEx').value=year+"-"+mes+"-"+dia;
+    document.getElementById('fechaHastaEx').value=yearH+"-"+mesH+"-"+diaH;
     $("#tabla_contenido tr").each(function() {
     var from=$('#fechaDesde').val();
     var to=$('#fechaHasta').val();

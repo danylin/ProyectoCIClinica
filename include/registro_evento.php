@@ -18,7 +18,7 @@
         $resultado=mysqli_query($conexion,$sql);
     } else{
         $sql="UPDATE sop__evento_acc_db
-        SET fecha_programacion='$fecha',hora='$hora',nombre_paciente='$paciente',apellido_paciente='$pacienteApellido',descripcion_evento='$descripcion',nombre_responsable='$responsable'
+        SET id_evento=$evento,fecha_programacion='$fecha',hora='$hora',nombre_paciente='$paciente',apellido_paciente='$pacienteApellido',descripcion_evento='$descripcion',nombre_responsable='$responsable'
         WHERE id_accion=$id_accion;";
         $resultado=mysqli_query($conexion,$sql);
     };

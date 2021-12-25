@@ -5,7 +5,8 @@ $id=$_GET['codigo'];
 $encuentro=$_GET['encuentro'];
 $actualizar="UPDATE sop__evento_acc_db SET codigo_cierre=$encuentro,id_estado=3, fecha_cierre=DATE(NOW()) WHERE id_accion=$id";
 $resultado=mysqli_query($conexion,$actualizar);
-    if($_SESSION['tipousuario']==1){
+if(mysqli_affected_rows($conexion) >0){
+  if($_SESSION['tipousuario']==1){
     echo '<script>';
      echo  'window.location="../usuario1.php"';
      echo '</script>';
@@ -14,4 +15,5 @@ $resultado=mysqli_query($conexion,$actualizar);
       echo 'window.location="../usuario2.php"';
       echo '</script>';
     }
+}
 ?>

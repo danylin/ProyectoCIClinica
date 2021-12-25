@@ -196,7 +196,7 @@ $('#llenadoEncuentro1').on('click',function(){
     var id=$(row).find("td").eq(3).html();
     var encuentro=$('#encuentro').val();
     $("#btnGuardado").trigger("click");
-    window.location="tipoReporte.php?codigo="+id+"&encuentro="+encuentro;
+    window.location="tipoReporte.php?codigo="+<?php echo $evento?>+"&encuentro="+encuentro;
   }
 });
 $('#subtipo').on('focus',function(){
