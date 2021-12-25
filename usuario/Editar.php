@@ -54,7 +54,7 @@ error_reporting(0);
                       }
                       echo "</select> </p> </div>";
                       echo "<div class='row'>";
-                      $sql="SELECT*FROM sede__db_area;";
+                      $sql="SELECT*FROM sede__db_area WHERE id in (1,2,3,4,5,6,7,17,18,21,24);";
                       $sedeResultado=mysqli_query($conexion,$sql);
                       echo "<p  class='col-sm-12'> Sede <br> <select name='sede'>";
                       while($row=mysqli_fetch_array($sedeResultado)){

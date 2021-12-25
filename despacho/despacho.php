@@ -317,7 +317,7 @@ function eliminar(){
           <?php
           $sql="SELECT id_accion,CONCAT(nombre_paciente,' ',apellido_paciente) nombre_completo ,nombre_responsable,a.nombre FROM sop__evento_acc_db 
           INNER JOIN sop__eventos_db a on sop__evento_acc_db.id_evento=a.id_evento
-          WHERE dni_usuario=$idSesion and (id_estado=1 or id_estado=2) and id_accion=$evento;";
+          WHERE (id_estado=1 or id_estado=2) and id_accion=$evento;";
           $consulta=mysqli_query($conexion,$sql);
           $row=mysqli_fetch_array($consulta);
           $tipoEvento=$row['nombre'];
