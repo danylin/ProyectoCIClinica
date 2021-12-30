@@ -70,7 +70,6 @@
         $('#btnGuardado').on('click',function(event){
           event.preventDefault();
         var table = document.getElementById("mensaje");
-        var subtipo=document.getElementById("subtipo").value;
         var evento=document.getElementById("tipoEvento").value;
         var codigo=[];
         var descripcion=[];
@@ -78,12 +77,7 @@
         var tipo=[];
         var update=[];
         var devObjeto=[];
-        if (subtipo=='Todos'){
-          if (evento!="Procedimiento Medico" || evento!="Control Logistico"){
-            alert('Elija un subtipo de producto antes de registrarlo');
-          }
-        }else{
-          for (var i = 0, row; row = table.rows[i]; i++) {
+        for (var i = 0, row; row = table.rows[i]; i++) {
             codigo.push(row.cells[0].innerText);
             descripcion.push(row.cells[1].innerText);
             cantidad.push(row.cells[2].children[0].value);
@@ -97,14 +91,13 @@
         $.ajax({
             type:'POST',
             url:'registrarDespacho.php?evento=<?php echo $evento ?>',
-            data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update,evento:evento},
+            data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,devObjeto:devObjeto,update:update,evento:evento},
             success: function(data){
               $('#mensaje').prepend(data);
               alert('Guardado con Exito');
               document.getElementById("codigo").focus();
             }
            });
-        }
         });
     $("#codigo").keyup(function(event) {
       event.preventDefault();
@@ -122,12 +115,11 @@
       event.preventDefault();
       var codigo=$('#codigo').val();
       var devolucion=$('#devolucion').val();
-      var tipoEvento=$('#subtipo').val();
       var evento=document.getElementById("tipoEvento").value;
       $.ajax({
         type:'POST',
         url:'creacionDespacho.php?codEvento=<?php echo $evento ?>',
-        data:{codigo:codigo,devolucion:devolucion,tipoEvento:tipoEvento,evento:evento},
+        data:{codigo:codigo,devolucion:devolucion,evento:evento},
         success: function(data){
             $('#mensaje').prepend(data);
             $('#formMaterial')[0].reset();
@@ -140,14 +132,13 @@
       var nombre=$('#nombreManual').val();
       var cantidad=$('#cantidadManual').val();
       var devolucion=$('#devolucion').val();
-      var tipoEvento=$('#subtipo').val();
       var codgtin=$('#gtin').val();
       var crf=$('#crf').val();
       var evento=document.getElementById("tipoEvento").value;
       $.ajax({
         type:'POST',
         url:'creacionDespacho.php',
-        data:{nombre:nombre,cantidad:cantidad,devolucion:devolucion,tipoEvento:tipoEvento,evento:evento,codgtin:codgtin,crf:crf},
+        data:{nombre:nombre,cantidad:cantidad,devolucion:devolucion,evento:evento,codgtin:codgtin,crf:crf},
         success: function(data){
             $('#mensaje').prepend(data);
             $('#formManual')[0].reset();
@@ -179,68 +170,27 @@
     var nombre=$('#busquedaInput').val();
     var devolucion=$('#devolucion').val();
     var tipoEvento=$('#tipoEvento').val();
-    var subtipo=$('#subtipo').val();
     $("#resultadoBusqueda tr").remove(); 
       $.ajax({
         type:'POST',
         url:'busquedaManual.php',
-        data:{nombre:nombre,devolucion:devolucion,tipoEvento:tipoEvento,subtipo:subtipo},
+        data:{nombre:nombre,devolucion:devolucion,tipoEvento:tipoEvento},
         success: function(data){
             $('#resultadoBusqueda').prepend(data);
         }
     });
   });
-$('#llenadoEncuentro1').on('click',function(){
-  if(confirm("Está a punto de cerrar el evento. Despues de ello no podrá modificarlo.¿Está seguro de cerrar el evento?")){
-    var row=$('#except .botonReporte button').closest('tr');
-    var id=$(row).find("td").eq(3).html();
-    var encuentro=$('#encuentro').val();
+  $('#llenadoEncuentro1').on('click',function(){
     $("#btnGuardado").trigger("click");
-    window.location="tipoReporte.php?codigo="+<?php echo $evento?>+"&encuentro="+encuentro;
-  }
-});
-$('#subtipo').on('focus',function(){
-      valorAnterior=this.value;
-    });
-    $('#subtipo').on('change',function(){
-        var table = document.getElementById("mensaje");
-        var subtipo=valorAnterior;
-        var codigo=[];
-        var descripcion=[];
-        var cantidad=[];
-        var tipo=[];
-        var update=[];
-        var devObjeto=[];
-          for (var i = 0, row; row = table.rows[i]; i++) {
-            codigo.push(row.cells[0].innerText);
-            descripcion.push(row.cells[1].innerText);
-            cantidad.push(row.cells[2].children[0].value);
-            tipo.push(row.cells[3].innerText);
-            update.push(row.cells[5].children[0].value);
-            devObjeto.push(row.cells[6].children[0].value);
-            if(row.cells[5].children[0].value==0){
-            row.cells[5].children[0].value=2
-           }
-          }
-          $.ajax({
-            type:'POST',
-            url:'registrarDespacho.php?evento=<?php echo $evento ?>',
-            data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,subtipo:subtipo,devObjeto:devObjeto,update:update},
-           });
-            $("#mensaje tr").remove();
-            var subtipo=$(this).val();
-                $.ajax({
-                  type:'POST',
-                  url:'filtroDespacho.php?evento=<?php echo  $evento ?>',
-                  data:{subtipo:subtipo},
-                  success: function(data){
-                    $('#mensaje').append(data);
-                  }
-              });
-              document.getElementById("codigo").focus();
-          });
+    if(confirm("Está a punto de cerrar el evento. Despues de ello no podrá modificarlo.¿Está seguro de cerrar el evento?")){
+      var row=$('#except .botonReporte button').closest('tr');
+      var id=$(row).find("td").eq(3).html();
+      var encuentro=$('#encuentro').val();
+      window.location="tipoReporte.php?codigo="+<?php echo $evento?>+"&encuentro="+encuentro;
+    }
   });
-    </script>
+});
+</script>
 <script>
   var cuenta=0;
  function isChecked(checkbox) {
@@ -335,25 +285,6 @@ function eliminar(){
       </div>
     </form>
     <div class="form-group" id="busquedaCodigo">
-    <p>SubEvento</p> <select id="subtipo">
-      <option value='Todos'>Todos los Tipos</option>
-      <?php
-       if($tipoEvento=="Cirugia"){
-        echo "<option value='Material de Anestesia'>Material de Anestesia</option>";
-        echo "<option value='Medicación de Anestesia'>Medicación de Anestesia</option>";
-        echo "<option value='Protocolo' selected>Protocolo</option>";
-        echo "<option value='Adicionales' >Adicionales</option>";
-      } elseif($tipoEvento=="Quimioterapia"){
-        echo "<option value='Hidratación prequimioterapia'>Hidratación prequimioterapia</option>";
-        echo "<option value='Protocolo' selected>Protocolo</option>";
-        echo "<option value='Alta postquimioterapia'>Alta postquimioterapia</option>";
-      }elseif($tipoEvento=="Control Logistico"){
-        echo "<option value='Inventario'>Inventario</option>";
-        echo "<option value='Entrega'>Entrega</option>";
-        echo "<option value='Devolucion'>Devolucion</option>";
-      }
-      ?>
-      </select> 
       <label>Codigo del Producto</label>
       <input type="text" id='codigo' name="codigo" class="form-control" autofocus="autofocus" size="10"required autocomplete=off>
        <div id="divBusqueda"><button class="btn btn-info" onclick="busquedaManual()" id="botonBusquedaManual">Búsqueda Manual</button> </div>
@@ -368,7 +299,6 @@ function eliminar(){
       </div>
 
     </div>
-    
     <form action="registrarDespacho.php?codigo=<?php echo $evento ?>" method="POST" id="registro_Despacho">
       <table class="table" id="tabla_elementos">
         <thead>
@@ -382,25 +312,7 @@ function eliminar(){
         </thead>
         <tbody id="mensaje">
           <?php
-          switch($tipoEvento){
-            case "Cirugia":
-              $subT="Protocolo";
-              break;
-            case "Quimioterapia":
-              $subT="Protocolo";
-              break;
-            case "Control Logistico":
-              $subT="";
-              break;
-            case "Procedimiento Medico":
-              $subT="";
-              break;
-          }
-          if($subT!=""){
-            $sqlMateriales="SELECT*FROM sop__despacho_db Where id_evento_acc=$evento and subtipo='$subT' order by nombre asc ;";
-          }else{
-            $sqlMateriales="SELECT*FROM sop__despacho_db Where id_evento_acc=$evento  order by nombre asc ;";
-          }
+          $sqlMateriales="SELECT*FROM sop__despacho_db Where id_evento_acc=$evento  order by nombre asc ;";
           $consultaMateriales=mysqli_query($conexion,$sqlMateriales);
           while($filaConsulta=mysqli_fetch_array($consultaMateriales)){
             if($filaConsulta['devolucion']==0){

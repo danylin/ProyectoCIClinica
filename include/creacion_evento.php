@@ -208,9 +208,9 @@ Programados, en proceso, finalizados y suspendidos. -->
 var codigoEvento;
 var subTipo;
   function reporte(a){
-    document.getElementById("overlay2").style.visibility = "visible";
     codigoEvento=$(a).closest('tr').find("td").eq(1).html();
     subTipo=$(a).closest('tr').find("td").eq(9).html();
+    reportes(0);
   };
   function reportes(n){
       if (n==0){

@@ -6,6 +6,7 @@
     include("include/titulo.php");
     session_start();
     include("include/bd_usuario.php");
+    error_reporting(0);
     $sql="SELECT*FROM sede__db_area WHERE id=".$_SESSION['id_sede'];
     $consulta=mysqli_query($conexion,$sql);
     $row=mysqli_fetch_array($consulta);
