@@ -57,9 +57,9 @@
                 $consulta=mysqli_query($conexion,$codigoNuevoProducto);
                 $fila=mysqli_fetch_array($consulta);
                 $codigo[$i]=$fila['id_sc'];
-                $query = " INSERT INTO sop__despacho_db (id_material,id_evento_acc,cantidad,nombre,tipo) VALUES ('".$codigo[$i]."',$idEvento,".$cantidad[$i].",'".$nombre[$i]."','".$tipo[$i]."');";
+                $query = " INSERT INTO sop__despacho_db (id_material,id_evento_acc,cantidad,nombre,tipo,fecha_ingreso,hora_ingreso) VALUES ('".$codigo[$i]."',$idEvento,".$cantidad[$i].",'".$nombre[$i]."','".$tipo[$i]."',DATE(NOW()),TIME(NOW()));";
                 }else{
-                    $query = "INSERT INTO sop__despacho_db (id_material,id_evento_acc,cantidad,nombre,tipo) VALUES ('".$codigo[$i]."',$idEvento,".$cantidad[$i].",'".$nombre[$i]."','".$tipo[$i]."');";
+                    $query = "INSERT INTO sop__despacho_db (id_material,id_evento_acc,cantidad,nombre,tipo,fecha_ingreso,hora_ingreso) VALUES ('".$codigo[$i]."',$idEvento,".$cantidad[$i].",'".$nombre[$i]."','".$tipo[$i]."',DATE(NOW()),TIME(NOW()));";
                 }
             $consulta=mysqli_query($conexion,$query);
         }
