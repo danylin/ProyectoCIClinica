@@ -67,7 +67,7 @@
     $('#gtin').on('click',function(event){
       event.preventDefault();
     });
-        $('#btnGuardado').on('click',function(event){
+    $('#btnGuardado').on('click',function(event){
           event.preventDefault();
         var table = document.getElementById("mensaje");
         var evento=document.getElementById("tipoEvento").value;
@@ -116,7 +116,21 @@
       var codigo=$('#codigo').val();
       var devolucion=$('#devolucion').val();
       var evento=document.getElementById("tipoEvento").value;
-      $.ajax({
+      var table = document.getElementById("mensaje");
+      var cuentaDevolucion=0;
+      if (table.rows.length==0 && devolucion==1){
+          cuentaDevolucion=1
+        }else{
+          for (var i = 0, row; row = table.rows[i]; i++){
+          if (codigo!=row.cells[0].innerText && devolucion==1){
+            cuentaDevolucion=1
+          }
+        }
+      }
+      if (cuentaDevolucion==1){
+        alert("El articulo a devolver no esta en el listado. Verifique e intente de nuevo.")
+      }else{
+        $.ajax({
         type:'POST',
         url:'creacionDespacho.php?codEvento=<?php echo $evento ?>',
         data:{codigo:codigo,devolucion:devolucion,evento:evento},
@@ -124,8 +138,9 @@
             $('#mensaje').prepend(data);
             $('#formMaterial')[0].reset();
             document.getElementById("codigo").focus();
-        }
-    });
+          }
+        });
+      }
     });
     $('#formManual').submit(function(event) {
       event.preventDefault();
@@ -229,7 +244,6 @@ function eliminar(){
         });
         if(devolucion==0){
           table.deleteRow(i);
-          table.deleteRow(i);
         }else{
           table.deleteRow(i);
         }
@@ -297,7 +311,6 @@ function eliminar(){
       <div id="ingresos">
         <input type="submit" form='formMaterial' id="enviar" class="btn btn-success" value="Buscar" style="display:none">
       </div>
-
     </div>
     <form action="registrarDespacho.php?codigo=<?php echo $evento ?>" method="POST" id="registro_Despacho">
       <table class="table" id="tabla_elementos">
