@@ -118,15 +118,35 @@
       var evento=document.getElementById("tipoEvento").value;
       var table = document.getElementById("mensaje");
       var cuentaDevolucion=0;
-      if (table.rows.length==0 && devolucion==1){
-          cuentaDevolucion=1
+      if(codigo.length>8){
+        if(codigo.includes("$")){
+          codigo=codigo.substring(0,8);
         }else{
-          for (var i = 0, row; row = table.rows[i]; i++){
-          if (codigo!=row.cells[0].innerText && devolucion==1){
-            cuentaDevolucion=1
-          }
+          $.ajax({
+          type:'POST',
+          async: false,
+          url:'consultaCodigoBarras.php',
+          data:{codigo:codigo},
+          success: function(data){
+            codigo=data;
+            }
+          });
         }
       }
+      if (table.rows.length==0 && devolucion==1){
+          cuentaDevolucion=1;
+      }else{
+          if(devolucion==1){
+            for (var i = 0, row; row = table.rows[i]; i++){
+              if ((row.cells[0].innerText).includes(codigo)){
+                cuentaDevolucion=0;
+                break
+             }else{
+              cuentaDevolucion=1;
+             }
+            }
+          }
+        }
       if (cuentaDevolucion==1){
         alert("El articulo a devolver no esta en el listado. Verifique e intente de nuevo.")
       }else{
