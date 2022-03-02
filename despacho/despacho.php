@@ -256,11 +256,12 @@ function eliminar(){
       var codigo=table.rows[i].cells[0].innerText;
       var eliminar=table.rows[i].cells[4].children[0].value;
       var devolucion=table.rows[i].cells[6].children[0].value;
+      var cantidad=table.rows[i].cells[2].children[0].value;
       if(eliminar==1){
         $.ajax({
             type:'POST',
             url:'eliminacionMaterial.php',
-            data:{codigo:codigo,evento:evento,devolucion:devolucion},
+            data:{codigo:codigo,evento:evento,devolucion:devolucion,cantidad:cantidad},
         });
         if(devolucion==0){
           table.deleteRow(i);
