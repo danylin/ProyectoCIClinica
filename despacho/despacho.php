@@ -26,7 +26,7 @@
       var codigoGTIN;
       function GTIN(fila){
       document.getElementById("overlay4").style.visibility = "visible";
-      var table = document.getElementById("mensaje");
+      var table = document.getElementById("mensaje"); 
       var row=$(fila).closest('tr');
       codigoGTIN=$(row).find("td").eq(0).html();
       $.ajax({
@@ -67,6 +67,7 @@
     $('#gtin').on('click',function(event){
       event.preventDefault();
     });
+    // El presente apartado se realiza el guardado de los elementos en el sistema
     $('#btnGuardado').on('click',function(event){
           event.preventDefault();
         var table = document.getElementById("mensaje");
