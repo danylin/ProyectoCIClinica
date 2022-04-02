@@ -140,7 +140,7 @@
       }else{
           if(devolucion==1){
             for (var i = 0, row; row = table.rows[i]; i++){
-              if ((row.cells[0].innerText).includes(codigo)){
+              if ((row.cells[0].innerText).includes(codigoC)){
                 cuentaDevolucion=0;
                 break
              }else{

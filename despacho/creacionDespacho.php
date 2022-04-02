@@ -78,25 +78,18 @@
                                     $resultado=mysqli_query($conexion,$sql);
                                     $row=mysqli_fetch_array($resultado);
                                 }else{
-                                    if(strlen($codigo)!=8){ //El presente caso detecara si es un codigo de barras
-                                        if(strlen($codigo)>16){//Si el codigo es demasiado extenso se recortara en el 16vo caracter (esto debido a que la base de datos tiene como maximo en el codigo GTIN 16 caracteres)
-                                                for($longitud=1;$longitud<=strlen($codigo);$longitud++){
-                                                    $prueba=substr($codigo,0,$longitud);
-                                                    $sql="SELECT codigo,descripcion FROM material__db WHERE gtin='$prueba'";
-                                                    $resultado=mysqli_query($conexion,$sql);
-                                                    $row=mysqli_fetch_array($resultado);
-                                                    $tipo='';
-                                                    if(!empty($row)){
-                                                        break;
-                                                    }
-                                                }
-                                        }else { //En caso que sea menor se ingresara directamente en la condicional WHERE
-                                        $sql="SELECT codigo,descripcion FROM material__db WHERE gtin=$codigo";
-                                        $resultado=mysqli_query($conexion,$sql);
-                                        $row=mysqli_fetch_array($resultado);
-                                        $tipo='';
-                                        }
-                                    }
+                                    if(strlen($codigo)!=8) {
+                                        for($longitud=1;$longitud<=strlen($codigo);$longitud++){
+                                            $prueba=substr($codigo,0,$longitud);
+                                            $sql="SELECT codigo,descripcion FROM material__db WHERE gtin='$prueba'";
+                                            $resultado=mysqli_query($conexion,$sql);
+                                            $row=mysqli_fetch_array($resultado);
+                                            $tipo='';
+                                            if(!empty($row)){
+                                                break;
+                                            }
+                                        } 
+                                    } //El presente caso detecara si es un codigo de barras
                                     else{ //Finalmente este caso es si se ingresa el codigo numero manualmente en la barra de busqueda observando si es un codigo GTIN o ID dentro de la base de datos
                                         $sql="SELECT codigo,descripcion FROM material__db WHERE codigo=$codigo";
                                         $resultado=mysqli_query($conexion,$sql);
