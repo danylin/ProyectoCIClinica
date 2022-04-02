@@ -82,6 +82,7 @@
             codigo.push(row.cells[0].innerText);
             descripcion.push(row.cells[1].innerText);
             cantidad.push(row.cells[2].children[0].value);
+            console.log(cantidad)
             tipo.push(row.cells[3].innerText);
             update.push(row.cells[5].children[0].value);
             devObjeto.push(row.cells[6].children[0].value);
@@ -135,6 +136,8 @@
             }
           });
         }
+      }else{
+        codigoC=codigo
       }
       if (table.rows.length==0 && devolucion==1){
           cuentaDevolucion=1;

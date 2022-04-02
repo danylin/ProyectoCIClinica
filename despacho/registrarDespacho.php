@@ -32,9 +32,14 @@
                     }
                     $consulta=mysqli_query($conexion,$query);
                 }else {
-                    $query = "UPDATE sop__despacho_db SET cantidad=cantidad+1 WHERE id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
-                    $consulta=mysqli_query($conexion,$query);
-                }
+                    if ($cantidad[$i]>1){
+                        $query = "UPDATE sop__despacho_db SET cantidad=cantidad+$cantidad[$i] WHERE id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
+                        $consulta=mysqli_query($conexion,$query);
+                    }else{
+                            $query = "UPDATE sop__despacho_db SET cantidad=cantidad+1 WHERE id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
+                            $consulta=mysqli_query($conexion,$query);
+                            }
+                    }
             }elseif($update[$i]==1){
                 $consulta="SELECT*FROM sop__despacho_db  WHERE id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
                 $consultaq=mysqli_query($conexion,$consulta);
