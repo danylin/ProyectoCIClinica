@@ -119,9 +119,10 @@
       var evento=document.getElementById("tipoEvento").value;
       var table = document.getElementById("mensaje");
       var cuentaDevolucion=0;
+      var codigoC;
       if(codigo.length>8){
         if(codigo.includes("$")){
-          codigo=codigo.substring(0,8);
+          codigoC=codigo.substring(0,8);
         }else{
           $.ajax({
           type:'POST',
@@ -129,7 +130,7 @@
           url:'consultaCodigoBarras.php',
           data:{codigo:codigo},
           success: function(data){
-            codigo=data;
+            codigoC=data;
             }
           });
         }
