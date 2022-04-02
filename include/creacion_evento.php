@@ -51,6 +51,7 @@ con un boton el cual habilitara el formulario de creacion de eventos-->
                     <button type="submit" class='btn btn-success' form='formEvento' id='btnRegistrar'>Registrar</button>
                     <button type="submit" class='btn btn-success' form='formEvento' id='btnEditar'>Editar</button>
                 </div>
+                <button type="button" onclick='suspenderEvento()' class='btn btn-danger' id='btnSuspender'>Suspender</button>
             </div>
         </form>
     </div>
@@ -254,6 +255,32 @@ if(confirm("¿Desea reabrir este evento?")){
         });
   }
 }
+function suspenderEvento(){
+  var idEventoSus=$('#id_accion').val();
+  console.log(idEventoSus);
+    if(confirm("¿Desea suspender el presente evento?")){
+      $.ajax({
+             type:'POST',
+             url:'include/Suspender.php',
+              data:{idEvento:idEventoSus},
+              success: function(data){
+                document.location.reload(true);  
+              }
+        });
+  }
+ }
+function levantarSuspension(idEvento){
+if(confirm("¿Desea levantar la suspension de este evento?")){
+  $.ajax({
+            type:'POST',
+            url:'include/levantarSuspension.php',
+            data:{idEvento:idEvento},
+            success: function(data){
+              document.location.reload(true);
+            }
+        });
+  }
+}
 /* La presente funcion tiene como objetivo relacionar los botones numericos
 con los eventos mostrados en pantalla. ADVERTENCIA. SOLO ESTA DISPONIBLE LOS NUMEROS DESDE EL 1 HASTA EL 9*/
   $(document).keydown(function(e) {
@@ -304,14 +331,17 @@ referenciados en las variables btnRegistrar y btnEditar*/
   function mostrar(n){
       var btnRegistrar=document.getElementById("btnRegistrar");
       var btnEditar=document.getElementById("btnEditar");
+      var btnSuspender=document.getElementById("btnSuspender");
       var valorEditar=document.getElementById("verificadorEditar");
       if(n==1){
         btnRegistrar.style.display='none';
         btnEditar.style.display='block'
+        btnSuspender.style.display='inline-block'
         valorEditar.value=1;
     }else{
         btnRegistrar.style.display='block';
         btnEditar.style.display='none'
+        btnSuspender.style.display='none'
         valorEditar.value=0;
     }
     document.getElementById("overlay1").style.visibility = "visible";
@@ -473,7 +503,6 @@ que compara los valores de la fecha programada en conjunto con los filtros antes
       row.show();
       $(this).find(".numeroFila").html(contador);
       contador++;
-      console.log(contador)
     }
     else{
       row.hide();

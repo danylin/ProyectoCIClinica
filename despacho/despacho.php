@@ -95,8 +95,9 @@
             data:{codigo:codigo,descripcion:descripcion,cantidad:cantidad,tipo:tipo,devObjeto:devObjeto,update:update,evento:evento},
             success: function(data){
               $('#mensaje').prepend(data);
-              alert('Guardado con Exito');
+              alert('Guardado con Exito');  
               document.getElementById("codigo").focus();
+              location.reload();
             }
            });
         });

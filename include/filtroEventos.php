@@ -14,7 +14,7 @@
                 ORDER BY a.fecha_programacion,horaF,a.apellido_paciente asc;";
                 $resultado=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_array($resultado)){
-                    if ($estado!=3){
+                if ($estado==1 || $estado==2){
                 ?>
                     <tr class='fila' onclick='redireccion(<?php echo $row["id_estado"]; ?>,<?php echo $row["id_accion"]; ?>,<?php echo $row["id_evento"]; ?>)'>
                 <?php
@@ -22,7 +22,12 @@
                 ?>
                     <tr class='fila' onclick='reabrir(<?php echo $row["id_accion"]; ?>)'>
                 <?php
-                }else{
+                }elseif($tipoUsuario==3 && $estado==4){
+                ?>
+                    <tr class='fila' onclick='levantarSuspension(<?php echo $row["id_accion"]; ?>)'>
+                <?php
+                }
+                else{
                 ?>
                     <tr class='filaFinalizada'>
                 <?php
