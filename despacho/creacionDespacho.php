@@ -87,11 +87,16 @@
                                                 $row=mysqli_fetch_array($resultado);
                                                 $tipo='';
                                             }else{
-                                                $codigo=substr($codigo,0,16);
-                                                $sql="SELECT codigo,descripcion FROM material__db WHERE gtin=$codigo";
-                                                $resultado=mysqli_query($conexion,$sql);
-                                                $row=mysqli_fetch_array($resultado);
-                                                $tipo='';
+                                                for($longitud=1;$longitud<=strlen($codigo);$longitud++){
+                                                    $prueba=substr($codigo,0,$longitud);
+                                                    $sql="SELECT codigo,descripcion FROM material__db WHERE gtin='$prueba'";
+                                                    $resultado=mysqli_query($conexion,$sql);
+                                                    $row=mysqli_fetch_array($resultado);
+                                                    $tipo='';
+                                                    if(!empty($row)){
+                                                        break;
+                                                    }
+                                                }
                                             }
                                         }else { //En caso que sea menor se ingresara directamente en la condicional WHERE
                                         $sql="SELECT codigo,descripcion FROM material__db WHERE gtin=$codigo";
