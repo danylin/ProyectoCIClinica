@@ -28,9 +28,13 @@
                         $query = "UPDATE sop__despacho_db SET devolucion=IF(cantidad<$cantidad[$i]+1,cantidad,$cantidad[$i]) WHERE id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
                         $consulta=mysqli_query($conexion,$query);    
                     }else{
-                        $query = "UPDATE sop__despacho_db SET devolucion=IF(cantidad<devolucion+1,cantidad,devolucion+1) WHERE id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
+                        if($cantidad[$i]>1){
+                            $query = "UPDATE sop__despacho_db SET devolucion=IF(cantidad<$cantidad[$i]+1,cantidad,devolucion+$cantidad[$i]) WHERE id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
+                        }else{
+                            $query = "UPDATE sop__despacho_db SET devolucion=IF(cantidad<devolucion+1,cantidad,devolucion+1) WHERE id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
+                        }
+                        $consulta=mysqli_query($conexion,$query);
                     }
-                    $consulta=mysqli_query($conexion,$query);
                 }else {
                     if ($cantidad[$i]>1){
                         $query = "UPDATE sop__despacho_db SET cantidad=cantidad+$cantidad[$i] WHERE id_material='".$codigo[$i]."' and id_evento_acc=$idEvento;";
